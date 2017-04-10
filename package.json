@@ -1,5 +1,5 @@
 {
-    "name": "nginx-conf-hint",
+    "name": "vscode-nginx-conf-hint",
     "displayName": "nginx.conf hint",
     "description": "nginx.conf hint and autocompletion",
     "version": "0.0.1",
@@ -11,13 +11,13 @@
     },
     "publisher": "hangxingliu",
     "author": "hangxingliu",
-    "engines": {"vscode": "^1.11.0"},
+    "engines": {"vscode": "^1.1.0"},
     "categories": ["Snippets","Languages"],
     "activationEvents": ["onLanguage:NGINX"],
     "main": "./extension/main",
     "scripts": {},
     "extensionDependencies": ["shanoor.vscode-nginx"],
-    "devDependencies": {"vscode": "^1.11.0"},
+    "devDependencies": {"vscode": "^1.1.0"},
     "keywords": ["NGINX", "nginx", "hint", "auto-completion", "configuration"],
     "dependencies": {},
     "contributes": {
