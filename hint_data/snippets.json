@@ -1,0 +1,42 @@
+{
+  "Block server": {
+    "prefix": "server",
+    "body": "server {\n\t$0\n}"
+  },
+  "Block stream": {
+    "prefix": "stream",
+    "body": "stream {\n\t$0\n}"
+  },
+  "Block upstream": {
+    "prefix": "upstream",
+    "body": "upstream {\n\t$0\n}"
+  },
+  "Block mail": {
+    "prefix": "mail",
+    "body": "mail {\n\t$0\n}"
+  },
+  "Block http": {
+    "prefix": "http",
+    "body": "http {\n\t$0\n}"
+  },
+  "Block location": {
+    "prefix": "location",
+    "body": "location {\n\t$0\n}"
+  },
+  "Block ifinlocation": {
+    "prefix": "ifinlocation",
+    "body": "ifinlocation {\n\t$0\n}"
+  },
+  "Block if": {
+    "prefix": "if",
+    "body": "if {\n\t$0\n}"
+  },
+  "Block limit_except": {
+    "prefix": "limit_except",
+    "body": "limit_except {\n\t$0\n}"
+  },
+  "Block events": {
+    "prefix": "events",
+    "body": "events {\n\t$0\n}"
+  }
+}

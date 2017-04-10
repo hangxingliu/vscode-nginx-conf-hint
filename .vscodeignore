@@ -1,0 +1,10 @@
+.vscode/**
+automatic_scripts/**
+node_modules/@types/**
+utils/cache
+utils/**
+.eslintrc.json
+.vscode.d.ts
+*.tgz
+*.vsix
+*.d.ts

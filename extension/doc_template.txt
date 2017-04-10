@@ -1,0 +1,7 @@
+Name:	${name}
+Module:	${module}
+Syntax: 
+${syntax}
+	
+Documents:
+${doc}
