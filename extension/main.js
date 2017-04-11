@@ -48,10 +48,12 @@ function loadHintData() {
 			vscode.CompletionItemKind.Property);
 		item.documentation = directive.syntax + '\n' + directive.desc;
 		item.detail = directive.module;
+
 		item.insertText = new vscode.SnippetString(
-			directive.def 
-				? directive.def.replace(/^(\w+)(\s+)(.+);$/, '$1$2$${params:$3}') 
+			directive.def  // has default value
+				? directive.def.replace(/^(\w+)(\s+)(.+);$/, '$1$2$${params:$3};') 
 				: `${directive.name} \$\{0\};`);
+
 		item.filter = directive.name.split('_');
 		directivesCompletionItems.push(item);
 	});
@@ -117,6 +119,7 @@ function activate(context) {
 			resolveCompletionItem: (item/*, token*/) => item
 		}, '$'
 	));
+
 	subscriptions.push(
 		vscode.languages.registerHoverProvider(DOCUMENT_SELECTOR, {
 			provideHover: (document, position/*, token*/) => {
