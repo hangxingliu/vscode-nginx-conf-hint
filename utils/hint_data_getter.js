@@ -16,9 +16,9 @@ const CACHE_PATH = `${__dirname}/cache/`;
 
 String.prototype.removeWhiteChar = function () { return this.replace(/\s/g, '');}
 
-let checker = require('./checker'),
-	snippetGenerator = require('./snippet_generator'),
-	html2md = require('./html2md');
+let checker = require('./lib/checker'),
+	snippetGenerator = require('./lib/snippet_generator'),
+	html2md = require('./lib/html2md');
 let start = name => console.log(`${name} ...`),
 	newVariableObject = () => ({
 		name: '',
