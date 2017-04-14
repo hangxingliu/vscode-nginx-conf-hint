@@ -5,3 +5,4 @@
 - [ ] add location block param "location" placeholder
 - [ ] auto show parameters hint after directive completion 
 - [ ] nginx directive detail document
+- [ ] directive hint order

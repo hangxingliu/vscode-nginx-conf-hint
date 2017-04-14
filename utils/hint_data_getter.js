@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 
 const BASE_URL = 'https://nginx.org/en/docs/';
-
 const SIGN_TITLE = 'Modules reference';
 const SIGN_TABLE_HEAD = 'Syntax:Default:Context:';
 const SIGN_SINCE_VERSION = /^This directive appeared in versions? (\d+\.\d+\.\d+)/;
-
-require('colors');
 
 const DIRECTIVES_OUTPUT_FILE = `${__dirname}/../hint_data/directives.json`;
 const VARIABLES_OUTPUT_FILE = `${__dirname}/../hint_data/variables.json`;
@@ -15,6 +12,8 @@ const SNIPPETS_OUTPUT_FILE = `${__dirname}/../hint_data/snippets.json`;
 const CACHE_PATH = `${__dirname}/cache/`;
 
 String.prototype.removeWhiteChar = function () { return this.replace(/\s/g, '');}
+
+let enable_cache = process.argv[2] != '--no-cache';
 
 let checker = require('./lib/checker'),
 	snippetGenerator = require('./lib/snippet_generator'),
@@ -35,10 +34,12 @@ let start = name => console.log(`${name} ...`),
 		since: '',
 		link: '',
 		module: ''
-	}), get = (name, url, callback) => {
+	}),
+	//Function for getting document page from internet
+	get = (name, url, callback) => {
 		start(`Getting ${name}`);
 		let cacheName = `${CACHE_PATH}${new Buffer(url).toString('base64')}`;
-		if (fs.existsSync(cacheName))
+		if (fs.existsSync(cacheName) && enable_cache)
 			return callback(fs.readFileSync(cacheName, 'utf8'));
 		request.get(url, {}, (err, res, html) => {
 			checker.reponseOK(name, err, res, html);
@@ -47,6 +48,7 @@ let start = name => console.log(`${name} ...`),
 		});
 	};
 
+require('colors');
 
 let cheerio = require('cheerio'),
 	request = require('request'),
@@ -61,15 +63,11 @@ let directivesResult = [],
 	lastDirectivesLength = 0,
 	lastVariablesLength = 0;
 
+enable_cache || console.log(`No cache mode!`.yellow.bold);
+
 if (!fs.existsSync(CACHE_PATH))
 	start(`Creating cache path: ${CACHE_PATH}`) +
 		fs.mkdirSync(CACHE_PATH) + checker.ok();
-
-//DEBUG
-// pageList = [{ uri: 'ngx_core_module.html', name: 'Core functionality' }];
-// pageList = [{ uri: 'http/ngx_http_core_module.html', name: 'ngx_http_core_module'}];
-// handlerSubDocumentPage();
-// false &&
 
 get('Nginx document index page', BASE_URL, html => {
 	checker.ok();
