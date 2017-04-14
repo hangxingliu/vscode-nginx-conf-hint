@@ -1,3 +1,7 @@
+# ignore vscode.d.ts and vscode.proposed.d.ts
+vscode.d.ts
+vscode.proposed.d.ts
+
 # ignore html page cache
 cache
 # ignore vsix

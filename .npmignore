@@ -2,3 +2,6 @@
 utils/cache
 *.vsix
 *.tgz
+
+vscode.d.ts
+vscode.proposed.d.ts
