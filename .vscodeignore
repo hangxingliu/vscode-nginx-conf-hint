@@ -1,5 +1,4 @@
 .vscode/**
-automatic_scripts/**
 node_modules/@types/**
 utils/cache
 utils/**
@@ -7,3 +6,5 @@ utils/**
 *.tgz
 *.vsix
 *.d.ts
+
+images/screenshots.gif
