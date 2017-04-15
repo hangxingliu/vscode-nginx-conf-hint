@@ -10,13 +10,29 @@ Launch Code's command palette (<kbd>Ctrl</kbd> + <kbd>P</kbd>) and type
 
     ext install vscode-nginx-conf-hint
 
-## Hint Support
+## Screenshots
 
-1. nginx directives hint
-2. directive default parameters hint
-3. directives syntax hint
-4. embedded variables hint
-5. config block snippets
+![screenshots](https://raw.githubusercontent.com/hangxingliu/vscode-nginx-conf-hint/master/images/screenshots.gif)
+
+## Functions
+
+1. hint nginx directives and embedded variables
+2. hint directive default parameters
+3. hint directives syntax 
+4. nginx block snippets
+5. "Goto Nginx Document" for each directives and variables
+
+## Changelog
+
+### 0.0.2 (2017-04-15)
+
+1. add "Goto Nginx Docuement" context menu to watching directives and variables document
+2. filter directive completion items according to context(block)
+3. add more useful snippet
+4. fixed directives and variables completion item order 
+5. fixed auto completion insert wrong text
+
+[more...][changelog]
 
 ## Declaration
 
@@ -44,3 +60,4 @@ File description:
 [icon-nginx]: https://github.com/shanoor/vscode-nginx/blob/master/nginx_logo.png
 [issues]: https://github.com/hangxingliu/vscode-nginx-conf-hint/issues
 [pr]: https://github.com/hangxingliu/vscode-nginx-conf-hint/pulls
+[changelog]: https://github.com/hangxingliu/vscode-nginx-conf-hint/blob/master/CHANGELOG.md

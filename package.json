@@ -2,7 +2,7 @@
       "name": "vscode-nginx-conf-hint",
       "displayName": "nginx.conf hint",
       "description": "nginx.conf hint and autocompletion",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "license": "GPL-3.0",
 
       "icon": "icon.png",
@@ -27,7 +27,8 @@
             "colors": "*",
             "cheerio": "*",
             "request": "*",
-            "fs-extra": "*"
+            "fs-extra": "*",
+            "html-minifier": "*"
       },
       "engines": {
             "vscode": "^1.1.0"
@@ -39,7 +40,19 @@
             "snippets": [{
                   "language": "NGINX",
                   "path": "./hint_data/snippets.json"
-            }]
+            }],
+            "commands": [{
+                  "command": "nginx-conf-hint.showDocument",
+                  "title": "Goto Nginx Document"
+            }],
+            "menus": {
+                  "editor/context": [{
+                              "when": "!inOutput && resourceLangId == 'NGINX'",
+                              "command": "nginx-conf-hint.showDocument",
+                              "group": "navigation"
+                        }
+                  ]
+            }
       },
 
       
