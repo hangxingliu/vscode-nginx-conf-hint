@@ -1,9 +1,28 @@
+/**
+ * Special body for some block with paramters. such as location, upstream...
+ */
+let specialSnippetBody = {
+	location: 'location ${location:/} {\n\t$0\n}',
+	upstream: 'upstream ${upstream_name} {\n\t$0\n}'
+};
 
-let getABlockSnippetObject = blockName => ({
+let extraSnippet = {
+	"Block server with directives": {
+		prefix: 'server',
+		body: [
+			'server {',
+			'\tlisten ${address:80};',
+			'\tserver_name ${server_names:server_names};',
+			'\t$0',
+			'}'
+		]
+	}
+};
+
+let generateBlockSnippetObject = blockName => ({
 	prefix: blockName,
-	body: `${blockName} {\n\t$0\n}`
+	body: specialSnippetBody[blockName] || `${blockName} {\n\t$0\n}`
 });
-
 /**
  * @param {Array<object>} directives 
  */
@@ -18,7 +37,9 @@ function generate(directives) {
 	delete contextsMap.any;
 
 	Object.keys(contextsMap).forEach(blockName =>
-		result[`Block ${blockName}`] = getABlockSnippetObject(blockName));
+		result[`Block ${blockName}`] = generateBlockSnippetObject(blockName));
+	
+	Object.keys(extraSnippet).forEach(name => result[name] = extraSnippet[name]);
 
 	return result;
 }
