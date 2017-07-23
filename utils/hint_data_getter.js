@@ -53,7 +53,7 @@ let start = name => console.log(`${name} ...`),
 		if (fs.existsSync(cacheName) && enable_cache)
 			return callback(fs.readFileSync(cacheName, 'utf8'));
 		request.get(url, {}, (err, res, html) => {
-			checker.reponseOK(name, err, res, html);
+			checker.responseOK(name, err, res, html);
 			fs.writeFileSync(cacheName, html);
 			callback(html);
 		});
@@ -99,7 +99,7 @@ get('Nginx document index page', BASE_URL, html => {
 		//  Alphabetical index of variables		
 		if (i == 0) return;
 		let links = $(list).find('a'), link;
-		checker.lengthAtlease('<a> in ul.compact', links, 1);
+		checker.lengthAtLease('<a> in ul.compact', links, 1);
 		links.each(i => {
 			link = links.eq(i);
 			pageList.push({ uri: link.attr('href'), name: link.text().trim() });
@@ -143,7 +143,7 @@ function handlerSubDocumentPage() {
 		
 		start(`Analyzing sub-page ${name.bold}`);
 
-		checker.lengthAtlease(`directives info of ${name}: .directive`, directives, 1);
+		checker.lengthAtLease(`directives info of ${name}: .directive`, directives, 1);
 
 		directives.each( i => {
 			let item = newDirectiveObject(),
@@ -154,7 +154,7 @@ function handlerSubDocumentPage() {
 			docObj.table = html.compress(directive.html())
 				.replace('cellspacing=\"0\"', '');
 
-			//check table item avaible
+			//check table item available
 			let title_check = directive.find('table th').text().removeWhiteChar();
 			checker.equal('directive define table head', title_check, SIGN_TABLE_HEAD);
 			
@@ -170,27 +170,27 @@ function handlerSubDocumentPage() {
 
 			item.name = directiveSyntax.find('code strong').eq(0).text().trim();
 			docObj.name = item.name;
-			checker.lengthAtlease(`directive name in module(${name})`, item.name, 1);
+			checker.lengthAtLease(`directive name in module(${name})`, item.name, 1);
 
 			directiveSyntax.children('code').each((i, e) => item.syntax.push($(e).text().trim()));
-			checker.lengthAtlease(`directive syntax (${item.name})`, item.syntax, 1);
+			checker.lengthAtLease(`directive syntax (${item.name})`, item.syntax, 1);
 			item.syntax.forEach((syntax, i) =>
-				checker.lengthAtlease(`directive syntax[${i}] (${item.name})`, syntax, item.name.length));
+				checker.lengthAtLease(`directive syntax[${i}] (${item.name})`, syntax, item.name.length));
 
 			item.def = directiveDefault.text().trim();
 			item.def = item.def == '—' ? null : item.def;
 			
 			item.contexts = directiveContext.text().removeWhiteChar().split(',');
-			checker.lengthAtlease(`directive contexts (${item.name})`, item.contexts, 1);
+			checker.lengthAtLease(`directive contexts (${item.name})`, item.contexts, 1);
 
 			item.since = directive.find('p').text().trim() || null;
 			if (item.since) {
 				item.since = (item.since.match(SIGN_SINCE_VERSION) || ['', null])[1];
-				checker.lengthAtlease(`directive since version (${item.name})`, item.since, 1);
+				checker.lengthAtLease(`directive since version (${item.name})`, item.since, 1);
 			}
 			
 			docObj.link = directive.prev('a').attr('name');
-			checker.lengthAtlease(`document link of directive (${item.name})`, docObj.link, 1);
+			checker.lengthAtLease(`document link of directive (${item.name})`, docObj.link, 1);
 			docObj.link = `${uri}#${docObj.link}`;
 
 			// loop after directive box div
@@ -220,8 +220,8 @@ function handlerSubDocumentPage() {
 				docObj.doc += $.html(elementPointer);
 			}
 
-			checker.lengthAtlease(`descrption of directive (${item.name})`, item.desc, 1, checker.LEVEL_WARN);
-			// checker.lengthAtlease(`document content of directive (${item.name})`, item.doc, 1);
+			checker.lengthAtLease(`description of directive (${item.name})`, item.desc, 1, checker.LEVEL_WARN);
+			// checker.lengthAtLease(`document content of directive (${item.name})`, item.doc, 1);
 
 			docObj.doc = html.compress(docObj.doc)
 				.replace(/href=[\"\'].+?[\"\']/g, 'href="#"');
@@ -237,7 +237,7 @@ function handlerSubDocumentPage() {
 			let variablesDescription = variableContainer.next('center').next('p');
 			let container = variablesDescription.next('dl');
 			
-			//Beacuse page of ngx_http_auth_jwt_module
+			//Because page of ngx_http_auth_jwt_module
 			if (!container.length)
 				container = variablesDescription.next('p').next('dl');
 			
@@ -253,7 +253,7 @@ function handlerSubDocumentPage() {
 			docObj.doc = html.compress(docObj.doc)
 				.replace(/href=[\"\'].+?[\"\']/g, 'href="#var_protocol"');
 			
-			// too many page has not compact class in varianle
+			// too many page has not compact class in variable
 			// if ((container.attr('class')||'').trim() != 'compact')
 			// 	checker.warn(`variables dl tag has not class name "compact" in ${name}`);
 
@@ -265,16 +265,16 @@ function handlerSubDocumentPage() {
 				
 				item.module = name;
 				item.name = (elementVarName.text() || '').trim();
-				checker.lengthAtlease(`variable name ${i} of ${name}`, item.name, 2);
+				checker.lengthAtLease(`variable name ${i} of ${name}`, item.name, 2);
 				
 				item.desc = (elementVarDesc.text() || '').trim();
-				checker.lengthAtlease(`description of variable ${item.name}`, item.desc, 1);
+				checker.lengthAtLease(`description of variable ${item.name}`, item.desc, 1);
 
 				if (elementTailCheck.length && elementTailCheck.prop('tagName') != 'DT')
 					checker.warn(`the tag after description of variable ${item.name} is not "dt"`);	
 				
 				let elementId = elementVarName.attr('id');
-				checker.lengthAtlease(`attribute "id" of element "dt" ${item.name} `,
+				checker.lengthAtLease(`attribute "id" of element "dt" ${item.name} `,
 					elementId, 'var_'.length);
 				
 				docObj.vars[item.name] = elementId;

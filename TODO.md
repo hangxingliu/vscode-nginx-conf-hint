@@ -4,7 +4,7 @@
 - [x] filter autocompletion items by checking context block
 - [x] add location block param "location" and "upstream" placeholder
 - [x] auto show parameters hint after directive completion
-	- VSCode don't support automatic show paramters hint after auto-complete
+	- VSCode don't support automatic show parameters hint after auto-complete
 - [x] nginx directive detail document
 - [x] directive hint order
 - [ ] cache the block name cursor located in

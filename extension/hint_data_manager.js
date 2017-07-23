@@ -64,7 +64,7 @@ function initialize() {
 function getVariableCompletionItems(varNamePrefix) {
 	return varCompletionItems.filter(v =>
 		v.label.startsWith(varNamePrefix) ||
-		v.filter.reduce((macthed, keyword) => macthed || keyword.startsWith(varNamePrefix), false));
+		v.filter.reduce((matched, keyword) => matched || keyword.startsWith(varNamePrefix), false));
 }
 
 function getDirectiveCompletionItems(directiveNamePrefix, parentBlockName) {
@@ -107,7 +107,7 @@ function genDirectiveHoverHintItem(directiveItem) {
 		`**${it.name}** ${it.module}` +
 		(it.since ? `since **${it.since}**` : '')
 	];
-	// if it has default paramters
+	// if it has default parameters
 	it.def && hover.push(`default: *${it.def}*`);
 	hover.push(it.desc);
 	return new vscode.Hover(hover.concat(it.notes));

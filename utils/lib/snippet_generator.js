@@ -1,5 +1,5 @@
 /**
- * Special body for some block with paramters. such as location, upstream...
+ * Special body for some block with parameters. such as location, upstream...
  */
 let specialSnippetBody = {
 	location: 'location ${location:/} {\n\t$0\n}',

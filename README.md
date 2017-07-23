@@ -26,7 +26,7 @@ Launch Code's command palette (<kbd>Ctrl</kbd> + <kbd>P</kbd>) and type
 
 ### 0.0.2 (2017-04-15)
 
-1. add "Goto Nginx Docuement" context menu to watching directives and variables document
+1. add "Goto Nginx Document" context menu to watching directives and variables document
 2. filter directive completion items according to context(block)
 3. add more useful snippet
 4. fixed directives and variables completion item order 
@@ -36,7 +36,7 @@ Launch Code's command palette (<kbd>Ctrl</kbd> + <kbd>P</kbd>) and type
 
 ## Declaration
 
-1. This extension depend extension [nginx.conf developed by shanoor][ext-nginx-conf] (**It will be install automaticallly by VS Code**)
+1. This extension depend extension [nginx.conf developed by shanoor][ext-nginx-conf] (**It will be install automatically by VS Code**)
 2. Icon image of this extension is from extension [nginx.conf][icon-nginx] 
 3. Open source license of this extension is [GPL-3.0](LICENSE)
 

@@ -43,13 +43,13 @@ function lengthEquals(name = '', arrOrStr = [], length = 1, justWarn = false) {
  * @param {number} length 
  * @param {boolean} justWarn 
  */
-function lengthAtlease(name, arrOrStr, length = 1, justWarn = false) {
+function lengthAtLease(name, arrOrStr, length = 1, justWarn = false) {
 	return (arrOrStr && arrOrStr.length >= length) ?
 		arrOrStr :
 		(justWarn ? warn : error)(`length of ${name.bold} (${
 			arrOrStr ? arrOrStr.length : 'undefined'})less than ${String(length).bold}!`);
 }
-function reponseOK(name, err, res, html) {
+function responseOK(name, err, res, html) {
 	err && error(err.stack);
 	res.statusCode != 200 && error(`${name.bold} statusCode != 200`);
 	!html && error(`${name.bold} empty response content`);
@@ -63,7 +63,7 @@ function equal(name = '', actual = '', expected = '', justWarn = false) {
 module.exports = {
 	ok, error, warn, done, LEVEL_ERROR, LEVEL_WARN,
 	lengthEquals, 
-	lengthAtlease,
-	reponseOK,
+	lengthAtLease,
+	responseOK,
 	equal
 };

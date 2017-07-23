@@ -10,7 +10,7 @@ const VARIABLES_DOC_FILE = `${__dirname}/../hint_data/variables_document.json`;
 let templates = {};
 let directivesDocItems = [];
 let variablesDocItems = [],
-	mapVarName2Moudle = {},
+	mapVarName2Module = {},
 	mapVarName2VarId = {};
 
 let openURI = uri => vscode.commands.executeCommand('vscode.previewHtml', vscode.Uri.parse(uri)),
@@ -54,7 +54,7 @@ function initialize(context) {
 	for(let module of variablesDocItems) {
 		for (let varName in module.vars) {
 			mapVarName2VarId[varName] = module.vars[varName];
-			mapVarName2Moudle[varName] = module.module;
+			mapVarName2Module[varName] = module.module;
 		}
 	}	
 
@@ -97,7 +97,7 @@ function openDirectiveDoc(directiveName) {
 }
 function openVariableDoc(variableName) {
 	variableName = `$${variableName}`;
-	openURI(getDocURI(`variable`, mapVarName2Moudle[variableName])
+	openURI(getDocURI(`variable`, mapVarName2Module[variableName])
 		+ `#${mapVarName2VarId[variableName]}`);
 }
 
