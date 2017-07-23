@@ -42,6 +42,8 @@ Launch Code's command palette (<kbd>Ctrl</kbd> + <kbd>P</kbd>) and type
 
 ## Contributing to the Extension
 
+Following Node.js tradition, you can `npm install` before editing codes
+
 File description:
 
 - `utils/*.js` scripts for getting hint data from nginx document web page

@@ -205,6 +205,11 @@
     "module": "ngx_http_core_module"
   },
   {
+    "name": "$sent_trailer_name",
+    "desc": "arbitrary field sent at the end of the response (1.13.2);\nthe last part of a variable name is the field name converted\nto lower case with dashes replaced by underscores",
+    "module": "ngx_http_core_module"
+  },
+  {
     "name": "$server_addr",
     "desc": "an address of the server which accepted a request\n\nComputing a value of this variable usually requires one system call.\nTo avoid a system call, the listen directives\nmust specify addresses and use the bind parameter.",
     "module": "ngx_http_core_module"

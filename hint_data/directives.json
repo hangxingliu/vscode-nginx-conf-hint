@@ -2433,7 +2433,9 @@
       "http"
     ],
     "desc": "Sets the path and other parameters of a cache.Cache data are stored in files.Both the key and file name in a cache are a result ofapplying the MD5 function to the proxied URL.The levels parameter defines hierarchy levels of a cache:from 1 to 3, each level accepts values 1 or 2.For example, in the following configuration",
-    "notes": [],
+    "notes": [
+      "\nIn versions 1.7.3, 1.7.7, and 1.11.10 cache header format has been changed.\nPreviously cached responses will be considered invalid\nafter upgrading to a newer nginx version.\n"
+    ],
     "since": null,
     "module": "ngx_http_fastcgi_module"
   },
@@ -3274,9 +3276,26 @@
       "location",
       "ifinlocation"
     ],
-    "desc": "Adds the specified field to a response header provided thatthe response code equals 200, 201, 204, 206, 301, 302, 303, 304, or 307.A value can contain variables.",
+    "desc": "Adds the specified field to a response header provided thatthe response code equals 200, 201, 204, 206, 301, 302, 303, 304, 307, or 308.The value can contain variables.",
     "notes": [],
     "since": null,
+    "module": "ngx_http_headers_module"
+  },
+  {
+    "name": "add_trailer",
+    "syntax": [
+      "add_trailer \nname value\n[always];"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location",
+      "ifinlocation"
+    ],
+    "desc": "Adds the specified field to the end of a response provided thatthe response code equals 200, 201, 206, 301, 302, 303, 307, or 308.The value can contain variables.",
+    "notes": [],
+    "since": "1.13.2",
     "module": "ngx_http_headers_module"
   },
   {
@@ -3292,7 +3311,7 @@
       "location",
       "ifinlocation"
     ],
-    "desc": "Enables or disables adding or modifying the “Expires”and “Cache-Control” response header fields provided thatthe response code equals 200, 201, 204, 206, 301, 302, 303, 304, or 307.The parameter can be a positive or negativetime.",
+    "desc": "Enables or disables adding or modifying the “Expires”and “Cache-Control” response header fields provided thatthe response code equals 200, 201, 204, 206, 301, 302, 303, 304, 307, or 308.The parameter can be a positive or negativetime.",
     "notes": [],
     "since": null,
     "module": "ngx_http_headers_module"
@@ -4390,7 +4409,9 @@
       "http"
     ],
     "desc": "Sets the path and other parameters of a cache.Cache data are stored in files.The file name in a cache is a result ofapplying the MD5 function to thecache key.The levels parameter defines hierarchy levels of a cache:from 1 to 3, each level accepts values 1 or 2.For example, in the following configuration",
-    "notes": [],
+    "notes": [
+      "\nIn versions 1.7.3, 1.7.7, and 1.11.10 cache header format has been changed.\nPreviously cached responses will be considered invalid\nafter upgrading to a newer nginx version.\n"
+    ],
     "since": null,
     "module": "ngx_http_proxy_module"
   },
@@ -5061,7 +5082,7 @@
   {
     "name": "proxy_ssl_protocols",
     "syntax": [
-      "proxy_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2];"
+      "proxy_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
     ],
     "def": "proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
     "contexts": [
@@ -5211,7 +5232,7 @@
       "server",
       "location"
     ],
-    "desc": "Defines trusted addresses that are known to send correctreplacement addresses.If the special value unix: is specified,all UNIX-domain sockets will be trusted.",
+    "desc": "Defines trusted addresses that are known to send correctreplacement addresses.If the special value unix: is specified,all UNIX-domain sockets will be trusted.Trusted addresses may also be specified using a hostname (1.13.1).",
     "notes": [
       "\nIPv6 addresses are supported starting from versions 1.3.0 and 1.2.1.\n"
     ],
@@ -5342,7 +5363,8 @@
     "desc": "Stops processing and returns the specified code to a client.The non-standard code 444 closes a connection without sendinga response header.",
     "notes": [
       "\nOnly the following codes could be returned before version 0.7.51:\n204, 400, 402 — 406, 408, 410, 411, 413, 416, and 500 — 504.\n",
-      "\nThe code 307 was not treated as a redirect until versions 1.1.16 and 1.0.13.\n"
+      "\nThe code 307 was not treated as a redirect until versions 1.1.16 and 1.0.13.\n",
+      "\nThe code 308 was not treated as a redirect until version 1.13.0.\n"
     ],
     "since": null,
     "module": "ngx_http_rewrite_module"
@@ -5665,7 +5687,9 @@
       "http"
     ],
     "desc": "Sets the path and other parameters of a cache.Cache data are stored in files.The file name in a cache is a result ofapplying the MD5 function to thecache key.The levels parameter defines hierarchy levels of a cache:from 1 to 3, each level accepts values 1 or 2.For example, in the following configuration",
-    "notes": [],
+    "notes": [
+      "\nIn versions 1.7.3, 1.7.7, and 1.11.10 cache header format has been changed.\nPreviously cached responses will be considered invalid\nafter upgrading to a newer nginx version.\n"
+    ],
     "since": null,
     "module": "ngx_http_scgi_module"
   },
@@ -6544,16 +6568,17 @@
   {
     "name": "ssl_protocols",
     "syntax": [
-      "ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2];"
+      "ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
     ],
     "def": "ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
     "contexts": [
       "http",
       "server"
     ],
-    "desc": "Enables the specified protocols.The TLSv1.1 and TLSv1.2 parameters workonly when the OpenSSL library of version 1.0.1 or higher is used.",
+    "desc": "Enables the specified protocols.",
     "notes": [
-      "\nThe TLSv1.1 and TLSv1.2 parameters are\nsupported starting from versions 1.1.13 and 1.0.12,\nso when the OpenSSL version 1.0.1 or higher\nis used on older nginx versions, these protocols work, but cannot\nbe disabled.\n"
+      "\nThe TLSv1.1 and TLSv1.2 parameters\n(1.1.13, 1.0.12) work only when OpenSSL 1.0.1 or higher is used.\n",
+      "\nThe TLSv1.3 parameter (1.13.0) works only when\nOpenSSL 1.1.1 built with TLSv1.3 support is used.\n"
     ],
     "since": null,
     "module": "ngx_http_ssl_module"
@@ -7483,7 +7508,9 @@
       "http"
     ],
     "desc": "Sets the path and other parameters of a cache.Cache data are stored in files.The file name in a cache is a result ofapplying the MD5 function to thecache key.The levels parameter defines hierarchy levels of a cache:from 1 to 3, each level accepts values 1 or 2.For example, in the following configuration",
-    "notes": [],
+    "notes": [
+      "\nIn versions 1.7.3, 1.7.7, and 1.11.10 cache header format has been changed.\nPreviously cached responses will be considered invalid\nafter upgrading to a newer nginx version.\n"
+    ],
     "since": null,
     "module": "ngx_http_uwsgi_module"
   },
@@ -8007,7 +8034,7 @@
   {
     "name": "uwsgi_ssl_protocols",
     "syntax": [
-      "uwsgi_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2];"
+      "uwsgi_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
     ],
     "def": "uwsgi_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
     "contexts": [
@@ -8397,7 +8424,7 @@
   {
     "name": "listen",
     "syntax": [
-      "listen \n    address:port\n    [ssl]\n    [backlog=number]\n    [bind]\n    [ipv6only=on|off]\n    [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]];"
+      "listen \n    address:port\n    [ssl]\n    [backlog=number]\n    [rcvbuf=size]\n    [sndbuf=size]\n    [bind]\n    [ipv6only=on|off]\n    [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]];"
     ],
     "def": null,
     "contexts": [
@@ -8793,16 +8820,17 @@
   {
     "name": "ssl_protocols",
     "syntax": [
-      "ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2];"
+      "ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
     ],
     "def": "ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
     "contexts": [
       "mail",
       "server"
     ],
-    "desc": "Enables the specified protocols.The TLSv1.1 and TLSv1.2 parameters workonly when the OpenSSL library of version 1.0.1 or higher is used.",
+    "desc": "Enables the specified protocols.",
     "notes": [
-      "\nThe TLSv1.1 and TLSv1.2 parameters are\nsupported starting from versions 1.1.13 and 1.0.12\nso when the OpenSSL version 1.0.1 or higher\nis used on older nginx versions, these protocols work, but cannot\nbe disabled.\n"
+      "\nThe TLSv1.1 and TLSv1.2 parameters\n(1.1.13, 1.0.12) work only when OpenSSL 1.0.1 or higher is used.\n",
+      "\nThe TLSv1.3 parameter (1.13.0) works only when\nOpenSSL 1.1.1 built with TLSv1.3 support is used.\n"
     ],
     "since": null,
     "module": "ngx_mail_ssl_module"
@@ -9035,7 +9063,7 @@
   {
     "name": "listen",
     "syntax": [
-      "listen \n    address:port\n    [ssl]\n    [udp]\n    [proxy_protocol]\n    [backlog=number]\n    [bind]\n    [ipv6only=on|off]\n    [reuseport]\n    [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]];"
+      "listen \n    address:port\n    [ssl]\n    [udp]\n    [proxy_protocol]\n    [backlog=number]\n    [rcvbuf=size]\n    [sndbuf=size]\n    [bind]\n    [ipv6only=on|off]\n    [reuseport]\n    [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]];"
     ],
     "def": null,
     "contexts": [
@@ -9780,7 +9808,7 @@
   {
     "name": "proxy_ssl_protocols",
     "syntax": [
-      "proxy_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2];"
+      "proxy_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
     ],
     "def": "proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
     "contexts": [
@@ -10067,15 +10095,18 @@
   {
     "name": "ssl_protocols",
     "syntax": [
-      "ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2];"
+      "ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
     ],
     "def": "ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
     "contexts": [
       "stream",
       "server"
     ],
-    "desc": "Enables the specified protocols.The TLSv1.1 and TLSv1.2 parameters workonly when the OpenSSL library of version 1.0.1 or higher is used.",
-    "notes": [],
+    "desc": "Enables the specified protocols.",
+    "notes": [
+      "\nThe TLSv1.1 and TLSv1.2 parameters work\nonly when OpenSSL 1.0.1 or higher is used.\n",
+      "\nThe TLSv1.3 parameter (1.13.0) works only when\nOpenSSL 1.1.1 built with TLSv1.3 support is used.\n"
+    ],
     "since": null,
     "module": "ngx_stream_ssl_module"
   },
