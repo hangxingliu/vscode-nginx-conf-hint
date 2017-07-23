@@ -2,7 +2,7 @@
       "name": "vscode-nginx-conf-hint",
       "displayName": "nginx.conf hint",
       "description": "nginx.conf hint and autocompletion",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "license": "GPL-3.0",
 
       "icon": "images/icon.png",

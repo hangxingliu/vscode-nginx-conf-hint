@@ -1,3 +1,9 @@
+### 0.0.4 (2017-07-24)
+
+1. update Nginx directives and variables to latest.
+2. add access_log into block server snippet
+3. modify snippet project structure
+
 ### 0.0.3 (2017-04-15)
 
 1. add "Goto Nginx Document" context menu to watching directives and variables document

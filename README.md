@@ -24,15 +24,13 @@ Launch Code's command palette (<kbd>Ctrl</kbd> + <kbd>P</kbd>) and type
 
 ## Changelog
 
-### 0.0.2 (2017-04-15)
+### 0.0.4 (2017-07-24)
 
-1. add "Goto Nginx Document" context menu to watching directives and variables document
-2. filter directive completion items according to context(block)
-3. add more useful snippet
-4. fixed directives and variables completion item order 
-5. fixed auto completion insert wrong text
+1. update Nginx directives and variables to latest.
+2. add access_log into block server snippet
+3. modify snippet project structure
 
-[more...][changelog]
+[CHANGELOG.md][changelog]
 
 ## Declaration
 
@@ -42,15 +40,15 @@ Launch Code's command palette (<kbd>Ctrl</kbd> + <kbd>P</kbd>) and type
 
 ## Contributing to the Extension
 
-Following Node.js tradition, you can `npm install` before editing codes
+Welcome contributing:
 
-File description:
+- useful nginx.conf snippets reporting bug 
+- improving pull request
+- reporting bug
 
-- `utils/*.js` scripts for getting hint data from nginx document web page
-- `extension/*.js` extension main script files
-- `hint_data/*.json` hint data json file generated automatically
+[Pull Request](pr) & [Issues](issues)
 
-[Pull Request](pr)
+[CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Author
 
