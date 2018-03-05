@@ -370,8 +370,13 @@
     "module": "ngx_http_ssl_module"
   },
   {
+    "name": "$ssl_client_escaped_cert",
+    "desc": "returns the client certificate in the PEM format (urlencoded)\nfor an established SSL connection (1.13.5);",
+    "module": "ngx_http_ssl_module"
+  },
+  {
     "name": "$ssl_client_cert",
-    "desc": "returns the client certificate in the PEM format\nfor an established SSL connection, with each line except the first\nprepended with the tab character;\nthis is intended for the use in the\nproxy_set_header directive;",
+    "desc": "returns the client certificate in the PEM format\nfor an established SSL connection, with each line except the first\nprepended with the tab character;\nthis is intended for the use in the\nproxy_set_header directive;\n\nThe variable is deprecated,\nthe $ssl_client_escaped_cert variable should be used instead.",
     "module": "ngx_http_ssl_module"
   },
   {
@@ -476,7 +481,7 @@
   },
   {
     "name": "$upstream_addr",
-    "desc": "keeps the IP address and port,\nor the path to the UNIX-domain socket of the upstream server.\nIf several servers were contacted during request processing,\ntheir addresses are separated by commas, e.g.\n“192.168.1.1:80, 192.168.1.2:80, unix:/tmp/sock”.\nIf an internal redirect from one server group to another happens,\ninitiated by\n“X-Accel-Redirect” or\nerror_page,\nthen the server addresses from different groups are separated by colons, e.g.\n“192.168.1.1:80, 192.168.1.2:80, unix:/tmp/sock : 192.168.10.1:80, 192.168.10.2:80”.",
+    "desc": "keeps the IP address and port,\nor the path to the UNIX-domain socket of the upstream server.\nIf several servers were contacted during request processing,\ntheir addresses are separated by commas, e.g.\n“192.168.1.1:80, 192.168.1.2:80, unix:/tmp/sock”.\nIf an internal redirect from one server group to another happens,\ninitiated by\n“X-Accel-Redirect” or\nerror_page,\nthen the server addresses from different groups are separated by colons, e.g.\n“192.168.1.1:80, 192.168.1.2:80, unix:/tmp/sock : 192.168.10.1:80, 192.168.10.2:80”.\nIf a server cannot be selected,\nthe variable keeps the name of the server group.",
     "module": "ngx_http_upstream_module"
   },
   {
@@ -521,7 +526,7 @@
   },
   {
     "name": "$upstream_status",
-    "desc": "keeps status code of the response obtained from the upstream server.\nStatus codes of several responses\nare separated by commas and colons like addresses in the\n$upstream_addr variable.",
+    "desc": "keeps status code of the response obtained from the upstream server.\nStatus codes of several responses\nare separated by commas and colons like addresses in the\n$upstream_addr variable.\nIf a server cannot be selected,\nthe variable keeps the 502 (Bad Gateway) status code.",
     "module": "ngx_http_upstream_module"
   },
   {
@@ -741,7 +746,7 @@
   },
   {
     "name": "$upstream_addr",
-    "desc": "keeps the IP address and port,\nor the path to the UNIX-domain socket of the upstream server (1.11.4).\nIf several servers were contacted during proxying,\ntheir addresses are separated by commas, e.g.\n“192.168.1.1:12345, 192.168.1.2:12345, unix:/tmp/sock”.",
+    "desc": "keeps the IP address and port,\nor the path to the UNIX-domain socket of the upstream server (1.11.4).\nIf several servers were contacted during proxying,\ntheir addresses are separated by commas, e.g.\n“192.168.1.1:12345, 192.168.1.2:12345, unix:/tmp/sock”.\nIf a server cannot be selected,\nthe variable keeps the name of the server group.",
     "module": "ngx_stream_upstream_module"
   },
   {

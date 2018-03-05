@@ -217,7 +217,7 @@
     "syntax": [
       "pid file;"
     ],
-    "def": "pid nginx.pid;",
+    "def": "pid logs/nginx.pid;",
     "contexts": [
       "main"
     ],
@@ -730,7 +730,9 @@
     ],
     "desc": "Defines the URI that will be shown for the specified errors.A uri value can contain variables.",
     "notes": [
-      "\nIf uri processing leads to an error,\nthe status code of the last occurred error is returned to the client.\n"
+      "\nIf uri processing leads to an error,\nthe status code of the last occurred error is returned to the client.\n",
+      "\nThe code 307 was not treated as a redirect until versions 1.1.16 and 1.0.13.\n",
+      "\nThe code 308 was not treated as a redirect until version 1.13.0.\n"
     ],
     "since": null,
     "module": "ngx_http_core_module"
@@ -1734,6 +1736,20 @@
     "module": "ngx_http_addition_module"
   },
   {
+    "name": "api",
+    "syntax": [
+      "api \n[write=on|off];"
+    ],
+    "def": null,
+    "contexts": [
+      "location"
+    ],
+    "desc": "Turns on the REST API interface in the surrounding location.Access to this location should belimited.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_api_module"
+  },
+  {
     "name": "auth_basic",
     "syntax": [
       "auth_basic string | off;"
@@ -1786,28 +1802,32 @@
   {
     "name": "auth_jwt_header_set",
     "syntax": [
-      "auth_jwt_header_set $variable name;"
+      "auth_jwt_header_set $variable name ...;"
     ],
     "def": null,
     "contexts": [
       "http"
     ],
-    "desc": "Sets the variable to the givenJOSE header parameter name.",
-    "notes": [],
+    "desc": "Sets the variable to a JOSE header parameteridentified by key names.Name matching starts from the top level of the JSON tree.For arrays, the variable keeps a list of array elements separated by commas.",
+    "notes": [
+      "\nPrior to version 1.13.7, only one key name could be specified,\nand the result was undefined for arrays.\n"
+    ],
     "since": "1.11.10",
     "module": "ngx_http_auth_jwt_module"
   },
   {
     "name": "auth_jwt_claim_set",
     "syntax": [
-      "auth_jwt_claim_set $variable name;"
+      "auth_jwt_claim_set $variable name ...;"
     ],
     "def": null,
     "contexts": [
       "http"
     ],
-    "desc": "Sets the variable to the givenJWT claim parameter name.",
-    "notes": [],
+    "desc": "Sets the variable to a JWT claim parameteridentified by key names.Name matching starts from the top level of the JSON tree.For arrays, the variable keeps a list of array elements separated by commas.",
+    "notes": [
+      "\nPrior to version 1.13.7, only one key name could be specified,\nand the result was undefined for arrays.\n"
+    ],
     "since": "1.11.10",
     "module": "ngx_http_auth_jwt_module"
   },
@@ -2434,6 +2454,7 @@
     ],
     "desc": "Sets the path and other parameters of a cache.Cache data are stored in files.Both the key and file name in a cache are a result ofapplying the MD5 function to the proxied URL.The levels parameter defines hierarchy levels of a cache:from 1 to 3, each level accepts values 1 or 2.For example, in the following configuration",
     "notes": [
+      "\nAs part of\ncommercial subscription,\nthe shared memory zone also stores extended\ncache information,\nthus, it is required to specify a larger zone size for the same number of keys.\nFor example,\none megabyte zone can store about 4 thousand keys.\n",
       "\nIn versions 1.7.3, 1.7.7, and 1.11.10 cache header format has been changed.\nPreviously cached responses will be considered invalid\nafter upgrading to a newer nginx version.\n"
     ],
     "since": null,
@@ -3276,7 +3297,7 @@
       "location",
       "ifinlocation"
     ],
-    "desc": "Adds the specified field to a response header provided thatthe response code equals 200, 201, 204, 206, 301, 302, 303, 304, 307, or 308.The value can contain variables.",
+    "desc": "Adds the specified field to a response header provided thatthe response code equals 200, 201 (1.3.10), 204, 206, 301, 302, 303, 304,307 (1.1.16, 1.0.13), or 308 (1.13.0).The value can contain variables.",
     "notes": [],
     "since": null,
     "module": "ngx_http_headers_module"
@@ -3311,7 +3332,7 @@
       "location",
       "ifinlocation"
     ],
-    "desc": "Enables or disables adding or modifying the “Expires”and “Cache-Control” response header fields provided thatthe response code equals 200, 201, 204, 206, 301, 302, 303, 304, 307, or 308.The parameter can be a positive or negativetime.",
+    "desc": "Enables or disables adding or modifying the “Expires”and “Cache-Control” response header fields provided thatthe response code equals 200, 201 (1.3.10), 204, 206, 301, 302, 303, 304,307 (1.1.16, 1.0.13), or 308 (1.13.0).The parameter can be a positive or negativetime.",
     "notes": [],
     "since": null,
     "module": "ngx_http_headers_module"
@@ -3585,6 +3606,34 @@
     "module": "ngx_http_js_module"
   },
   {
+    "name": "keyval",
+    "syntax": [
+      "keyval \n    key\n    $variable\n    zone=name;"
+    ],
+    "def": null,
+    "contexts": [
+      "http"
+    ],
+    "desc": "Creates a new $variable whose valueis looked up by the key in the key-value database.Strings are matched ignoring the case.The database is stored in a shared memory zonespecified by the zone parameter.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_keyval_module"
+  },
+  {
+    "name": "keyval_zone",
+    "syntax": [
+      "keyval_zone \n    zone=name:size\n    [state=file];"
+    ],
+    "def": null,
+    "contexts": [
+      "http"
+    ],
+    "desc": "Sets the name and size of the shared memory zonethat keeps the key-value database.Key-value pairs are managed by theAPI.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_keyval_module"
+  },
+  {
     "name": "limit_conn",
     "syntax": [
       "limit_conn zone number;"
@@ -3595,7 +3644,7 @@
       "server",
       "location"
     ],
-    "desc": "Sets the shared memory zoneand the maximum allowed number of connections for a given key value.When this limit is exceeded, the server will return the503 (Service Temporarily Unavailable)error in reply to a request.For example, the directives",
+    "desc": "Sets the shared memory zoneand the maximum allowed number of connections for a given key value.When this limit is exceeded, the server will return theerrorin reply to a request.For example, the directives",
     "notes": [
       "\nIn HTTP/2 and SPDY, each concurrent request is considered a separate connection.\n"
     ],
@@ -3677,7 +3726,7 @@
       "server",
       "location"
     ],
-    "desc": "Sets the shared memory zoneand the maximum burst size of requests.If the requests rate exceeds the rate configured for a zone,their processing is delayed such that requests are processedat a defined rate.Excessive requests are delayed until their number exceeds themaximum burst sizein which case the request is terminated with an error503 (Service Temporarily Unavailable).By default, the maximum burst size is equal to zero.For example, the directives",
+    "desc": "Sets the shared memory zoneand the maximum burst size of requests.If the requests rate exceeds the rate configured for a zone,their processing is delayed such that requests are processedat a defined rate.Excessive requests are delayed until their number exceeds themaximum burst sizein which case the request is terminated with anerror.By default, the maximum burst size is equal to zero.For example, the directives",
     "notes": [],
     "since": null,
     "module": "ngx_http_limit_req_module"
@@ -4001,6 +4050,38 @@
     "notes": [],
     "since": null,
     "module": "ngx_http_memcached_module"
+  },
+  {
+    "name": "mirror",
+    "syntax": [
+      "mirror uri | off;"
+    ],
+    "def": "mirror off;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Sets the URI to which an original request will be mirrored.Several mirrors can be specified on the same level.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_mirror_module"
+  },
+  {
+    "name": "mirror_request_body",
+    "syntax": [
+      "mirror_request_body on | off;"
+    ],
+    "def": "mirror_request_body on;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Indicates whether the client request body is mirrored.When enabled, the client request body will be readprior to creating mirror subrequests.In this case, unbuffered client request body proxyingset by theproxy_request_buffering,fastcgi_request_buffering,scgi_request_buffering,anduwsgi_request_bufferingdirectives will be disabled.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_mirror_module"
   },
   {
     "name": "mp4",
@@ -4410,6 +4491,7 @@
     ],
     "desc": "Sets the path and other parameters of a cache.Cache data are stored in files.The file name in a cache is a result ofapplying the MD5 function to thecache key.The levels parameter defines hierarchy levels of a cache:from 1 to 3, each level accepts values 1 or 2.For example, in the following configuration",
     "notes": [
+      "\nAs part of\ncommercial subscription,\nthe shared memory zone also stores extended\ncache information,\nthus, it is required to specify a larger zone size for the same number of keys.\nFor example,\none megabyte zone can store about 4 thousand keys.\n",
       "\nIn versions 1.7.3, 1.7.7, and 1.11.10 cache header format has been changed.\nPreviously cached responses will be considered invalid\nafter upgrading to a newer nginx version.\n"
     ],
     "since": null,
@@ -5688,6 +5770,7 @@
     ],
     "desc": "Sets the path and other parameters of a cache.Cache data are stored in files.The file name in a cache is a result ofapplying the MD5 function to thecache key.The levels parameter defines hierarchy levels of a cache:from 1 to 3, each level accepts values 1 or 2.For example, in the following configuration",
     "notes": [
+      "\nAs part of\ncommercial subscription,\nthe shared memory zone also stores extended\ncache information,\nthus, it is required to specify a larger zone size for the same number of keys.\nFor example,\none megabyte zone can store about 4 thousand keys.\n",
       "\nIn versions 1.7.3, 1.7.7, and 1.11.10 cache header format has been changed.\nPreviously cached responses will be considered invalid\nafter upgrading to a newer nginx version.\n"
     ],
     "since": null,
@@ -6914,7 +6997,9 @@
       "upstream"
     ],
     "desc": "Defines the name and size of the sharedmemory zone that keeps the group’s configuration and run-time state that areshared between worker processes.Several groups may share the same zone.In this case, it is enough to specify the size only once.",
-    "notes": [],
+    "notes": [
+      "\nPrior to version 1.13.3,\nthe configuration was accessible only via a special location\nhandled by\nupstream_conf.\n"
+    ],
     "since": "1.9.0",
     "module": "ngx_http_upstream_module"
   },
@@ -7042,7 +7127,7 @@
     "contexts": [
       "upstream"
     ],
-    "desc": "If an upstream server cannot be selected immediatelywhile processing a request,the request will be placed into the queue.The directive specifies the maximum number of requests that can be in the queueat the same time.If the queue is filled up,or the server to pass the request to cannot be selected withinthe time period specified in the timeout parameter,the 502 (Bad Gateway)error will be returned to the client.",
+    "desc": "If an upstream server cannot be selected immediatelywhile processing a request,the request will be placed into the queue.The directive specifies the maximum number of requeststhat can be in the queue at the same time.If the queue is filled up,or the server to pass the request to cannot be selected withinthe time period specified in the timeout parameter,the 502 (Bad Gateway)error will be returned to the client.",
     "notes": [
       "\nWhen using load balancer methods other than the default\nround-robin method, it is necessary to activate them before\nthe queue directive.\n",
       "\nThis directive is available as part of our\ncommercial subscription.\n"
@@ -7055,7 +7140,7 @@
     "syntax": [
       "sticky \n    cookie name\n    [expires=time]\n    [domain=domain]\n    [httponly]\n    [secure]\n    [path=path];",
       "sticky \n    route $variable ...;",
-      "sticky \n    learn\n    create=$variable\n    lookup=$variable\n    zone=name:size\n    [timeout=time];"
+      "sticky \n    learn\n    create=$variable\n    lookup=$variable\n    zone=name:size\n    [timeout=time]\n    [header];"
     ],
     "def": null,
     "contexts": [
@@ -7509,6 +7594,7 @@
     ],
     "desc": "Sets the path and other parameters of a cache.Cache data are stored in files.The file name in a cache is a result ofapplying the MD5 function to thecache key.The levels parameter defines hierarchy levels of a cache:from 1 to 3, each level accepts values 1 or 2.For example, in the following configuration",
     "notes": [
+      "\nAs part of\ncommercial subscription,\nthe shared memory zone also stores extended\ncache information,\nthus, it is required to specify a larger zone size for the same number of keys.\nFor example,\none megabyte zone can store about 4 thousand keys.\n",
       "\nIn versions 1.7.3, 1.7.7, and 1.11.10 cache header format has been changed.\nPreviously cached responses will be considered invalid\nafter upgrading to a newer nginx version.\n"
     ],
     "since": null,
@@ -8238,6 +8324,21 @@
     "module": "ngx_http_v2_module"
   },
   {
+    "name": "http2_max_concurrent_pushes",
+    "syntax": [
+      "http2_max_concurrent_pushes number;"
+    ],
+    "def": "http2_max_concurrent_pushes 10;",
+    "contexts": [
+      "http",
+      "server"
+    ],
+    "desc": "Limits the maximum number of concurrentpush requests in a connection.",
+    "notes": [],
+    "since": "1.13.9",
+    "module": "ngx_http_v2_module"
+  },
+  {
     "name": "http2_max_concurrent_streams",
     "syntax": [
       "http2_max_concurrent_streams number;"
@@ -8290,12 +8391,43 @@
     "def": "http2_max_requests 1000;",
     "contexts": [
       "http",
+      "server"
+    ],
+    "desc": "Sets the maximum number of requests (includingpush requests) that can be servedthrough one HTTP/2 connection,after which the next client request will lead to connection closingand the need of establishing a new connection.",
+    "notes": [],
+    "since": "1.11.6",
+    "module": "ngx_http_v2_module"
+  },
+  {
+    "name": "http2_push",
+    "syntax": [
+      "http2_push uri | off;"
+    ],
+    "def": "http2_push off;",
+    "contexts": [
+      "http",
       "server",
       "location"
     ],
-    "desc": "Sets the maximum number of requests that can beserved through one HTTP/2 connection,after which the connection is closedand the client should use a new connection.",
+    "desc": "Pre-emptively sends(pushes)a request to the specified urialong with the response to the original request.Only relative URIs with absolute path will be processed,for example:",
     "notes": [],
-    "since": "1.11.6",
+    "since": "1.13.9",
+    "module": "ngx_http_v2_module"
+  },
+  {
+    "name": "http2_push_preload",
+    "syntax": [
+      "http2_push_preload on | off;"
+    ],
+    "def": "http2_push_preload off;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Enables automatic conversion ofpreloadlinksspecified in the “Link” response header fields intopushrequests.",
+    "notes": [],
+    "since": "1.13.9",
     "module": "ngx_http_v2_module"
   },
   {
@@ -8995,7 +9127,7 @@
       "mail",
       "server"
     ],
-    "desc": "Sets the IMAP commands read buffer size.By default, the buffer size is equal to one memory page.This is either 4K or 8K, depending on a platform.",
+    "desc": "Sets the size of the buffer used for reading IMAP commands.By default, the buffer size is equal to one memory page.This is either 4K or 8K, depending on a platform.",
     "notes": [],
     "since": null,
     "module": "ngx_mail_imap_module"
@@ -9056,6 +9188,36 @@
       "server"
     ],
     "desc": "Sets the SMTP protocol extensions listthat is passed to the client in response to theEHLO command.The authentication methods specified in the smtp_auth directive andSTARTTLSare automatically added to this list depending on thestarttls directive value.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_mail_smtp_module"
+  },
+  {
+    "name": "smtp_client_buffer",
+    "syntax": [
+      "smtp_client_buffer size;"
+    ],
+    "def": "smtp_client_buffer 4k|8k;",
+    "contexts": [
+      "mail",
+      "server"
+    ],
+    "desc": "Sets the size of the buffer used for reading SMTP commands.By default, the buffer size is equal to one memory page.This is either 4K or 8K, depending on a platform.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_mail_smtp_module"
+  },
+  {
+    "name": "smtp_greeting_delay",
+    "syntax": [
+      "smtp_greeting_delay time;"
+    ],
+    "def": "smtp_greeting_delay 0;",
+    "contexts": [
+      "mail",
+      "server"
+    ],
+    "desc": "Allows setting a delay before sending an SMTP greetingin order to reject clients who fail to wait for the greeting beforesending SMTP commands.",
     "notes": [],
     "since": null,
     "module": "ngx_mail_smtp_module"
@@ -9384,6 +9546,34 @@
     "notes": [],
     "since": null,
     "module": "ngx_stream_js_module"
+  },
+  {
+    "name": "keyval",
+    "syntax": [
+      "keyval \n    key\n    $variable\n    zone=name;"
+    ],
+    "def": null,
+    "contexts": [
+      "stream"
+    ],
+    "desc": "Creates a new $variable whose valueis looked up by the key in the key-value database.Strings are matched ignoring the case.The database is stored in a shared memory zonespecified by the zone parameter.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_keyval_module"
+  },
+  {
+    "name": "keyval_zone",
+    "syntax": [
+      "keyval_zone \n    zone=name:size\n    [state=file];"
+    ],
+    "def": null,
+    "contexts": [
+      "stream"
+    ],
+    "desc": "Sets the name and size of the shared memory zonethat keeps the key-value database.Key-value pairs are managed by theAPI.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_keyval_module"
   },
   {
     "name": "limit_conn",
@@ -10270,7 +10460,9 @@
       "upstream"
     ],
     "desc": "Defines the name and size of the sharedmemory zone that keeps the group’s configuration and run-time state that areshared between worker processes.Several groups may share the same zone.In this case, it is enough to specify the zone size only once.",
-    "notes": [],
+    "notes": [
+      "\nPrior to version 1.13.3,\nthe configuration was accessible only via a special location\nhandled by\nupstream_conf.\n"
+    ],
     "since": null,
     "module": "ngx_stream_upstream_module"
   },
