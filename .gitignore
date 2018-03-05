@@ -1,9 +1,11 @@
+# ignore nginx document page html cache
+utils/cache
+utils/cache-*
+
 # ignore vscode.d.ts and vscode.proposed.d.ts
 vscode.d.ts
 vscode.proposed.d.ts
 
-# ignore html page cache
-cache
 # ignore vsix
 *.vsix
 

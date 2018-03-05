@@ -1,67 +1,81 @@
 {
-      "name": "vscode-nginx-conf-hint",
-      "displayName": "nginx.conf hint",
-      "description": "nginx.conf hint and autocompletion",
-      "version": "0.0.4",
-      "license": "GPL-3.0",
-
-      "icon": "images/icon.png",
-      "galleryBanner": {
-            "color": "#E5FFEC",
-            "theme": "light"
-      },
-      
-      "categories": ["Snippets", "Languages"],
-      "keywords": ["NGINX", "nginx", "hint", "auto-completion", "configuration"],
-      
-      "publisher": "hangxingliu",
-      "author": "hangxingliu",
-      
-      "main": "./extension/main",
-      "scripts": {},
-
-      "extensionDependencies": ["shanoor.vscode-nginx"],
-      "dependencies": {},
-      "devDependencies": {
-            "vscode": "^1.1.0",
-            "colors": "*",
-            "cheerio": "*",
-            "request": "*",
-            "fs-extra": "*",
-            "html-minifier": "*"
-      },
-      "engines": {
-            "vscode": "^1.1.0"
-      },
-      
-      
-      "activationEvents": ["onLanguage:NGINX"],
-      "contributes": {
-            "snippets": [{
-                  "language": "NGINX",
-                  "path": "./hint_data/snippets.json"
-            }],
-            "commands": [{
-                  "command": "nginx-conf-hint.showDocument",
-                  "title": "Goto Nginx Document"
-            }],
-            "menus": {
-                  "editor/context": [{
-                              "when": "!inOutput && resourceLangId == 'NGINX'",
-                              "command": "nginx-conf-hint.showDocument",
-                              "group": "navigation"
-                        }
-                  ]
-            }
-      },
-
-      
-      "repository": {
-            "type": "git",
-            "url": "https://github.com/hangxingliu/vscode-nginx-conf-hint"
-      },
-      "bugs": {
-            "url": "https://github.com/hangxingliu/vscode-nginx-conf-hint/issues"
-      },
-      "homepage": "https://github.com/hangxingliu/vscode-nginx-conf-hint"
+	"name": "vscode-nginx-conf-hint",
+	"displayName": "nginx.conf hint",
+	"description": "nginx.conf hint and autocompletion",
+	"version": "0.0.4",
+	"license": "GPL-3.0",
+	"icon": "images/icon.png",
+	"galleryBanner": {
+		"color": "#E5FFEC",
+		"theme": "light"
+	},
+	"categories": [
+		"Snippets",
+		"Languages"
+	],
+	"keywords": [
+		"NGINX",
+		"nginx",
+		"hint",
+		"auto-completion",
+		"configuration"
+	],
+	"publisher": "hangxingliu",
+	"author": "hangxingliu",
+	"main": "./extension/main",
+	"scripts": {},
+	"extensionDependencies": [
+		"shanoor.vscode-nginx"
+	],
+	"dependencies": {},
+	"devDependencies": {
+		"cheerio": "^0.22.0",
+		"colors": "^1.1.2",
+		"fs-extra": "^5.0.0",
+		"html-minifier": "^3.5.10",
+		"request": "^2.83.0",
+		"vscode": "^1.1.0"
+	},
+	"engines": {
+		"vscode": "^1.1.0"
+	},
+	"activationEvents": [
+		"onLanguage:NGINX"
+	],
+	"contributes": {
+		"snippets": [
+			{
+				"language": "NGINX",
+				"path": "./hint_data/snippets.json"
+			}
+		],
+		"commands": [
+			{
+				"command": "nginx-conf-hint.showDocument",
+				"title": "Goto Nginx Document"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"when": "!inOutput && resourceLangId == 'NGINX'",
+					"command": "nginx-conf-hint.showDocument",
+					"group": "navigation"
+				}
+			]
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/hangxingliu/vscode-nginx-conf-hint"
+	},
+	"bugs": {
+		"url": "https://github.com/hangxingliu/vscode-nginx-conf-hint/issues"
+	},
+	"homepage": "https://github.com/hangxingliu/vscode-nginx-conf-hint",
+	"__metadata": {
+		"id": "c3d3e8fb-c61d-4edf-8fb8-32298bc763f9",
+		"publisherDisplayName": "Liu Yue",
+		"publisherId": "43f8445f-f00e-4e08-ab0f-21e398616231"
+	}
 }
