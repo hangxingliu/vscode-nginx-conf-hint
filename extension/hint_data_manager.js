@@ -1,4 +1,6 @@
-let vscode = require('vscode');
+let vscode = require('vscode'),
+	{ isAbsolute, join, resolve, dirname } = require('path'),
+	{ readdirSync, statSync, existsSync } = require('fs');
 
 const DIRECTIVES_FILE = `${__dirname}/../hint_data/directives.json`;
 const VARIABLES_FILE = `${__dirname}/../hint_data/variables.json`;
@@ -38,11 +40,11 @@ function initialize() {
 
 		item.insertText = new vscode.SnippetString(
 			directive.def  // has default value
-				? directive.def.replace(/^(\w+)(\s+)(.+);$/, '$1$2$${params:$3};') 
+				? directive.def.replace(/^(\w+)(\s+)(.+);$/, '$1$2$${params:$3};')
 				: `${directive.name}\$\{0\};`);
-		
+
 		item.sortText = getSortPrefix(index) + item.label;
-		
+
 		//for fuzzy matching
 		item.filter = directive.name.split('_');
 		//for checking parent block name
@@ -61,6 +63,53 @@ function initialize() {
 	});
 }
 
+function getLinkItems(document) {
+	const INCLUDE_REGEXP = /(include\s+['"]?)(\S+)(?:$|['";])/g;
+
+	/** @type {string} */
+	let code = document.getText(), baseFile = document.fileName;
+
+	/** @type {RegExpMatchArray} */
+	let matched = null;
+	let result = [];
+
+	try {
+		while ((matched = INCLUDE_REGEXP.exec(code)) != null) {
+			let p = matched[2];
+			if (baseFile && !isAbsolute(p))
+				p = resolve(join(dirname(baseFile), p));
+			if (!existsSync(p) || !statSync(p).isFile())
+				continue;
+
+			let offset1 = matched.index + matched[1].length, offset2 = offset1 + matched[2].length;
+			result.push(new vscode.DocumentLink(
+				new vscode.Range(document.positionAt(offset1), document.positionAt(offset2)),
+				vscode.Uri.file(p)));
+		}
+	} catch (ex) { console.error(ex); }
+	return result;
+}
+
+function getPathCompletionItems(baseFile = '', pathPrefix = '') {
+	// console.log(baseFile, pathPrefix);
+	let files = [], dirs = [];
+	try {
+		let base = pathPrefix;
+		if (baseFile && !isAbsolute(pathPrefix))
+			base = resolve(join(dirname(baseFile), pathPrefix));
+		readdirSync(base).forEach(f => {
+			let stat = statSync(join(base, f));
+			if (stat.isFile()) files.push(f);
+			else if (stat.isDirectory()) dirs.push(f);
+		});
+	} catch (ex) {
+		return [];
+	}
+	let its = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File))
+		.concat(dirs.map(d => new vscode.CompletionItem(d, vscode.CompletionItemKind.Folder)));
+	return its;
+}
+
 function getVariableCompletionItems(varNamePrefix) {
 	return varCompletionItems.filter(v =>
 		v.label.startsWith(varNamePrefix) ||
@@ -73,16 +122,16 @@ function getDirectiveCompletionItems(directiveNamePrefix, parentBlockName) {
 		return directivesCompletionItems;
 	return directivesCompletionItems.filter(it => {
 		//If there has a specific parent block
-		if (parentBlockName)	
+		if (parentBlockName)
 			if (it.contexts.indexOf(parentBlockName) == -1 && it.contexts[0] != 'any')
 				return false;
-		
+
 		if (it.label.startsWith(directiveNamePrefix)) return true;
 
 		//fuzzy matching
 		for (let name of it.filter)
 			if (name.startsWith(directiveNamePrefix))
-				return true;	
+				return true;
 	});
 }
 
@@ -131,10 +180,13 @@ function genDirectiveParametersHintItem(directiveItem) {
 
 module.exports = {
 	initialize,
-	
+
+	getLinkItems,
+
+	getPathCompletionItems,
 	getVariableCompletionItems,
 	getDirectiveCompletionItems,
-	
+
 	getVariableItem,
 	getDirectiveItem,
 

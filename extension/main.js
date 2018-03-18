@@ -1,20 +1,34 @@
+//@ts-check
 /// <reference path="../vscode.d.ts" />
 let vscode = require('vscode'),
 	nginxDocument = require('./open_nginx_document'),
 	hint = require('./hint_data_manager'),
-	{ getTextAroundCursor, getTextBeforeCursor } = require('./vscode_helper');
+	{ getTextAroundCursor, getTextBeforeCursor, showErrorMessage } = require('./vscode_helper');
 
 let NGINX_LANGUAGE_ID = 'NGINX';
 let DOCUMENT_SELECTOR = [NGINX_LANGUAGE_ID];
 
 // ==============================
-//      Semantization function 
+//      Semantization function
 //            语义化函数
 // ==============================
-let isCursorInTheDirectiveName = textBeforeCursor => textBeforeCursor.match(/^\s+(\w*)$/);
-let getVariableNamePrefixBeforeCursor = textBeforeCursor => (textBeforeCursor.match(/\$(\w+)$/) || [])[1];
-let couldNotMatchVariableName = variableNamePrefix => typeof variableNamePrefix == 'undefined';
-let showErrorMessage = msg => vscode.window.showErrorMessage(`nginx-conf-hint: ${msg}`);
+
+function isCursorInTheDirectiveName(textBeforeCursor = '') {
+	return textBeforeCursor.match(/(?:^|;)\s*(\w*)$/); }
+
+function getVariableNamePrefixBeforeCursor(textBeforeCursor = '') {
+	let mtx = textBeforeCursor.match(/\$(\w*)$/);
+	return mtx ? mtx[1] : undefined;
+}
+
+function getCurrentDirectiveInfo(textBeforeCursor = '') {
+	let index = textBeforeCursor.lastIndexOf(';');
+	if (index >= 0)
+		textBeforeCursor = textBeforeCursor.slice(index + 1);
+	let mtx = textBeforeCursor.match(/^\s*(\w+)\s+(.*)$/);
+	return mtx ? ({ name: mtx[1], param: mtx[2] }) : undefined;
+}
+
 
 /**
  * get which configuration block cursor located in.
@@ -24,7 +38,7 @@ function getBlockNameCursorIn(document, position){
 	let lineNum = position.line, stack = 0, match, line = '', commentMark;
 	while (--lineNum >= 0) {
 		line = document.lineAt(lineNum).text;
-		
+
 		// ignore comments
 		commentMark = line.indexOf('#');
 		if (commentMark >= 0) line = line.slice(0, commentMark);
@@ -32,7 +46,7 @@ function getBlockNameCursorIn(document, position){
 		line = line.trim();
 
 		if (line == '}') stack++;
-		
+
 		if (match = line.match(/^(\w+)\s+.*\{$/)) {
 			if(!stack)
 				return match[1];
@@ -45,41 +59,57 @@ function getBlockNameCursorIn(document, position){
 function activate(context) {
 	console.log('nginx-conf-hint activating...');
 
-	let subscriptions = context.subscriptions, sub1, sub2, sub3, sub4;
+	let subscriptions = context.subscriptions, disposable = [];
 
 	hint.initialize();
 	nginxDocument.initialize(context);
 
 	//======================================
-	//          Completion Item	
-	//======================================	
-	sub1 = vscode.languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, {
+	//          Link Item for `include`
+	//======================================
+	disposable[0] = vscode.languages.registerDocumentLinkProvider(DOCUMENT_SELECTOR, {
+		provideDocumentLinks: (document) => hint.getLinkItems(document),
+		resolveDocumentLink: (item) => item
+	});
+
+
+	//======================================
+	//          Completion Item
+	//======================================
+	disposable[1] = vscode.languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, {
 		provideCompletionItems: (document, position) => {
 			// console.log(getBlockNameCursorIn(document, position));
 			let beforeText = getTextBeforeCursor(document, position);
-			
+
 			let isDirective = isCursorInTheDirectiveName(beforeText),
 				directiveNamePrefix = isDirective && isDirective[1];
 			if (isDirective)
 				return hint.getDirectiveCompletionItems(directiveNamePrefix,
 					getBlockNameCursorIn(document, position));
-			
+
+			let directive = getCurrentDirectiveInfo(beforeText);
+			if (!directive)
+				return null;
+
+			if (directive.name == 'include')
+				return hint.getPathCompletionItems(document.fileName, directive.param);
+
 			let variableNamePrefix = getVariableNamePrefixBeforeCursor(beforeText);
-			if (couldNotMatchVariableName(variableNamePrefix))
-				return null;	
+			if (typeof variableNamePrefix == 'undefined')
+				return null;
 			return hint.getVariableCompletionItems(variableNamePrefix);
 		},
 		resolveCompletionItem: item => item
-	}, '$');
+	}, '$', '/');
 
-	
+
 
 	//======================================
-	//          Hover	
+	//          Hover
 	//======================================
-	sub2 = vscode.languages.registerHoverProvider(DOCUMENT_SELECTOR, {
+	disposable[2] = vscode.languages.registerHoverProvider(DOCUMENT_SELECTOR, {
 		provideHover: (document, position) => {
-			
+
 			let beforeText = getTextBeforeCursor(document, position);
 
 			let name = getTextAroundCursor(document, position);
@@ -87,19 +117,19 @@ function activate(context) {
 
 			if (beforeText.match(/^\s*(\w+)$/))
 				return hint.genDirectiveHoverHintItem(hint.getDirectiveItem(name));
-			
+
 			return hint.genVariableHoverHintItem(hint.getVariableItem(name));
 		}
 	});
 
-	
+
 
 	//======================================
-	//          Parameters Hint	
-	//======================================	
-	sub3 = vscode.languages.registerSignatureHelpProvider(DOCUMENT_SELECTOR, {
+	//          Parameters Hint
+	//======================================
+	disposable[3] = vscode.languages.registerSignatureHelpProvider(DOCUMENT_SELECTOR, {
 		provideSignatureHelp: (document, position) => {
-			
+
 			let beforeText = getTextBeforeCursor(document, position);
 			let directiveName = beforeText.match(/^\s*(\w+)\s*/);
 
@@ -109,10 +139,11 @@ function activate(context) {
 		}
 	}, ' ');
 
+
 	//======================================
-	//          Open document command	
+	//          Open document command
 	//======================================
-	sub4 = vscode.commands.registerCommand('nginx-conf-hint.showDocument', () => {
+	disposable[4] = vscode.commands.registerCommand('nginx-conf-hint.showDocument', () => {
 
 		let editor = vscode.window.activeTextEditor;
 		if (!editor || editor.document.languageId != NGINX_LANGUAGE_ID)
@@ -126,22 +157,19 @@ function activate(context) {
 		console.log("request open nginx document: " + text);
 
 		if (!text)
-			return showErrorMessage(`There not any word around cursor or selected!`);	
-		
+			return showErrorMessage(`There not any word around cursor or selected!`);
+
 		if (nginxDocument.containsThisDirective(text))
 			return nginxDocument.openDirectiveDoc(text.trim());
 		if (nginxDocument.containsThisVariable(text))
 			return nginxDocument.openVariableDoc(text.trim());
-		
-		return showErrorMessage(`"${text}" is not a nginx directive or nginx embedded variables!`);	
-	});	
-	
-	
-	subscriptions.push(sub1);
-	subscriptions.push(sub2);
-	subscriptions.push(sub3);
-	subscriptions.push(sub4);
-	
+
+		return showErrorMessage(`"${text}" is not a nginx directive or nginx embedded variables!`);
+	});
+
+
+	subscriptions.push(...disposable);
+
 	console.log('nginx-conf-hint activated');
 }
 

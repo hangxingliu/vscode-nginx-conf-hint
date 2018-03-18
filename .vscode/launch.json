@@ -9,21 +9,11 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
+            "args": [
+				"--extensionDevelopmentPath=${workspaceRoot}",
+				"${workspaceRoot}/example_files"
+			],
             "stopOnEntry": false
-        },
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Launch Program",
-			"program": "${workspaceRoot}/extension/main"
-		},
-		{
-			"type": "node",
-			"request": "attach",
-			"name": "Attach to Process",
-			"address": "localhost",
-			"port": 5858
-		}
+        }
 	]
 }

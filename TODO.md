@@ -4,10 +4,14 @@
 - [x] filter autocompletion items by checking context block
 - [x] add location block param "location" and "upstream" placeholder
 - [x] auto show parameters hint after directive completion
-	- VSCode don't support automatic show parameters hint after auto-complete
+  - VSCode don't support automatic show parameters hint after auto-complete
 - [x] nginx directive detail document
 - [x] directive hint order
-- [ ] cache the block name cursor located in
 - [x] variable documents
-- [ ] add configuration to control enable of filter directive followed context 
-- [ ] enable document links
+- [x] path completion after directive `include`
+- [ ] add configuration to control enable of filter directive followed context
+- [ ] make links in nginx configuration documents valid
+- [ ] some useful snippets
+- [ ] cache the block name cursor located in
+- [ ] make hint senmantic
+  - reference: <https://github.com/tmont/nginx-conf>

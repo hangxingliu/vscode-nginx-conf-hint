@@ -2,8 +2,15 @@
 let vscode = require('vscode');
 
 /**
- * @param {any} document 
- * @param {any} position 
+ * @param {string} msg
+ */
+function showErrorMessage(msg) {
+	vscode.window.showErrorMessage(`nginx-conf-hint: ${msg}`);
+}
+
+/**
+ * @param {any} document
+ * @param {any} position
  * @returns {string}
  */
 function getTextBeforeCursor(document, position) {
@@ -13,8 +20,8 @@ function getTextBeforeCursor(document, position) {
 }
 
 /**
- * @param {any} document 
- * @param {any} position 
+ * @param {any} document
+ * @param {any} position
  * @returns {string}
  */
 function getTextAroundCursor(document, position) {
@@ -29,5 +36,6 @@ function getTextAroundCursor(document, position) {
 
 module.exports = {
 	getTextBeforeCursor,
-	getTextAroundCursor
+	getTextAroundCursor,
+	showErrorMessage
 };
