@@ -14,6 +14,12 @@
 				"${workspaceRoot}/example_files"
 			],
             "stopOnEntry": false
-        }
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Launch Hint Data Getter",
+			"program": "${workspaceFolder}/utils/hint_data_getter.js"
+		}
 	]
 }

@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+//@ts-check
+
+const ENABLE_CACHE = process.argv[2] != '--no-cache';
 
 const BASE_URL = 'https://nginx.org/en/docs/';
 const SIGN_TITLE = 'Modules reference';
@@ -13,21 +16,24 @@ const SNIPPETS_OUTPUT_FILE = `${OUTPUT}/snippets.json`;
 const DIRECTIVES_DOC_OUTPUT_FILE = `${OUTPUT}/directives_document.json`;
 const VARIABLES_DOC_OUTPUT_FILE = `${OUTPUT}/variables_document.json`;
 
-const CACHE_PATH = `${__dirname}/cache/`;
-
-String.prototype.removeWhiteChar = function () { return this.replace(/\s/g, '');}
-
-let enable_cache = process.argv[2] != '--no-cache';
-
 let checker = require('./lib/checker'),
+	chalk = require('chalk').default,
 	snippetGenerator = require('./lib/snippet_generator'),
-	html = require('./lib/html');
+	http = require('./lib/http_with_cache'),
+	html = require('./lib/html'),
+	io = require('./lib/io'),
+	url = require('url'),
+	cheerio = require('cheerio');
+
+const bold = any => chalk.bold(String(any));
+const removeBlank = any => String(any).replace(/\s/g, '');
+
 let start = name => console.log(`${name} ...`),
 	newVariableObject = () => ({
 		name: '',
 		desc: '',
 		module: ''
-	}),newDirectiveObject = () => ({
+	}), newDirectiveObject = () => ({
 		name: '',
 		syntax: [],
 		def: '',
@@ -45,25 +51,8 @@ let start = name => console.log(`${name} ...`),
 		module: '',
 		vars: {},
 		doc: ''
-	}),
-	//Function for getting document page from internet
-	get = (name, url, callback) => {
-		start(`Getting ${name}`);
-		let cacheName = `${CACHE_PATH}${new Buffer(url).toString('base64')}`;
-		if (fs.existsSync(cacheName) && enable_cache)
-			return callback(fs.readFileSync(cacheName, 'utf8'));
-		request.get(url, {}, (err, res, html) => {
-			checker.responseOK(name, err, res, html);
-			fs.writeFileSync(cacheName, html);
-			callback(html);
-		});
-	};
+	});
 
-require('colors');
-
-let cheerio = require('cheerio'),
-	request = require('request'),
-	fs = require('fs-extra');
 
 //==========================
 //     START      =======>
@@ -76,15 +65,10 @@ let directivesResult = [],
 	lastDirectivesLength = 0,
 	lastVariablesLength = 0;
 
-enable_cache || console.log(`No cache mode!`.yellow.bold);
-
-if (!fs.existsSync(CACHE_PATH))
-	start(`Creating cache path: ${CACHE_PATH}`) +
-		fs.mkdirSync(CACHE_PATH) + checker.ok();
-
-get('Nginx document index page', BASE_URL, html => {
+http.init(ENABLE_CACHE);
+http.get('Nginx document index page', BASE_URL, html => {
 	checker.ok();
-	
+
 	start('Analyzing sub document page links');
 	let $ = cheerio.load(html),
 		title = $('center h4').filter((i, e) => $(e).text().trim() == SIGN_TITLE);
@@ -94,9 +78,9 @@ get('Nginx document index page', BASE_URL, html => {
 	checker.lengthEquals('ul.compact', directiveLists, 6, checker.LEVEL_WARN);
 
 	directiveLists.each((i, list) => {
-		//ignore 
+		//ignore
 		//  Alphabetical index of directives
-		//  Alphabetical index of variables		
+		//  Alphabetical index of variables
 		if (i == 0) return;
 		let links = $(list).find('a'), link;
 		checker.lengthAtLease('<a> in ul.compact', links, 1);
@@ -105,7 +89,7 @@ get('Nginx document index page', BASE_URL, html => {
 			pageList.push({ uri: link.attr('href'), name: link.text().trim() });
 		});
 	});
-	checker.ok(`Got ${String(pageList.length).bold} sub document pages`);
+	checker.ok(`Got ${bold(pageList.length)} sub document pages`);
 
 	handlerSubDocumentPage();
 });
@@ -116,15 +100,17 @@ function finish() {
 	checker.ok();
 
 	start('Writing to file');
-	fs.writeJSONSync(DIRECTIVES_OUTPUT_FILE, directivesResult);
-	fs.writeJSONSync(DIRECTIVES_DOC_OUTPUT_FILE, directivesDocResult);
-	fs.writeJSONSync(VARIABLES_OUTPUT_FILE, variablesResult);
-	fs.writeJSONSync(VARIABLES_DOC_OUTPUT_FILE, variablesDocResult);
-	fs.writeJSONSync(SNIPPETS_OUTPUT_FILE, snippetsResult);
+	io.writeEachJSON({
+		[DIRECTIVES_OUTPUT_FILE]: directivesResult,
+		[DIRECTIVES_DOC_OUTPUT_FILE]: directivesDocResult,
+		[VARIABLES_OUTPUT_FILE]: variablesResult,
+		[VARIABLES_DOC_OUTPUT_FILE]: variablesDocResult,
+		[SNIPPETS_OUTPUT_FILE]: snippetsResult,
+	});
 	checker.ok();
 
-	console.log(`Total directives number: ${String(directivesResult.length).bold}`);
-	console.log(`Total variables number: ${String(variablesResult.length).bold}`);
+	console.log(`Total directives number: ${bold(directivesResult.length)}`);
+	console.log(`Total variables number: ${bold(variablesResult.length)}`);
 
 	return checker.done();
 }
@@ -134,37 +120,38 @@ function handlerSubDocumentPage() {
 		return finish();
 
 	let { uri, name } = pageList.shift();
+	let fullURL = `${BASE_URL}${uri}`;
 
-	get(`sub-page ${name.bold}`,`${BASE_URL}${uri}`, _html => {
+	http.get(`sub-page ${bold(name)}`, fullURL, _html => {
 		checker.ok();
 		let $ = cheerio.load(_html),
 			directives = $('.directive'),
 			variableContainer = $('a[name=variables]')
-		
-		start(`Analyzing sub-page ${name.bold}`);
+
+		start(`Analyzing sub-page ${bold(name)}`);
 
 		checker.lengthAtLease(`directives info of ${name}: .directive`, directives, 1);
 
 		directives.each( i => {
 			let item = newDirectiveObject(),
 				docObj = newDirectiveDocObject();
-			
+
 			let directive = directives.eq(i);
 
 			docObj.table = html.compress(directive.html())
 				.replace('cellspacing=\"0\"', '');
 
 			//check table item available
-			let title_check = directive.find('table th').text().removeWhiteChar();
+			let title_check = removeBlank(directive.find('table th').text());
 			checker.equal('directive define table head', title_check, SIGN_TABLE_HEAD);
-			
+
 			let directiveDef = directive.find('table td');
 			checker.lengthEquals('directive define item', directiveDef, 3);
 
 			let directiveSyntax = directiveDef.eq(0),
 				directiveDefault = directiveDef.eq(1),
 				directiveContext = directiveDef.eq(2);
-			
+
 			item.module = name;
 			docObj.module = name;
 
@@ -179,8 +166,8 @@ function handlerSubDocumentPage() {
 
 			item.def = directiveDefault.text().trim();
 			item.def = item.def == '—' ? null : item.def;
-			
-			item.contexts = directiveContext.text().removeWhiteChar().split(',');
+
+			item.contexts = removeBlank(directiveContext.text()).split(',');
 			checker.lengthAtLease(`directive contexts (${item.name})`, item.contexts, 1);
 
 			item.since = directive.find('p').text().trim() || null;
@@ -188,43 +175,42 @@ function handlerSubDocumentPage() {
 				item.since = (item.since.match(SIGN_SINCE_VERSION) || ['', null])[1];
 				checker.lengthAtLease(`directive since version (${item.name})`, item.since, 1);
 			}
-			
+
 			docObj.link = directive.prev('a').attr('name');
 			checker.lengthAtLease(`document link of directive (${item.name})`, docObj.link, 1);
 			docObj.link = `${uri}#${docObj.link}`;
 
 			// loop after directive box div
-			
+
 			let elementPointer = directive;
 			while ((elementPointer =
 				elementPointer.next('p, blockquote.note, blockquote.example, dl.compact')).length) {
 				let tagName = elementPointer.prop('tagName');
-				if (tagName == 'P') {
+				switch (tagName) {
+				case 'P':
 					if (!elementPointer.text().trim()) continue;
 					if (!item.desc)
 						item.desc = elementPointer.text().replace(/\n/g, '');
 					docObj.doc += $.html(elementPointer);
-					continue;
-				}
-				if (tagName == 'DL') {
+					break;
+				case 'DL':
 					docObj.doc += $.html(elementPointer);
-					continue;
+					break;
+				case 'BLOCKQUOTE':
+					let className = elementPointer.attr('class').trim();
+					if (className == 'note')
+						item.notes.push(elementPointer.text());
+					else if (className != 'example')
+						checker.warn(`there is a blockquote tag with unknown class name (${className}) ` +
+							`after directive (${item.name})`);
+					docObj.doc += $.html(elementPointer);
 				}
-				//BLOCKQUOTE
-				let className = elementPointer.attr('class').trim();
-				if (className == 'note')
-					item.notes.push(elementPointer.text());
-				else if (className != 'example')
-					checker.warn(`there is a blockquote tag with unknown class name (${className}) ` +
-						`after directive (${item.name})`);
-				docObj.doc += $.html(elementPointer);
 			}
 
 			checker.lengthAtLease(`description of directive (${item.name})`, item.desc, 1, checker.LEVEL_WARN);
 			// checker.lengthAtLease(`document content of directive (${item.name})`, item.doc, 1);
 
-			docObj.doc = html.compress(docObj.doc)
-				.replace(/href=[\"\'].+?[\"\']/g, 'href="#"');
+			docObj.doc = resolveDocumentHTML(docObj.doc);
 
 			directivesResult.push(item);
 			directivesDocResult.push(docObj);
@@ -236,23 +222,22 @@ function handlerSubDocumentPage() {
 
 			let variablesDescription = variableContainer.next('center').next('p');
 			let container = variablesDescription.next('dl');
-			
+
 			//Because page of ngx_http_auth_jwt_module
 			if (!container.length)
 				container = variablesDescription.next('p').next('dl');
-			
+
 			checker.lengthEquals(`variables info of ${name}: a[name=variables]+center+p+dl or ` +
 				`a[name=variables]+center+p+p+dl`,
 				container, 1);
-			
+
 			docObj.doc = $.html(variablesDescription);
 			if (variablesDescription.next('p').length)
 				docObj.doc += $.html(variablesDescription.next('p')) + $.html(container);
 			else
 				docObj.doc += $.html(container);
-			docObj.doc = html.compress(docObj.doc)
-				.replace(/href=[\"\'].+?[\"\']/g, 'href="#var_protocol"');
-			
+			docObj.doc = resolveDocumentHTML(docObj.doc);
+
 			// too many page has not compact class in variable
 			// if ((container.attr('class')||'').trim() != 'compact')
 			// 	checker.warn(`variables dl tag has not class name "compact" in ${name}`);
@@ -262,21 +247,21 @@ function handlerSubDocumentPage() {
 					elementVarDesc = elementVarName.next('dd'),
 					elementTailCheck = elementVarName.next().next(),
 					item = newVariableObject();
-				
+
 				item.module = name;
 				item.name = (elementVarName.text() || '').trim();
 				checker.lengthAtLease(`variable name ${i} of ${name}`, item.name, 2);
-				
+
 				item.desc = (elementVarDesc.text() || '').trim();
 				checker.lengthAtLease(`description of variable ${item.name}`, item.desc, 1);
 
 				if (elementTailCheck.length && elementTailCheck.prop('tagName') != 'DT')
-					checker.warn(`the tag after description of variable ${item.name} is not "dt"`);	
-				
+					checker.warn(`the tag after description of variable ${item.name} is not "dt"`);
+
 				let elementId = elementVarName.attr('id');
 				checker.lengthAtLease(`attribute "id" of element "dt" ${item.name} `,
 					elementId, 'var_'.length);
-				
+
 				docObj.vars[item.name] = elementId;
 				variablesResult.push(item);
 			});
@@ -284,18 +269,23 @@ function handlerSubDocumentPage() {
 			variablesDocResult.push(docObj);
 		}
 
-		
+
 		let diffDirectives = directivesResult.length - lastDirectivesLength,
 			diffVariables = variablesResult.length - lastVariablesLength;
-		
-		diffDirectives && console.log(` - Directives count: ${String(diffDirectives).bold}`);
-		diffVariables && console.log(` - Variables count: ${String(diffVariables).bold}`);
+
+		diffDirectives && console.log(` - Directives count: ${bold(diffDirectives)}`);
+		diffVariables && console.log(` - Variables count: ${bold(diffVariables)}`);
 
 		lastDirectivesLength += diffDirectives;
 		lastVariablesLength += diffVariables;
-		
+
 		checker.ok();
 
 		handlerSubDocumentPage();
 	});
+
+	function resolveDocumentHTML(docHTML) {
+		return html.compress(docHTML).replace(/href=[\"\'](.+?)[\"\']/g,
+			(_, href) => `href="${encodeURI(url.resolve(fullURL, decodeURI(href)))}"`);
+	}
 }

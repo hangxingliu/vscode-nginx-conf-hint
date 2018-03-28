@@ -1,9 +1,11 @@
-require('colors')
+let chalk = require('chalk').default;
 
-const OK = ' - ' + 'OK'.green;
-const WARN = ' - ' + 'WARN'.yellow;
-const ERROR = ' - ' + 'ERROR'.red;
-const DONE = 'DONE'.blue.bold;
+const bold = any => chalk.bold(String(any));
+
+const OK = ' - ' + chalk.green('OK');
+const WARN = ' - ' + chalk.yellow('WARN');
+const ERROR = ' - ' + chalk.red('ERROR');
+const DONE = chalk.blue.bold('DONE');
 const LEVEL_WARN = true;
 const LEVEL_ERROR = false;
 
@@ -25,44 +27,45 @@ function done() {
 }
 
 /**
- * @param {string} name 
- * @param {string|Array<string>} arrOrStr 
- * @param {number} length 
- * @param {boolean} justWarn 
+ * @param {string} name
+ * @param {{length: number}} arrOrStr
+ * @param {number} length
+ * @param {boolean} justWarn
  */
 function lengthEquals(name = '', arrOrStr = [], length = 1, justWarn = false) {
 	return (arrOrStr && arrOrStr.length == length) ?
 		arrOrStr :
-		(justWarn ? warn : error)(`length of ${name.bold} (${
-			arrOrStr ? arrOrStr.length : 'undefined'})is not equal ${String(length).bold}!`);
+		(justWarn ? warn : error)(`length of ${bold(name)} (${
+			arrOrStr ? arrOrStr.length : 'undefined'})is not equal ${bold(length)}!`);
 }
 /**
- * 
- * @param {string} name 
- * @param {string|Array<any>} arrOrStr 
- * @param {number} length 
- * @param {boolean} justWarn 
+ *
+ * @param {string} name
+ * @param {{length: number}} arrOrStr
+ * @param {number} length
+ * @param {boolean} justWarn
  */
 function lengthAtLease(name, arrOrStr, length = 1, justWarn = false) {
 	return (arrOrStr && arrOrStr.length >= length) ?
 		arrOrStr :
-		(justWarn ? warn : error)(`length of ${name.bold} (${
-			arrOrStr ? arrOrStr.length : 'undefined'})less than ${String(length).bold}!`);
+		(justWarn ? warn : error)(`length of ${bold(name)} (${
+			arrOrStr ? arrOrStr.length : 'undefined'})less than ${bold(length)}!`);
 }
 function responseOK(name, err, res, html) {
 	err && error(err.stack);
-	res.statusCode != 200 && error(`${name.bold} statusCode != 200`);
-	!html && error(`${name.bold} empty response content`);
+	res.statusCode != 200 && error(`${bold(name)} statusCode != 200`);
+	!html && error(`${bold(name)} empty response content`);
 }
 function equal(name = '', actual = '', expected = '', justWarn = false) {
 	if (actual === expected)
-		return true;	
-	(justWarn ? warn : error)(`${name.bold}: expected: ${expected.green} .But actual: ${actual.red}.`);
+		return true;
+	(justWarn ? warn : error)(`${bold(name)}: expected: ${chalk.green(expected)}` +
+		`.But actual: ${chalk.red(actual)}.`);
 }
 
 module.exports = {
 	ok, error, warn, done, LEVEL_ERROR, LEVEL_WARN,
-	lengthEquals, 
+	lengthEquals,
 	lengthAtLease,
 	responseOK,
 	equal

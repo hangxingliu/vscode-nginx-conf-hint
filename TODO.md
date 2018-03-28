@@ -9,8 +9,8 @@
 - [x] directive hint order
 - [x] variable documents
 - [x] path completion after directive `include`
+- [x] make links in nginx configuration documents valid (2018-03-28)
 - [ ] add configuration to control enable of filter directive followed context
-- [ ] make links in nginx configuration documents valid
 - [ ] some useful snippets
 - [ ] cache the block name cursor located in
 - [ ] make hint senmantic
