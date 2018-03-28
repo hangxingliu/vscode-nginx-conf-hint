@@ -1511,6 +1511,22 @@
     "module": "ngx_http_core_module"
   },
   {
+    "name": "subrequest_output_buffer_size",
+    "syntax": [
+      "subrequest_output_buffer_size size;"
+    ],
+    "def": "subrequest_output_buffer_size 4k|8k;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Sets the size of the buffer used forstoring the response body of a subrequest.By default, the buffer size is equal to one memory page.This is either 4K or 8K, depending on a platform.It can be made smaller, however.",
+    "notes": [],
+    "since": "1.13.10",
+    "module": "ngx_http_core_module"
+  },
+  {
     "name": "tcp_nodelay",
     "syntax": [
       "tcp_nodelay on | off;"
@@ -1521,7 +1537,7 @@
       "server",
       "location"
     ],
-    "desc": "Enables or disables the use of the TCP_NODELAY option.The option is enabled only when a connection is transitioned into thekeep-alive state.",
+    "desc": "Enables or disables the use of the TCP_NODELAY option.The option is enabled when a connection is transitioned into thekeep-alive state.Additionally, it is enabled on SSL connections,for unbuffered proxying,and for WebSocket proxying.",
     "notes": [],
     "since": null,
     "module": "ngx_http_core_module"
@@ -3091,6 +3107,421 @@
     "module": "ngx_http_geoip_module"
   },
   {
+    "name": "grpc_bind",
+    "syntax": [
+      "grpc_bind \n    address\n    [transparent ] |\n    off;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Makes outgoing connections to a gRPC server originatefrom the specified local IP address with an optional port.Parameter value can contain variables.The special value off cancels the effectof the grpc_bind directiveinherited from the previous configuration level, which allows thesystem to auto-assign the local IP address and port.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_buffer_size",
+    "syntax": [
+      "grpc_buffer_size size;"
+    ],
+    "def": "grpc_buffer_size 4k|8k;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Sets the size of the buffer used for reading the responsereceived from the gRPC server.The response is passed to the client synchronously, as soon as it is received.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_connect_timeout",
+    "syntax": [
+      "grpc_connect_timeout time;"
+    ],
+    "def": "grpc_connect_timeout 60s;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Defines a timeout for establishing a connection with a gRPC server.It should be noted that this timeout cannot usually exceed 75 seconds.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_hide_header",
+    "syntax": [
+      "grpc_hide_header field;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "By default,nginx does not pass the header fields “Date”,“Server”, and“X-Accel-...” from the response of a gRPCserver to a client.The grpc_hide_header directive sets additional fieldsthat will not be passed.If, on the contrary, the passing of fields needs to be permitted,the grpc_pass_header directive can be used.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ignore_headers",
+    "syntax": [
+      "grpc_ignore_headers field ...;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Disables processing of certain response header fields from the gRPC server.The following fields can be ignored: “X-Accel-Redirect”and “X-Accel-Charset”.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_intercept_errors",
+    "syntax": [
+      "grpc_intercept_errors on | off;"
+    ],
+    "def": "grpc_intercept_errors off;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Determines whether gRPC server responses with codes greater than or equalto 300 should be passed to a clientor be intercepted and redirected to nginx for processingwith the error_page directive.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_next_upstream",
+    "syntax": [
+      "grpc_next_upstream \n    error |\n    timeout |\n    invalid_header |\n    http_500 |\n    http_502 |\n    http_503 |\n    http_504 |\n    http_403 |\n    http_404 |\n    http_429 |\n    non_idempotent |\n    off\n    ...;"
+    ],
+    "def": "grpc_next_upstream error timeout;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Specifies in which cases a request should be passed to the next server:",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_next_upstream_timeout",
+    "syntax": [
+      "grpc_next_upstream_timeout time;"
+    ],
+    "def": "grpc_next_upstream_timeout 0;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Limits the time during which a request can be passed to thenext server.The 0 value turns off this limitation.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_next_upstream_tries",
+    "syntax": [
+      "grpc_next_upstream_tries number;"
+    ],
+    "def": "grpc_next_upstream_tries 0;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Limits the number of possible tries for passing a request to thenext server.The 0 value turns off this limitation.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_pass",
+    "syntax": [
+      "grpc_pass address;"
+    ],
+    "def": null,
+    "contexts": [
+      "location",
+      "ifinlocation"
+    ],
+    "desc": "Sets the gRPC server address.The address can be specified as a domain name or IP address,and a port:",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_pass_header",
+    "syntax": [
+      "grpc_pass_header field;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Permits passing otherwise disabled headerfields from a gRPC server to a client.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_read_timeout",
+    "syntax": [
+      "grpc_read_timeout time;"
+    ],
+    "def": "grpc_read_timeout 60s;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Defines a timeout for reading a response from the gRPC server.The timeout is set only between two successive read operations,not for the transmission of the whole response.If the gRPC server does not transmit anything within this time,the connection is closed.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_send_timeout",
+    "syntax": [
+      "grpc_send_timeout time;"
+    ],
+    "def": "grpc_send_timeout 60s;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Sets a timeout for transmitting a request to the gRPC server.The timeout is set only between two successive write operations,not for the transmission of the whole request.If the gRPC server does not receive anything within this time,the connection is closed.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_set_header",
+    "syntax": [
+      "grpc_set_header field value;"
+    ],
+    "def": "grpc_set_header Content-Length $content_length;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Allows redefining or appending fields to the request headerpassed to the gRPC server.The value can contain text, variables, and their combinations.These directives are inherited from the previous level if andonly if there are nogrpc_set_headerdirectives defined on the current level.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_certificate",
+    "syntax": [
+      "grpc_ssl_certificate file;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Specifies a file with the certificate in the PEM formatused for authentication to a gRPC SSL server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_certificate_key",
+    "syntax": [
+      "grpc_ssl_certificate_key file;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Specifies a file with the secret key in the PEM formatused for authentication to a gRPC SSL server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_ciphers",
+    "syntax": [
+      "grpc_ssl_ciphers ciphers;"
+    ],
+    "def": "grpc_ssl_ciphers DEFAULT;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Specifies the enabled ciphers for requests to a gRPC SSL server.The ciphers are specified in the format understood by the OpenSSL library.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_crl",
+    "syntax": [
+      "grpc_ssl_crl file;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Specifies a file with revoked certificates (CRL)in the PEM format used to verifythe certificate of the gRPC SSL server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_name",
+    "syntax": [
+      "grpc_ssl_name name;"
+    ],
+    "def": "grpc_ssl_name host from grpc_pass;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Allows overriding the server name used toverifythe certificate of the gRPC SSL server and to bepassed through SNIwhen establishing a connection with the gRPC SSL server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_password_file",
+    "syntax": [
+      "grpc_ssl_password_file file;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Specifies a file with passphrases forsecret keyswhere each passphrase is specified on a separate line.Passphrases are tried in turn when loading the key.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_server_name",
+    "syntax": [
+      "grpc_ssl_server_name on | off;"
+    ],
+    "def": "grpc_ssl_server_name off;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Enables or disables passing of the server name throughTLSServer Name Indication extension (SNI, RFC 6066)when establishing a connection with the gRPC SSL server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_session_reuse",
+    "syntax": [
+      "grpc_ssl_session_reuse on | off;"
+    ],
+    "def": "grpc_ssl_session_reuse on;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Determines whether SSL sessions can be reused when working withthe gRPC server.If the errors“SSL3_GET_FINISHED:digest check failed”appear in the logs, try disabling session reuse.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_protocols",
+    "syntax": [
+      "grpc_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
+    ],
+    "def": "grpc_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Enables the specified protocols for requests to a gRPC SSL server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_trusted_certificate",
+    "syntax": [
+      "grpc_ssl_trusted_certificate file;"
+    ],
+    "def": null,
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Specifies a file with trusted CA certificates in the PEM formatused to verifythe certificate of the gRPC SSL server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_verify",
+    "syntax": [
+      "grpc_ssl_verify on | off;"
+    ],
+    "def": "grpc_ssl_verify off;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Enables or disables verification of the gRPC SSL server certificate.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
+    "name": "grpc_ssl_verify_depth",
+    "syntax": [
+      "grpc_ssl_verify_depth number;"
+    ],
+    "def": "grpc_ssl_verify_depth 1;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Sets the verification depth in the gRPC SSL server certificates chain.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
     "name": "gunzip",
     "syntax": [
       "gunzip on | off;"
@@ -3803,7 +4234,7 @@
   {
     "name": "log_format",
     "syntax": [
-      "log_format \n    name\n    [escape=default|json]\n    string ...;"
+      "log_format \n    name\n    [escape=default|json|none]\n    string ...;"
     ],
     "def": "log_format combined \"...\";",
     "contexts": [
@@ -3879,7 +4310,7 @@
   {
     "name": "memcached_bind",
     "syntax": [
-      "memcached_bind \n    address\n    [ transparent ] |\n    off;"
+      "memcached_bind \n    address\n    [transparent ] |\n    off;"
     ],
     "def": null,
     "contexts": [
@@ -9640,7 +10071,7 @@
   {
     "name": "log_format",
     "syntax": [
-      "log_format \n    name\n    [escape=default|json]\n    string ...;"
+      "log_format \n    name\n    [escape=default|json|none]\n    string ...;"
     ],
     "def": null,
     "contexts": [

@@ -530,6 +530,11 @@
     "module": "ngx_http_upstream_module"
   },
   {
+    "name": "$upstream_trailer_name",
+    "desc": "keeps fields from the end of the response\nobtained from the upstream server (1.13.10).",
+    "module": "ngx_http_upstream_module"
+  },
+  {
     "name": "$uid_got",
     "desc": "The cookie name and received client identifier.",
     "module": "ngx_http_userid_module"
@@ -741,7 +746,12 @@
   },
   {
     "name": "$ssl_preread_server_name",
-    "desc": "returns the server name requested through SNI",
+    "desc": "server name requested through SNI",
+    "module": "ngx_stream_ssl_preread_module"
+  },
+  {
+    "name": "$ssl_preread_alpn_protocols",
+    "desc": "list of protocols advertised by the client through ALPN (1.13.10).\nThe values are separated by commas.",
     "module": "ngx_stream_ssl_preread_module"
   },
   {
