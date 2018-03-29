@@ -1,7 +1,18 @@
+# vscode workspace configurations
 .vscode
+
+# example files (test environment)
+example_files
+
+# cache files
 utils/cache
+utils/cache-*
+
+# binary archives
 *.vsix
 *.tgz
+*.tar
 
+# vscode typing files
 vscode.d.ts
 vscode.proposed.d.ts

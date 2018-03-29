@@ -1,10 +1,30 @@
+# vscode workspace configurations
 .vscode/**
+
+# example files
+example_files/**
+
+# type dependencies
 node_modules/@types/**
+
+# cache files
 utils/cache
+utils/cache-**
+
+# utils
 utils/**
+
+# eslint
 .eslintrc.json
+
+# binary archives
 *.tgz
 *.vsix
 *.d.ts
 
+# screenshot image (because link of screenshot in README is under github)
 images/screenshots.gif
+
+# vscode typing files
+vscode.d.ts
+vscode.proposed.d.ts
