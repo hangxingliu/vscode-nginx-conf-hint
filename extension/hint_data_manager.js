@@ -116,7 +116,11 @@ function getVariableCompletionItems(varNamePrefix) {
 		v.filter.reduce((matched, keyword) => matched || keyword.startsWith(varNamePrefix), false));
 }
 
-function getDirectiveCompletionItems(directiveNamePrefix, parentBlockName) {
+/**
+ * @param {string} directiveNamePrefix
+ * @param {string} [parentBlockName] return completion items related this block name only if this parameter is not falsy
+ */
+function getDirectiveCompletionItems(directiveNamePrefix, parentBlockName = null) {
 	//Empty prefix , return all items
 	if (!directiveNamePrefix)
 		return directivesCompletionItems;

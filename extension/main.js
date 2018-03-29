@@ -8,6 +8,8 @@ let vscode = require('vscode'),
 let NGINX_LANGUAGE_ID = 'NGINX';
 let DOCUMENT_SELECTOR = [NGINX_LANGUAGE_ID];
 
+let enableStrictCompletion = true;
+
 // ==============================
 //      Semantization function
 //            语义化函数
@@ -55,6 +57,10 @@ function getBlockNameCursorIn(document, position){
 	}
 };
 
+function applyConfiguration() {
+	let configurations = vscode.workspace.getConfiguration('nginx-conf-hint');
+	enableStrictCompletion = configurations.get('enableStrictCompletion', true);
+}
 
 function activate(context) {
 	console.log('nginx-conf-hint activating...');
@@ -63,6 +69,13 @@ function activate(context) {
 
 	hint.initialize();
 	nginxDocument.initialize(context);
+
+	applyConfiguration();
+
+	//======================================
+	// Update configuration if it has changed
+	//======================================
+	vscode.workspace.onDidChangeConfiguration(applyConfiguration);
 
 	//======================================
 	//          Link Item for `include`
@@ -83,9 +96,10 @@ function activate(context) {
 
 			let isDirective = isCursorInTheDirectiveName(beforeText),
 				directiveNamePrefix = isDirective && isDirective[1];
-			if (isDirective)
-				return hint.getDirectiveCompletionItems(directiveNamePrefix,
-					getBlockNameCursorIn(document, position));
+			if (isDirective) {
+				let block = enableStrictCompletion ? getBlockNameCursorIn(document, position) : null;
+				return hint.getDirectiveCompletionItems(directiveNamePrefix, block);
+			}
 
 			let directive = getCurrentDirectiveInfo(beforeText);
 			if (!directive)

@@ -54,6 +54,18 @@
 				"title": "Goto Nginx Document"
 			}
 		],
+		"configuration":[
+			{
+				"title": "Nginx config file hint",
+				"properties": {
+					"nginx-conf-hint.enableStrictCompletion": {
+						"type": "boolean",
+						"default": true,
+						"description": "only complete directives related to the block where cursor is located"
+					}
+				}
+			}
+		],
 		"menus": {
 			"editor/context": [
 				{

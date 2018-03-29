@@ -10,7 +10,7 @@
 - [x] variable documents
 - [x] path completion after directive `include`
 - [x] make links in nginx configuration documents valid (2018-03-28)
-- [ ] add configuration to control enable of filter directive followed context
+- [x] add config to enable/disable complete directives in contextual block (strict complete). (2018-03-29)
 - [ ] some useful snippets
 - [ ] cache the block name cursor located in
 - [ ] make hint senmantic
