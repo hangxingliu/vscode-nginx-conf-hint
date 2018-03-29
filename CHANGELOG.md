@@ -1,3 +1,11 @@
+# CHANGELOG
+
+### 0.0.5 (2018-03-29)
+
+1. fix invalid links in nginx documents.
+2. add a configuration to enable/disable strict auto-completion.
+3. update Nginx directives and variables to latest.
+
 ### 0.0.4 (2017-07-24)
 
 1. update Nginx directives and variables to latest.

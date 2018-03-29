@@ -3,10 +3,10 @@
 Welcome contributing:
 
 - useful nginx.conf snippets reporting bug 
-- improving pull request
-- reporting bug
+- helpful pull request
+- report bug
 
-[Pull Request](pr) & [Issues](issues)
+[Pull Request][pr] & [Issues][issues]
 
 ## Executing npm install
 

@@ -16,7 +16,7 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 
 ## Functions
 
-1. hint nginx directives and embedded variables
+1. auto complete nginx directives and embedded variables
 2. hint directive default parameters
 3. hint directives syntax 
 4. nginx block snippets
@@ -24,11 +24,11 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 
 ## Changelog
 
-### 0.0.4 (2017-07-24)
+### 0.0.5 (2018-03-29)
 
-1. update Nginx directives and variables to latest.
-2. add access_log into block server snippet
-3. modify snippet project structure
+1. fix invalid links in nginx documents.
+2. add a configuration to enable/disable strict auto-completion.
+3. update Nginx directives and variables to latest.
 
 [CHANGELOG.md][changelog]
 
@@ -41,11 +41,11 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 ## Contributing to the Extension
 
 - useful nginx.conf snippets 
-- report bug
-- othe improving pull request
+- report bug via Github issues
+- helpful pull request
+- give me coffee to make extension better and better via [Paypal][paypal]
 
-
-[Pull Request](pr) & [Issues](issues)
+[Pull Request][pr] & [Issues][issues]
 
 [CONTRIBUTING.md](CONTRIBUTING.md)
 
@@ -60,3 +60,4 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 [issues]: https://github.com/hangxingliu/vscode-nginx-conf-hint/issues
 [pr]: https://github.com/hangxingliu/vscode-nginx-conf-hint/pulls
 [changelog]: https://github.com/hangxingliu/vscode-nginx-conf-hint/blob/master/CHANGELOG.md
+[paypal]: https://www.paypal.me/hangxingliu
