@@ -32,8 +32,8 @@
 		"chalk": "^2.3.2",
 		"cheerio": "^0.22.0",
 		"html-minifier": "^3.5.12",
-		"request": "^2.85.0",
-		"vscode": "^1.1.0"
+		"request": "^2.87.0",
+		"vscode": "^1.1.18"
 	},
 	"engines": {
 		"vscode": "^1.1.0"
