@@ -24,9 +24,7 @@
 	"author": "hangxingliu",
 	"main": "./extension/main",
 	"scripts": {},
-	"extensionDependencies": [
-		"shanoor.vscode-nginx"
-	],
+	"extensionDependencies": [],
 	"dependencies": {},
 	"devDependencies": {
 		"chalk": "^2.3.2",
@@ -42,10 +40,29 @@
 		"onLanguage:NGINX"
 	],
 	"contributes": {
+        "languages": [
+            {
+                "id": "NGINX",
+                "aliases": [
+                    "NGINX"
+                ],
+                "extensions": [
+                    ".conf"
+                ],
+                "configuration": "./nginx.configuration.json"
+            }
+        ],
 		"snippets": [
 			{
 				"language": "NGINX",
 				"path": "./hint_data/snippets.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "NGINX",
+				"scopeName": "source.nginx",
+				"path": "./syntaxes/nginx.tmLanguage"
 			}
 		],
 		"commands": [
