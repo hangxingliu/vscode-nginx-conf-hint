@@ -75,6 +75,20 @@
     "module": "Core functionality"
   },
   {
+    "name": "env",
+    "syntax": [
+      "env variable[=value];"
+    ],
+    "def": "env TZ;",
+    "contexts": [
+      "main"
+    ],
+    "desc": "By default, nginx removes all environment variables inheritedfrom its parent process except the TZ variable.This directive allows preserving some of the inherited variables,changing their values, or creating new environment variables.These variables are then:",
+    "notes": [],
+    "since": null,
+    "module": "Core functionality"
+  },
+  {
     "name": "error_log",
     "syntax": [
       "error_log file [level];"
@@ -93,20 +107,6 @@
       "\nFor debug logging to work, nginx needs to\nbe built with --with-debug,\nsee “A debugging log”.\n",
       "\nThe directive can be specified on the\nstream level\nstarting from version 1.7.11,\nand on the mail level\nstarting from version 1.9.0.\n"
     ],
-    "since": null,
-    "module": "Core functionality"
-  },
-  {
-    "name": "env",
-    "syntax": [
-      "env variable[=value];"
-    ],
-    "def": "env TZ;",
-    "contexts": [
-      "main"
-    ],
-    "desc": "By default, nginx removes all environment variables inheritedfrom its parent process except the TZ variable.This directive allows preserving some of the inherited variables,changing their values, or creating new environment variables.These variables are then:",
-    "notes": [],
     "since": null,
     "module": "Core functionality"
   },
@@ -886,7 +886,7 @@
     "contexts": [
       "location"
     ],
-    "desc": "Limits allowed HTTP methods inside a location.The method parameter can be one of the following:GET,HEAD,POST,PUT,DELETE,MKCOL,COPY,MOVE,OPTIONS,PROPFIND,PROPPATCH,LOCK,UNLOCK,orPATCH.Allowing the GET method makes theHEAD method also allowed.Access to other methods can be limited using thengx_http_access_moduleandngx_http_auth_basic_modulemodules directives:",
+    "desc": "Limits allowed HTTP methods inside a location.The method parameter can be one of the following:GET,HEAD,POST,PUT,DELETE,MKCOL,COPY,MOVE,OPTIONS,PROPFIND,PROPPATCH,LOCK,UNLOCK,orPATCH.Allowing the GET method makes theHEAD method also allowed.Access to other methods can be limited using thengx_http_access_module,ngx_http_auth_basic_module,andngx_http_auth_jwt_module(1.13.10)modules directives:",
     "notes": [],
     "since": null,
     "module": "ngx_http_core_module"
@@ -987,6 +987,7 @@
     "desc": "Sets the address and port for IP,or the path for a UNIX-domain socket on whichthe server will accept requests.Both address and port,or only address or only port can be specified.An address may also be a hostname, for example:",
     "notes": [
       "\nIn versions prior to 0.8.21 this parameter is named simply\ndefault.\n",
+      "\nThe PROXY protocol version 2 is supported since version 1.13.11.\n",
       "\nIn versions prior to 0.8.21, they could only be\nspecified in the listen directive together with the\ndefault parameter.\n"
     ],
     "since": null,
@@ -1808,27 +1809,12 @@
     "contexts": [
       "http",
       "server",
-      "location"
+      "location",
+      "limit_except"
     ],
     "desc": "Enables validation of JSON Web Token.The specified string is used as a realm.Parameter value can contain variables.",
     "notes": [],
     "since": null,
-    "module": "ngx_http_auth_jwt_module"
-  },
-  {
-    "name": "auth_jwt_header_set",
-    "syntax": [
-      "auth_jwt_header_set $variable name ...;"
-    ],
-    "def": null,
-    "contexts": [
-      "http"
-    ],
-    "desc": "Sets the variable to a JOSE header parameteridentified by key names.Name matching starts from the top level of the JSON tree.For arrays, the variable keeps a list of array elements separated by commas.",
-    "notes": [
-      "\nPrior to version 1.13.7, only one key name could be specified,\nand the result was undefined for arrays.\n"
-    ],
-    "since": "1.11.10",
     "module": "ngx_http_auth_jwt_module"
   },
   {
@@ -1848,6 +1834,22 @@
     "module": "ngx_http_auth_jwt_module"
   },
   {
+    "name": "auth_jwt_header_set",
+    "syntax": [
+      "auth_jwt_header_set $variable name ...;"
+    ],
+    "def": null,
+    "contexts": [
+      "http"
+    ],
+    "desc": "Sets the variable to a JOSE header parameteridentified by key names.Name matching starts from the top level of the JSON tree.For arrays, the variable keeps a list of array elements separated by commas.",
+    "notes": [
+      "\nPrior to version 1.13.7, only one key name could be specified,\nand the result was undefined for arrays.\n"
+    ],
+    "since": "1.11.10",
+    "module": "ngx_http_auth_jwt_module"
+  },
+  {
     "name": "auth_jwt_key_file",
     "syntax": [
       "auth_jwt_key_file file;"
@@ -1856,11 +1858,28 @@
     "contexts": [
       "http",
       "server",
-      "location"
+      "location",
+      "limit_except"
     ],
     "desc": "Specifies a file inJSON Web Key Setformat for validating JWT signature.Parameter value can contain variables.",
     "notes": [],
     "since": null,
+    "module": "ngx_http_auth_jwt_module"
+  },
+  {
+    "name": "auth_jwt_leeway",
+    "syntax": [
+      "auth_jwt_leeway time;"
+    ],
+    "def": "auth_jwt_leeway 0s;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Sets the maximum allowable leeway to compensateclock skew when verifying theexpandnbfJWT claims.",
+    "notes": [],
+    "since": "1.13.10",
     "module": "ngx_http_auth_jwt_module"
   },
   {
@@ -2085,7 +2104,7 @@
       "location",
       "ifinlocation"
     ],
-    "desc": "Determines whether a conversion should be performed for answersreceived from a proxied or a FastCGI/uwsgi/SCGI serverwhen the answers already carry a charset in the “Content-Type”response header field.If conversion is enabled, a charset specified in the receivedresponse is used as a source charset.",
+    "desc": "Determines whether a conversion should be performed for answersreceived from a proxied or a FastCGI/uwsgi/SCGI/gRPC serverwhen the answers already carry a charset in the “Content-Type”response header field.If conversion is enabled, a charset specified in the receivedresponse is used as a source charset.",
     "notes": [
       "\nIt should be noted that if a response is received in a subrequest\nthen the conversion from the response charset to the main request charset\nis always performed, regardless of the override_charset\ndirective setting.\n"
     ],
@@ -2108,6 +2127,22 @@
     "notes": [],
     "since": null,
     "module": "ngx_http_charset_module"
+  },
+  {
+    "name": "create_full_put_path",
+    "syntax": [
+      "create_full_put_path on | off;"
+    ],
+    "def": "create_full_put_path off;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "The WebDAV specification only allows creating files in alreadyexisting directories.This directive allows creating all needed intermediate directories.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_dav_module"
   },
   {
     "name": "dav_access",
@@ -2137,22 +2172,6 @@
       "location"
     ],
     "desc": "Allows the specified HTTP and WebDAV methods.The parameter off denies all methods processedby this module.The following methods are supported:PUT, DELETE, MKCOL,COPY, and MOVE.",
-    "notes": [],
-    "since": null,
-    "module": "ngx_http_dav_module"
-  },
-  {
-    "name": "create_full_put_path",
-    "syntax": [
-      "create_full_put_path on | off;"
-    ],
-    "def": "create_full_put_path off;",
-    "contexts": [
-      "http",
-      "server",
-      "location"
-    ],
-    "desc": "The WebDAV specification only allows creating files in alreadyexisting directories.This directive allows creating all needed intermediate directories.",
     "notes": [],
     "since": null,
     "module": "ngx_http_dav_module"
@@ -3426,6 +3445,22 @@
     "module": "ngx_http_grpc_module"
   },
   {
+    "name": "grpc_ssl_protocols",
+    "syntax": [
+      "grpc_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
+    ],
+    "def": "grpc_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Enables the specified protocols for requests to a gRPC SSL server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_grpc_module"
+  },
+  {
     "name": "grpc_ssl_server_name",
     "syntax": [
       "grpc_ssl_server_name on | off;"
@@ -3453,22 +3488,6 @@
       "location"
     ],
     "desc": "Determines whether SSL sessions can be reused when working withthe gRPC server.If the errors“SSL3_GET_FINISHED:digest check failed”appear in the logs, try disabling session reuse.",
-    "notes": [],
-    "since": null,
-    "module": "ngx_http_grpc_module"
-  },
-  {
-    "name": "grpc_ssl_protocols",
-    "syntax": [
-      "grpc_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
-    ],
-    "def": "grpc_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
-    "contexts": [
-      "http",
-      "server",
-      "location"
-    ],
-    "desc": "Enables the specified protocols for requests to a gRPC SSL server.",
     "notes": [],
     "since": null,
     "module": "ngx_http_grpc_module"
@@ -3621,22 +3640,6 @@
     "module": "ngx_http_gzip_module"
   },
   {
-    "name": "gzip_min_length",
-    "syntax": [
-      "gzip_min_length length;"
-    ],
-    "def": "gzip_min_length 20;",
-    "contexts": [
-      "http",
-      "server",
-      "location"
-    ],
-    "desc": "Sets the minimum length of a response that will be gzipped.The length is determined only from the “Content-Length”response header field.",
-    "notes": [],
-    "since": null,
-    "module": "ngx_http_gzip_module"
-  },
-  {
     "name": "gzip_http_version",
     "syntax": [
       "gzip_http_version 1.0 | 1.1;"
@@ -3648,6 +3651,22 @@
       "location"
     ],
     "desc": "Sets the minimum HTTP version of a request required to compress a response.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_gzip_module"
+  },
+  {
+    "name": "gzip_min_length",
+    "syntax": [
+      "gzip_min_length length;"
+    ],
+    "def": "gzip_min_length 20;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Sets the minimum length of a response that will be gzipped.The length is determined only from the “Content-Length”response header field.",
     "notes": [],
     "since": null,
     "module": "ngx_http_gzip_module"
@@ -3994,20 +4013,6 @@
     "module": "ngx_http_index_module"
   },
   {
-    "name": "js_include",
-    "syntax": [
-      "js_include file;"
-    ],
-    "def": null,
-    "contexts": [
-      "http"
-    ],
-    "desc": "Specifies a file that implements location and variable handlers in nginScript.",
-    "notes": [],
-    "since": null,
-    "module": "ngx_http_js_module"
-  },
-  {
     "name": "js_content",
     "syntax": [
       "js_content function;"
@@ -4017,7 +4022,21 @@
       "location",
       "limit_except"
     ],
-    "desc": "Sets an nginScript function as a location content handler.",
+    "desc": "Sets an njs function as a location content handler.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_js_module"
+  },
+  {
+    "name": "js_include",
+    "syntax": [
+      "js_include file;"
+    ],
+    "def": null,
+    "contexts": [
+      "http"
+    ],
+    "desc": "Specifies a file that implements location and variable handlers in njs.",
     "notes": [],
     "since": null,
     "module": "ngx_http_js_module"
@@ -4031,7 +4050,7 @@
     "contexts": [
       "http"
     ],
-    "desc": "Sets an nginScript function for the specified variable.",
+    "desc": "Sets an njs function for the specified variable.",
     "notes": [],
     "since": null,
     "module": "ngx_http_js_module"
@@ -5561,6 +5580,22 @@
     "module": "ngx_http_proxy_module"
   },
   {
+    "name": "proxy_ssl_protocols",
+    "syntax": [
+      "proxy_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
+    ],
+    "def": "proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Enables the specified protocols for requests to a proxied HTTPS server.",
+    "notes": [],
+    "since": "1.5.6",
+    "module": "ngx_http_proxy_module"
+  },
+  {
     "name": "proxy_ssl_server_name",
     "syntax": [
       "proxy_ssl_server_name on | off;"
@@ -5590,22 +5625,6 @@
     "desc": "Determines whether SSL sessions can be reused when working withthe proxied server.If the errors“SSL3_GET_FINISHED:digest check failed”appear in the logs, try disabling session reuse.",
     "notes": [],
     "since": null,
-    "module": "ngx_http_proxy_module"
-  },
-  {
-    "name": "proxy_ssl_protocols",
-    "syntax": [
-      "proxy_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
-    ],
-    "def": "proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
-    "contexts": [
-      "http",
-      "server",
-      "location"
-    ],
-    "desc": "Enables the specified protocols for requests to a proxied HTTPS server.",
-    "notes": [],
-    "since": "1.5.6",
     "module": "ngx_http_proxy_module"
   },
   {
@@ -6705,6 +6724,22 @@
     "module": "ngx_http_secure_link_module"
   },
   {
+    "name": "session_log",
+    "syntax": [
+      "session_log name | off;"
+    ],
+    "def": "session_log off;",
+    "contexts": [
+      "http",
+      "server",
+      "location"
+    ],
+    "desc": "Enables the use of the specified session log.The special value off cancels allsession_log directives inherited from the previousconfiguration level.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_http_session_log_module"
+  },
+  {
     "name": "session_log_format",
     "syntax": [
       "session_log_format \n    name\n    string ...;"
@@ -6728,22 +6763,6 @@
       "http"
     ],
     "desc": "Sets the path to a log file and configures the shared memory zone that is usedto store currently active sessions.",
-    "notes": [],
-    "since": null,
-    "module": "ngx_http_session_log_module"
-  },
-  {
-    "name": "session_log",
-    "syntax": [
-      "session_log name | off;"
-    ],
-    "def": "session_log off;",
-    "contexts": [
-      "http",
-      "server",
-      "location"
-    ],
-    "desc": "Enables the use of the specified session log.The special value off cancels allsession_log directives inherited from the previousconfiguration level.",
     "notes": [],
     "since": null,
     "module": "ngx_http_session_log_module"
@@ -6916,10 +6935,8 @@
       "http",
       "server"
     ],
-    "desc": "Enables the HTTPS protocol for the given virtual server.",
-    "notes": [
-      "\nIt is recommended to use the ssl parameter of the\nlisten directive instead\nof this directive.\n"
-    ],
+    "desc": "This directive was made obsolete in version 1.15.0.The ssl parameterof the listen directiveshould be used instead.",
+    "notes": [],
     "since": null,
     "module": "ngx_http_ssl_module"
   },
@@ -7567,11 +7584,25 @@
     "module": "ngx_http_upstream_module"
   },
   {
+    "name": "random",
+    "syntax": [
+      "random [two [method]];"
+    ],
+    "def": null,
+    "contexts": [
+      "upstream"
+    ],
+    "desc": "Specifies that a group should use a load balancing method where a requestis passed to a randomly selected server, taking into account weightsof servers.",
+    "notes": [],
+    "since": "1.15.1",
+    "module": "ngx_http_upstream_module"
+  },
+  {
     "name": "sticky",
     "syntax": [
       "sticky \n    cookie name\n    [expires=time]\n    [domain=domain]\n    [httponly]\n    [secure]\n    [path=path];",
       "sticky \n    route $variable ...;",
-      "sticky \n    learn\n    create=$variable\n    lookup=$variable\n    zone=name:size\n    [timeout=time]\n    [header];"
+      "sticky \n    learn\n    create=$variable\n    lookup=$variable\n    zone=name:size\n    [timeout=time]\n    [header]\n    [sync];"
     ],
     "def": null,
     "contexts": [
@@ -8709,6 +8740,21 @@
     "module": "ngx_http_uwsgi_module"
   },
   {
+    "name": "http2_body_preread_size",
+    "syntax": [
+      "http2_body_preread_size size;"
+    ],
+    "def": "http2_body_preread_size 64k;",
+    "contexts": [
+      "http",
+      "server"
+    ],
+    "desc": "Sets the size of the buffer per each requestin which the request body may be savedbefore it is started to be processed.",
+    "notes": [],
+    "since": "1.11.0",
+    "module": "ngx_http_v2_module"
+  },
+  {
     "name": "http2_chunk_size",
     "syntax": [
       "http2_chunk_size size;"
@@ -8722,21 +8768,6 @@
     "desc": "Sets the maximum size of chunksinto which the response body is sliced.A too low value results in higher overhead.A too high value impairs prioritization due toHOL blocking.",
     "notes": [],
     "since": null,
-    "module": "ngx_http_v2_module"
-  },
-  {
-    "name": "http2_body_preread_size",
-    "syntax": [
-      "http2_body_preread_size size;"
-    ],
-    "def": "http2_body_preread_size 64k;",
-    "contexts": [
-      "http",
-      "server"
-    ],
-    "desc": "Sets the size of the buffer per each requestin which the request body may be savedbefore it is started to be processed.",
-    "notes": [],
-    "since": "1.11.0",
     "module": "ngx_http_v2_module"
   },
   {
@@ -9234,7 +9265,7 @@
       "mail",
       "server"
     ],
-    "desc": "Enables the SSL/TLS protocol for the given server.",
+    "desc": "This directive was made obsolete in version 1.15.0.The ssl parameterof the listen directiveshould be used instead.",
     "notes": [],
     "since": null,
     "module": "ngx_mail_ssl_module"
@@ -9915,7 +9946,7 @@
       "stream",
       "server"
     ],
-    "desc": "Sets an nginScript function which will be called at theaccess phase.",
+    "desc": "Sets an njs function which will be called at theaccess phase.",
     "notes": [],
     "since": null,
     "module": "ngx_stream_js_module"
@@ -9944,7 +9975,7 @@
     "contexts": [
       "stream"
     ],
-    "desc": "Specifies a file that implements server and variable handlers in nginScript.",
+    "desc": "Specifies a file that implements server and variable handlers in njs.",
     "notes": [],
     "since": null,
     "module": "ngx_stream_js_module"
@@ -9959,7 +9990,7 @@
       "stream",
       "server"
     ],
-    "desc": "Sets an nginScript function which will be called at thepreread phase.",
+    "desc": "Sets an njs function which will be called at thepreread phase.",
     "notes": [],
     "since": null,
     "module": "ngx_stream_js_module"
@@ -9973,7 +10004,7 @@
     "contexts": [
       "stream"
     ],
-    "desc": "Sets an nginScript function for the specified variable.",
+    "desc": "Sets an njs function for the specified variable.",
     "notes": [],
     "since": null,
     "module": "ngx_stream_js_module"
@@ -10286,7 +10317,7 @@
       "stream",
       "server"
     ],
-    "desc": "Sets the number of datagrams expected from the proxied serverin response to the client requestif the UDPprotocol is used.By default, the number of datagrams is not limited:the response datagrams will be sentuntil the proxy_timeout value expires.",
+    "desc": "Sets the number of datagrams expected from the proxied serverin response to a client datagramif the UDPprotocol is used.The number serves as a hint for session termination.By default, the number of datagrams is not limited.",
     "notes": [],
     "since": "1.9.13",
     "module": "ngx_stream_proxy_module"
@@ -10397,6 +10428,21 @@
     "module": "ngx_stream_proxy_module"
   },
   {
+    "name": "proxy_ssl_protocols",
+    "syntax": [
+      "proxy_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
+    ],
+    "def": "proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Enables the specified protocols for connections to a proxied server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_proxy_module"
+  },
+  {
     "name": "proxy_ssl_server_name",
     "syntax": [
       "proxy_ssl_server_name on | off;"
@@ -10422,21 +10468,6 @@
       "server"
     ],
     "desc": "Determines whether SSL sessions can be reused when working withthe proxied server.If the errors“SSL3_GET_FINISHED:digest check failed”appear in the logs, try disabling session reuse.",
-    "notes": [],
-    "since": null,
-    "module": "ngx_stream_proxy_module"
-  },
-  {
-    "name": "proxy_ssl_protocols",
-    "syntax": [
-      "proxy_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
-    ],
-    "def": "proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
-    "contexts": [
-      "stream",
-      "server"
-    ],
-    "desc": "Enables the specified protocols for connections to a proxied server.",
     "notes": [],
     "since": null,
     "module": "ngx_stream_proxy_module"
@@ -10960,6 +10991,20 @@
     "module": "ngx_stream_upstream_module"
   },
   {
+    "name": "random",
+    "syntax": [
+      "random [two [method]];"
+    ],
+    "def": null,
+    "contexts": [
+      "upstream"
+    ],
+    "desc": "Specifies that a group should use a load balancing method where a connectionis passed to a randomly selected server, taking into account weightsof servers.",
+    "notes": [],
+    "since": "1.15.1",
+    "module": "ngx_stream_upstream_module"
+  },
+  {
     "name": "health_check",
     "syntax": [
       "health_check [parameters];"
@@ -11001,6 +11046,277 @@
     "notes": [],
     "since": null,
     "module": "ngx_stream_upstream_hc_module"
+  },
+  {
+    "name": "zone_sync",
+    "syntax": [
+      "zone_sync;"
+    ],
+    "def": null,
+    "contexts": [
+      "server"
+    ],
+    "desc": "Enables the synchronization of shared memory zones between cluster nodes.Cluster nodes are defined using zone_sync_server directives.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_buffers",
+    "syntax": [
+      "zone_sync_buffers number size;"
+    ],
+    "def": "zone_sync_buffers 256 4k|8k;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Sets the number and size of theper-zone buffers used for pushing zone contents.By default, the buffer size is equal to one memory page.This is either 4K or 8K, depending on a platform.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_connect_retry_interval",
+    "syntax": [
+      "zone_sync_connect_retry_interval time;"
+    ],
+    "def": "zone_sync_connect_retry_interval 1s;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Defines an interval between connection attempts to another cluster node.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_connect_timeout",
+    "syntax": [
+      "zone_sync_connect_timeout time;"
+    ],
+    "def": "zone_sync_connect_timeout 5s;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Defines a timeout for establishing a connection with another cluster node.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_interval",
+    "syntax": [
+      "zone_sync_interval time;"
+    ],
+    "def": "zone_sync_interval 1s;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Defines an interval for polling updates in a shared memory zone.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_recv_buffer_size",
+    "syntax": [
+      "zone_sync_recv_buffer_size size;"
+    ],
+    "def": "zone_sync_recv_buffer_size 4k|8k;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Sets size of a per-connection receive buffer used to parseincoming stream of synchronization messages.By default, the buffer size is equal to one memory page.This is either 4K or 8K, depending on a platform.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_server",
+    "syntax": [
+      "zone_sync_server address [resolve];"
+    ],
+    "def": null,
+    "contexts": [
+      "server"
+    ],
+    "desc": "Defines the address of a cluster node.The address can be specified as a domain name or IP addresswith a mandatory port, or as a UNIX-domain socket pathspecified after the “unix:” prefix.A domain name that resolves to several IP addresses definesmultiple nodes at once.",
+    "notes": [
+      "\nEach cluster node should be specified only once.\n",
+      "\nAll cluster nodes should use the same configuration.\n"
+    ],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl",
+    "syntax": [
+      "zone_sync_ssl on | off;"
+    ],
+    "def": "zone_sync_ssl off;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Enables the SSL/TLS protocol for connections to another cluster server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_certificate",
+    "syntax": [
+      "zone_sync_ssl_certificate file;"
+    ],
+    "def": null,
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Specifies a file with the certificate in the PEM formatused for authentication to another cluster server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_certificate_key",
+    "syntax": [
+      "zone_sync_ssl_certificate_key file;"
+    ],
+    "def": null,
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Specifies a file with the secret key in the PEM formatused for authentication to another cluster server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_ciphers",
+    "syntax": [
+      "zone_sync_ssl_ciphers ciphers;"
+    ],
+    "def": "zone_sync_ssl_ciphers DEFAULT;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Specifies the enabled ciphers for connections to another cluster server.The ciphers are specified in the format understood by the OpenSSL library.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_crl",
+    "syntax": [
+      "zone_sync_ssl_crl file;"
+    ],
+    "def": null,
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Specifies a file with revoked certificates (CRL)in the PEM format used to verifythe certificate of another cluster server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_password_file",
+    "syntax": [
+      "zone_sync_ssl_password_file file;"
+    ],
+    "def": null,
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Specifies a file with passphrases forsecret keyswhere each passphrase is specified on a separate line.Passphrases are tried in turn when loading the key.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_protocols",
+    "syntax": [
+      "zone_sync_ssl_protocols \n    [SSLv2]\n    [SSLv3]\n    [TLSv1]\n    [TLSv1.1]\n    [TLSv1.2]\n    [TLSv1.3];"
+    ],
+    "def": "zone_sync_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Enables the specified protocols for connections to another cluster server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_trusted_certificate",
+    "syntax": [
+      "zone_sync_ssl_trusted_certificate file;"
+    ],
+    "def": null,
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Specifies a file with trusted CA certificates in the PEM formatused to verifythe certificate of another cluster server.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_verify",
+    "syntax": [
+      "zone_sync_ssl_verify on | off;"
+    ],
+    "def": "zone_sync_ssl_verify off;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Enables or disables verification of another cluster server certificate.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_ssl_verify_depth",
+    "syntax": [
+      "zone_sync_ssl_verify_depth number;"
+    ],
+    "def": "zone_sync_ssl_verify_depth 1;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Sets the verification depth in another cluster server certificates chain.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
+  },
+  {
+    "name": "zone_sync_timeout",
+    "syntax": [
+      "zone_sync_timeout timeout;"
+    ],
+    "def": "zone_sync_timeout 5s;",
+    "contexts": [
+      "stream",
+      "server"
+    ],
+    "desc": "Sets the timeout between two successiveread or write operations on connection to another cluster node.If no data is transmitted within this time, the connection is closed.",
+    "notes": [],
+    "since": null,
+    "module": "ngx_stream_zone_sync_module"
   },
   {
     "name": "google_perftools_profiles",

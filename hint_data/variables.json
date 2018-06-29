@@ -515,6 +515,11 @@
     "module": "ngx_http_upstream_module"
   },
   {
+    "name": "$upstream_queue_time",
+    "desc": "keeps time the request spent in the upstream queue\n(1.13.9);\nthe time is kept in seconds with millisecond resolution.\nTimes of several responses\nare separated by commas and colons like addresses in the\n$upstream_addr variable.",
+    "module": "ngx_http_upstream_module"
+  },
+  {
     "name": "$upstream_response_length",
     "desc": "keeps the length of the response obtained from the upstream server (0.7.27);\nthe length is kept in bytes.\nLengths of several responses\nare separated by commas and colons like addresses in the\n$upstream_addr variable.",
     "module": "ngx_http_upstream_module"
