@@ -1,3 +1,7 @@
+# ignore personal vscode configurations
+.vscode/settings.json
+.vscode/cSpell.json
+
 # ignore node_modules.tar (node-modules-in-memory)
 node_modules.tar
 
