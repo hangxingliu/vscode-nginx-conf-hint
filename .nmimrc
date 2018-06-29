@@ -1,0 +1,3 @@
+#!/usr/env/bin bash
+
+NMIM_PREFERRED_SIZE="128m";
