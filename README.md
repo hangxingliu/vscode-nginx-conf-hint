@@ -14,27 +14,29 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 
 ![screenshots](https://raw.githubusercontent.com/hangxingliu/vscode-nginx-conf-hint/master/images/screenshots.gif)
 
-## Functions
+## Features
 
-1. auto complete nginx directives and embedded variables
-2. hint directive default parameters
-3. hint directives syntax 
-4. nginx block snippets
-5. "Goto Nginx Document" for each directives and variables
+1. provide highlight for Nginx configuration file.
+2. auto complete nginx directives and embedded variables
+3. hint directive default parameters
+4. hint directives syntax 
+5. nginx block snippets
+6. "Goto Nginx Document" for each directives and variables
 
 ## Changelog
 
-### 0.0.5 (2018-03-29)
+### 0.1.0 (2018-07-xx) Developing...
 
-1. fix invalid links in nginx documents.
-2. add a configuration to enable/disable strict auto-completion.
-3. update Nginx directives and variables to latest.
+1. update Nginx config syntaxes to latest from [sublime-nginx](https://github.com/brandonwamboldt/sublime-nginx).
+	- Thanks for contribution from [@tiansin](https://github.com/tiansin).
+2. remove dependent extension `shanoor.vscode-nginx` (because this extension provide latest syntaxes file from this version).
+3. update Nginx hint data(directives and variables) to latest.
 
 [CHANGELOG.md][changelog]
 
 ## Declaration
 
-1. This extension is depend on extension [nginx.conf developed by shanoor][ext-nginx-conf] (**It will be install automatically by VS Code**)
+1. Nginx config syntaxes file from [sublime-nginx][sublime-nginx] repo.
 2. Icon image of this extension is from extension [nginx.conf][icon-nginx] 
 3. This extension is published under the [GPL-3.0 license](LICENSE)
 
@@ -53,9 +55,14 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 
 [LiuYue(hangxingliu)](https://github.com/hangxingliu)
 
+## Contributor
+
+- [@tiansin](https://github.com/tiansin)
+
+
 [nginx-doc]: https://nginx.org/en/docs/
 [doc-script]: https://github.com/hangxingliu/vscode-nginx-conf-hint/blob/master/utils/hint_data_getter.js
-[ext-nginx-conf]: https://marketplace.visualstudio.com/items?itemName=shanoor.vscode-nginx
+[sublime-nginx]: https://github.com/brandonwamboldt/sublime-nginx
 [icon-nginx]: https://github.com/shanoor/vscode-nginx/blob/master/nginx_logo.png
 [issues]: https://github.com/hangxingliu/vscode-nginx-conf-hint/issues
 [pr]: https://github.com/hangxingliu/vscode-nginx-conf-hint/pulls
