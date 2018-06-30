@@ -79,6 +79,15 @@
 						"type": "boolean",
 						"default": true,
 						"description": "only complete directives related to the block where cursor is located"
+					},
+					"nginx-conf-hint.syntax": {
+						"type":"string",
+						"default": "original",
+						"enum": [
+							"original",
+							"sublime"
+						],
+						"description": "Syntaxes for Nginx config file, \"original\" or \"sublime\". (Need to reload VS Code)"
 					}
 				}
 			}
