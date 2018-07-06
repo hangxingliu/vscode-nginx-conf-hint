@@ -9,4 +9,5 @@ before_script:
   - npm install mocha -g
 
 notifications:
-  email: false
+  email:
+    on_failure: always
