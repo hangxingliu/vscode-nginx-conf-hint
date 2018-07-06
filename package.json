@@ -23,13 +23,17 @@
 	"publisher": "hangxingliu",
 	"author": "hangxingliu",
 	"main": "./extension/main",
-	"scripts": {},
+	"scripts": {
+		"test": "mocha ./test/*.js"
+	},
 	"extensionDependencies": [],
 	"dependencies": {},
 	"devDependencies": {
+		"@hangxingliu/assert": "^0.1.1",
 		"chalk": "^2.4.1",
 		"cheerio": "^0.22.0",
 		"html-minifier": "^3.5.17",
+		"mocha": "^5.2.0",
 		"request": "^2.87.0",
 		"vscode": "^1.1.18"
 	},
@@ -81,7 +85,7 @@
 						"description": "only complete directives related to the block where cursor is located"
 					},
 					"nginx-conf-hint.syntax": {
-						"type":"string",
+						"type": "string",
 						"default": "original",
 						"enum": [
 							"original",
