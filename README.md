@@ -29,16 +29,18 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 
 ### 0.1.0 (2018-07-xx) Developing...
 
-1. update Nginx config syntaxes to latest from [sublime-nginx](https://github.com/brandonwamboldt/sublime-nginx).
-	- Thanks for contribution from [@tiansin](https://github.com/tiansin).
-2. remove dependent extension `shanoor.vscode-nginx` (because this extension provide latest syntaxes file from this version).
+1. syntax of nginx.conf is provided inside.
+	- `original` syntax is from [shanoor/vscode-nginx][shanoor-syntax] (**by default**)
+	- `sublime` syntax is from [sublime-nginx][sublime-syntax]
+	- you can switch it by configuration: `nginx-conf-hint.syntax`
+2. remove dependent extension `shanoor.vscode-nginx`.
 3. update Nginx hint data(directives and variables) to latest.
 
 [CHANGELOG.md][changelog]
 
 ## Declaration
 
-1. Nginx config syntaxes file from [sublime-nginx][sublime-nginx] repo.
+1. Nginx config syntaxes file from [sublime-nginx][sublime-nginx] repo and [shanoor/vscode-nginx][shanoor-nginx] repo 
 2. Icon image of this extension is from extension [nginx.conf][icon-nginx] 
 3. This extension is published under the [GPL-3.0 license](LICENSE)
 
@@ -64,6 +66,9 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 
 [nginx-doc]: https://nginx.org/en/docs/
 [doc-script]: https://github.com/hangxingliu/vscode-nginx-conf-hint/blob/master/utils/hint_data_getter.js
+[shanoor-syntax]: https://github.com/shanoor/vscode-nginx/blob/master/syntaxes/nginx.tmLanguage
+[sublime-syntax]: https://github.com/brandonwamboldt/sublime-nginx/blob/master/Syntaxes/nginx.tmLanguage
+[shanoor-nginx]: https://github.com/shanoor/vscode-nginx
 [sublime-nginx]: https://github.com/brandonwamboldt/sublime-nginx
 [icon-nginx]: https://github.com/shanoor/vscode-nginx/blob/master/nginx_logo.png
 [issues]: https://github.com/hangxingliu/vscode-nginx-conf-hint/issues

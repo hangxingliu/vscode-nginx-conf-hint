@@ -2,9 +2,11 @@
 
 ### 0.1.0 (2018-07-xx) Developing...
 
-1. update Nginx config syntaxes to latest from [sublime-nginx](https://github.com/brandonwamboldt/sublime-nginx).
-	- Thanks for contribution from [@tiansin](https://github.com/tiansin).
-2. remove dependent extension `shanoor.vscode-nginx` (because this extension provide latest syntaxes file from this version).
+1. syntax of nginx.conf is provided inside.
+	- `original` syntax is from [shanoor/vscode-nginx][shanoor-syntax] (**by default**)
+	- `sublime` syntax is from [sublime-nginx][sublime-syntax]
+	- you can switch it by configuration: `nginx-conf-hint.syntax`
+2. remove dependent extension `shanoor.vscode-nginx`.
 3. update Nginx hint data(directives and variables) to latest.
 
 ### 0.0.5 (2018-03-29)
