@@ -1,5 +1,11 @@
+//@ts-check
 /// <reference path="../vscode.d.ts" />
-let vscode = require('vscode');
+
+const vscode = require('vscode');
+
+const INFORMATION = 1;
+const WARNING = 2;
+const AS_MODAL = 128;
 
 /**
  * @param {string} msg
@@ -7,6 +13,21 @@ let vscode = require('vscode');
 function showErrorMessage(msg) {
 	vscode.window.showErrorMessage(`nginx-conf-hint: ${msg}`);
 }
+
+
+function showConfirm(title, btnOk, btnCancel, flags = 0) {
+	return new Promise(resolve => {
+		const showConfirm = flags & WARNING
+			? vscode.window.showWarningMessage
+			: vscode.window.showInformationMessage;
+
+		const btn1 = { title: btnOk, code: 1 };
+		const btn2 = btnCancel ? { title: btnCancel, code: 2 } : undefined;
+		showConfirm(`nginx-conf-hint: ${title}`, { modal: !!(flags & AS_MODAL) }, btn1, btn2)
+			.then(result => resolve(result && result.code == 1));
+	});
+}
+
 
 /**
  * @param {any} document
@@ -35,6 +56,11 @@ function getTextAroundCursor(document, position) {
 }
 
 module.exports = {
+	WARNING,
+	INFORMATION,
+	AS_MODAL,
+	showConfirm,
+
 	getTextBeforeCursor,
 	getTextAroundCursor,
 	showErrorMessage

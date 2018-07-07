@@ -1,5 +1,7 @@
 # Nginx config file hint(auto-completion) for VS Code
 
+[![Build Status](https://travis-ci.org/hangxingliu/vscode-nginx-conf-hint.svg?branch=master)](https://travis-ci.org/hangxingliu/vscode-nginx-conf-hint)
+
 An **experimental** extension.   
 And the hint data generated from [nginx document web page][nginx-doc] by [scripts][doc-script]    
 You can report bug or send a feature suggestion in [Github Issues Page][issues].

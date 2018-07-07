@@ -1,3 +1,6 @@
+# ignore mark file about new syntax tip
+extension/new_syntax_tip_has_been_shown
+
 # ignore personal vscode configurations
 .vscode/settings.json
 .vscode/cSpell.json

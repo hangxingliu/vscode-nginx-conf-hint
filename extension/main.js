@@ -1,9 +1,17 @@
 //@ts-check
 /// <reference path="../vscode.d.ts" />
-let vscode = require('vscode'),
-	nginxDocument = require('./open_nginx_document'),
-	hint = require('./hint_data_manager'),
-	{ getTextAroundCursor, getTextBeforeCursor, showErrorMessage } = require('./vscode_helper');
+const vscode = require('vscode');
+const fs = require('fs');
+const nginxDocument = require('./open_nginx_document');
+const hint = require('./hint_data_manager');
+const { getCurrentSyntaxType, applySyntaxFile, isValidType } = require('./syntax_manager');
+const {
+	getTextAroundCursor, getTextBeforeCursor,
+	showErrorMessage, showConfirm,
+	WARNING, AS_MODAL,
+} = require('./vscode_helper');
+
+const DEFAULT_SYNTAX = 'original';
 
 let NGINX_LANGUAGE_ID = 'NGINX';
 let DOCUMENT_SELECTOR = [NGINX_LANGUAGE_ID];
@@ -60,6 +68,36 @@ function getBlockNameCursorIn(document, position){
 function applyConfiguration() {
 	let configurations = vscode.workspace.getConfiguration('nginx-conf-hint');
 	enableStrictCompletion = configurations.get('enableStrictCompletion', true);
+
+	let newSyntaxInConfig = configurations.get('syntax', DEFAULT_SYNTAX);
+	if (!isValidType(newSyntaxInConfig))
+		return showErrorMessage(`"${newSyntaxInConfig}" is invalid syntax type!`);
+
+	getCurrentSyntaxType().then(oldSyntax => {
+		if (oldSyntax == newSyntaxInConfig)
+			return;
+		//@ts-ignore
+		return applySyntaxFile(newSyntaxInConfig).then(() => {
+			showConfirm(`please reload Visual Studio Code to enable nginx.conf syntax style: ${newSyntaxInConfig}`,
+				'Reload now', null, WARNING | AS_MODAL).then(reloadNow => {
+					if (reloadNow)
+						vscode.commands.executeCommand("workbench.action.reloadWindow");
+				});
+		});
+	}).catch(error => showErrorMessage(`error: ${String(error.message || error)}`));
+}
+
+function displayNewSyntaxTip() {
+	const newSyntaxTipLockFile = `${__dirname}/new_syntax_tip_has_been_shown`;
+	fs.stat(newSyntaxTipLockFile, (err, stat) => {
+		if (stat) return; // file is existed
+
+		showConfirm(`sublime style syntax is supported now. Do you use it now ?`,
+			'Goto Settings', 'Not now').then(gotoSettings => {
+				if (gotoSettings)
+					vscode.commands.executeCommand("workbench.action.openGlobalSettings");
+			});
+	});
 }
 
 function activate(context) {
@@ -70,6 +108,7 @@ function activate(context) {
 	hint.initialize();
 	nginxDocument.initialize(context);
 
+	displayNewSyntaxTip();
 	applyConfiguration();
 
 	//======================================
