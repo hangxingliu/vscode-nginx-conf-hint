@@ -1,5 +1,6 @@
 # Nginx config file hint(auto-completion) for VS Code
 
+[![npm Version](https://img.shields.io/npm/v/vscode-nginx-conf-hint.svg)](https://www.npmjs.com/package/vscode-nginx-conf-hint)
 [![Build Status](https://travis-ci.org/hangxingliu/vscode-nginx-conf-hint.svg?branch=master)](https://travis-ci.org/hangxingliu/vscode-nginx-conf-hint)
 
 An **experimental** extension.   
@@ -27,7 +28,7 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 
 ## Changelog
 
-### 0.1.0 (2018-07-xx) Developing...
+### 0.1.0
 
 1. syntax of nginx.conf is provided inside.
 	- `original` syntax is from [shanoor/vscode-nginx][shanoor-syntax] (**by default**)
@@ -64,8 +65,9 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 - [@tiansin](https://github.com/tiansin)
 
 
+
 [nginx-doc]: https://nginx.org/en/docs/
-[doc-script]: https://github.com/hangxingliu/vscode-nginx-conf-hint/blob/master/utils/hint_data_getter.js
+[doc-script]: https://github.com/hangxingliu/vscode-nginx-conf-hint/blob/master/utils/download_hint_data.js
 [shanoor-syntax]: https://github.com/shanoor/vscode-nginx/blob/master/syntaxes/nginx.tmLanguage
 [sublime-syntax]: https://github.com/brandonwamboldt/sublime-nginx/blob/master/Syntaxes/nginx.tmLanguage
 [shanoor-nginx]: https://github.com/shanoor/vscode-nginx
