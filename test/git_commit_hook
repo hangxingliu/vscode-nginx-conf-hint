@@ -12,4 +12,6 @@ function throw() {
 	exit 1;
 }
 
-npm run test -s -- --reporter=list || throw "npm test exit without 0";
+# apply original syntaxes
+bash ./syntaxes/apply_original &&
+	npm run test -s -- --reporter=list || throw "npm test exit without 0";

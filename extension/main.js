@@ -96,6 +96,9 @@ function displayNewSyntaxTip() {
 			'Goto Settings', 'Not now').then(gotoSettings => {
 				if (gotoSettings)
 					vscode.commands.executeCommand("workbench.action.openGlobalSettings");
+
+				fs.writeFile(newSyntaxTipLockFile, new Date().toJSON(), err =>
+					showErrorMessage(`error: can not create new syntax tip lock file! ${String(err.message || err)}`));
 			});
 	});
 }
