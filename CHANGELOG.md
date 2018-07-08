@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### 0.1.0
+### 0.1.0 (2018-07-09)
 
 1. syntax of nginx.conf is provided inside.
 	- `original` syntax is from [shanoor/vscode-nginx][shanoor-syntax] (**by default**)
