@@ -1,3 +1,9 @@
+# ignore mark file about new syntax tip
+extension/new_syntax_tip_has_been_shown
+
+# ignore screenshots gif (big file)
+images/screenshots.gif
+
 # vscode workspace configurations
 .vscode
 
