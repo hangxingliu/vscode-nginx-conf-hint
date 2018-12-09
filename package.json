@@ -92,7 +92,17 @@
 							"sublime"
 						],
 						"description": "Syntaxes for Nginx config file, \"original\" or \"sublime\". (Need to reload VS Code)"
-					}
+                    },
+                    "nginx-conf-hint.format.align": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Set whether to perform alignment formatting"
+                    },
+                    "nginx-conf-hint.format.tabSize": {
+                        "type": "number",
+                        "default": 4,
+                        "description": "The number of spaces a tab is equal to. "
+                    }
 				}
 			}
 		],
