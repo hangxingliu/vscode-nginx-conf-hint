@@ -9,6 +9,7 @@ const schemeNginxDocument = 'nginx-doc';
 const templatesFolder = `${__dirname}/document_templates/`;
 
 const DIRECTIVES_DOC_FILE = `${__dirname}/../hint_data/directives_document.json`;
+const DIRECTIVES_LUA_DOC_FILE = `${__dirname}/../hint_data/directives_lua_document.json`;
 const VARIABLES_DOC_FILE = `${__dirname}/../hint_data/variables_document.json`;
 
 const UNAVAILABLE = 'This document is unavailable now, please reopen this document';
@@ -78,8 +79,13 @@ function generateVariablesHTML(nginxModule) {
 function initialize(context) {
 	let subscriptions = context.subscriptions;
 
-	directivesDocItems = require(DIRECTIVES_DOC_FILE);
-	variablesDocItems = require(VARIABLES_DOC_FILE);
+    directivesDocItems = Array.prototype.concat(
+        require(DIRECTIVES_DOC_FILE),
+        require(DIRECTIVES_LUA_DOC_FILE)
+    );
+	variablesDocItems = Array.prototype.concat(
+        require(VARIABLES_DOC_FILE),
+    );
 
 	for(let module of variablesDocItems) {
 		for (let varName in module.vars) {

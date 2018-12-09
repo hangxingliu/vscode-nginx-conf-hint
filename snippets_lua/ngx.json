@@ -1,0 +1,324 @@
+{
+	"ngx.arg": {
+		"description": "获取 nginx 中传入的变量， set_by_lua*, body_filter_by_lua*",
+		"prefix": "ngx.arg",
+		"body": [
+			"local $val = ngx.arg[$index]"
+		]
+	},
+	"ngx.var.VARIABLE.get": {
+		"description": "读取 Nginx 变量值",
+		"prefix": "ngx.var.get",
+		"body": [
+			"local $value = ngx.var.$name"
+		]
+	},
+	"ngx.var.VARIABLE.set": {
+		"description": "修改 Nginx 变量值",
+		"prefix": "ngx.var.set",
+		"body": [
+			"ngx.var.$name = $value"
+		]
+	},
+	"ngx.ctx.set": {
+		"description": "获取 nginx 请求上下文中的数据",
+		"prefix": "ngx.ctx.get",
+		"body": [
+			"lcoal $value = ngx.ctx.$name"
+		]
+	},
+	"ngx.ctx.get": {
+		"description": "设置 nginx 请求上下文中的数据",
+		"prefix": "ngx.ctx.set",
+		"body": [
+			"ngx.ctx.$name = $value"
+		]
+	},
+	"ngx.location.capture": {
+		"description": "创建一个同步非阻塞 nginx 的子请求, 并返回响应结果",
+		"prefix": "ngx.location.capture",
+		"body": [
+			"local $res = ngx.location.capture($uri, $options?)"
+		]
+	},
+	"ngx.location.capture_multi": {
+		"description": "创建多个同步非阻塞 nginx 的子请求, 并返回响应结果",
+		"prefix": "ngx.location.capture_multi",
+		"body": [
+			"lcoal $res1, $res2 = ngx.location.capture_multi({{ $uri, $options?}, { $uri, $options? }})"
+		]
+	},
+	"ngx.status.get": {
+		"description": "获取当前请求的响应状态",
+		"prefix": "ngx.status.get",
+		"body": [
+			"local $status = ngx.status"
+		]
+	},
+	"ngx.status.set": {
+		"description": "设置当前请求的响应状态",
+		"prefix": "ngx.status.set",
+		"body": [
+			"ngx.status = $status"
+		]
+	},
+	"ngx.header.HEADER.get": {
+		"description": "获取当前请求的响应头",
+		"prefix": "ngx.header.get",
+		"body": [
+			"local $value = ngx.header[$header]"
+		]
+	},
+	"ngx.header.HEADER.set": {
+		"description": "设置当前请求的响应头",
+		"prefix": "ngx.header.set",
+		"body": [
+			"ngx.header[$header] = $value"
+		]
+	},
+	"ngx.resp.get_headers": {
+		"description": "获取当前请求的响应头",
+		"prefix": "ngx.resp.get_headers",
+		"body": [
+			"local headers = ngx.resp.get_headers()"
+		]
+	},
+	"ngx.exec": {
+		"description": "用 args 对 uri 进行内部重定向，类似于 echo-nginx-module 模块的 echo_exec 指令。 ngx.exec(uri, args?)",
+		"prefix": "ngx.exec",
+		"body": [
+			"ngx.exec(${1:uri}', {$2:args})"
+		]
+	},
+	"ngx.redirect": {
+		"description": "重定向 uri, ngx.redirect(uri, status?)",
+		"prefix": "ngx.redirect",
+		"body": [
+			" return ngx.redirect(${1:uri}, ${2:status})"
+		]
+	},
+	"ngx.send_headers": {
+		"description": "显示的发送响应头,  ok, err = ngx.send_headers()",
+		"prefix": "ngx.send_headers",
+		"body": [
+			"local ok, err = ngx.send_headers()"
+		]
+	},
+	"ngx.headers_sent": {
+		"description": "判断 header 头是否已经发送，true 已发送，否则返回 false",
+		"prefix": "ngx.headers_sent",
+		"body": [
+			"local sent = ngx.headers_sent()"
+		]
+	},
+	"ngx.print": {
+		"description": "向客户端输出数据，如果响应头未发出，则先发送头部信息，再发送数据内容",
+		"prefix": "ngx.print",
+		"body": [
+			"ngx.print($...)"
+		]
+	},
+	"ngx.say": {
+		"description": "类似 ngx.print ，但为在结尾加上换行符",
+		"prefix": "ngx.say",
+		"body": [
+			"ngx.say($...)"
+		]
+	},
+	"ngx.flush": {
+		"description": "将响应输出流到客户端。ok, err = ngx.flush(wait?)",
+		"prefix": "ngx.flush",
+		"body": [
+			"ngx.flush()"
+		]
+	},
+	"ngx.exit": {
+		"description": "退出请求,当状态 >=200 时，会中断当前请求的执行,  == 0 时, 只会退出当前处理程序。ngx.exit(status)",
+		"prefix": "ngx.exit",
+		"body": [
+			"ngx.exit($1)"
+		]
+	},
+	"ngx.eof": {
+		"description": "显式地指定响应输出流的结束",
+		"prefix": "ngx.eof",
+		"body": [
+			"local ok, err = ngx.eof()"
+		]
+	},
+	"ngx.sleep": {
+		"description": "非阻塞式休眠指定的秒数",
+		"prefix": "ngx.sleep",
+		"body": [
+			"ngx.sleep($seconds)"
+		]
+	},
+	"ngx.unescape_uri": {
+		"description": "反转义一个 uri 字符串。newstr = ngx.unescape_uri(str)",
+		"prefix": "ngx.unescape_uri",
+		"body": [
+			"local $newstr = ngx.unescape_uri($str)"
+		]
+	},
+	"ngx.encode_args": {
+		"description": "根据URI编码的规则将 table 编码为 url 查询字符串",
+		"prefix": "ngx.encode_args",
+		"body": [
+			"local $str = ngx.encode_args($table)"
+		]
+	},
+	"ngx.decode_args": {
+		"description": "将 url 参数字符串转换为 table",
+		"prefix": "ngx.decode_args",
+		"body": [
+			"local $table = ngx.decode_args($str, $max_args?)"
+		]
+	},
+	"ngx.encode_base64": {
+		"description": "将字符串转换为 base64 编码格式字符串",
+		"prefix": "ngx.encode_base64",
+		"body": [
+			"local $newstr = ngx.encode_base64($str, $no_padding?)"
+		]
+	},
+	"ngx.decode_base64": {
+		"description": "将 base64 编码格式转换为 str 。",
+		"prefix": "ngx.decode_base64",
+		"body": [
+			"local $str = ngx.decode_base64($str, $no_padding?)"
+		]
+	},
+	"ngx.crc32_short": {
+		"description": "计算一个字符串的短 CRC 值",
+		"prefix": "ngx.crc32_short",
+		"body": [
+			"local $intval = ngx.crc32_short($str)"
+		]
+	},
+	"ngx.crc32_long": {
+		"description": "计算一个字符串的长 CRC 值",
+		"prefix": "ngx.crc32_long",
+		"body": [
+			"local $intval = ngx.crc32_long($str)"
+		]
+	},
+	"ngx.hmac_sha1": {
+		"description": "使用 secret_key 通过 HMAC-SHA1 算法加密字符串",
+		"prefix": "ngx.hmac_sha1",
+		"body": [
+			"local $digest = ngx.hmac_sha1($secret_key, $str)"
+		]
+	},
+	"ngx.md5": {
+		"description": "获取一个字符串的 MD5 值。 digest = ngx.md5(str)",
+		"prefix": "ngx.md5",
+		"body": [
+			"local $digest = ngx.md5($str)"
+		]
+	},
+	"ngx.md5_bin": {
+		"description": "获取一个字符串的 MD5 值(返回二进制)",
+		"prefix": "ngx.md5_bin",
+		"body": [
+			"local $digest = ngx.md5_bin($str)"
+		]
+	},
+	"ngx.sha1_bin": {
+		"description": "获取一个字符串的 SHA-1 值(返回二进制)",
+		"prefix": "ngx.sha1_bin",
+		"body": [
+			"local $digest = ngx.sha1_bin($str)"
+		]
+	},
+	"ngx.quote_sql_str": {
+		"description": "根据MySQL引用规则返回一个引用的SQL字符串文字",
+		"prefix": "ngx.quote_sql_str",
+		"body": [
+			"local $quoted_value = ngx.quote_sql_str($raw_value)"
+		]
+	},
+	"ngx.today": {
+		"description": "从nginx 时间缓存中返回一个本地当前时间，格式为 yyyy-mm-dd",
+		"prefix": "ngx.today",
+		"body": [
+			"local $str = ngx.today()"
+		]
+	},
+	"ngx.time": {
+		"description": "从 nginx 时间缓存中获取当前时间戳(秒)",
+		"prefix": "ngx.time",
+		"body": [
+			"local $secs = ngx.time()"
+		]
+	},
+	"ngx.now": {
+		"description": "从 nginx 时间缓存中获取当前时间戳(毫秒), 毫秒以小数点后表示",
+		"prefix": "ngx.now",
+		"body": [
+			"local $secs = ngx.now()"
+		]
+	},
+	"ngx.update_time": {
+		"description": "更新 nginx 时间缓存。ngx.update_time()",
+		"prefix": "ngx.update_time",
+		"body": [
+			"ngx.update_time()"
+		]
+	},
+	"ngx.localtime": {
+		"description": "从 nginx 时间缓存中获取当前本地时间，格式为：yyyy-mm-dd hh:mm:ss",
+		"prefix": "ngx.localtime",
+		"body": [
+			"local $str = ngx.localtime()"
+		]
+	},
+	"ngx.utctime": {
+		"description": "从 nginx 时间缓存中获取当前 utc 时间，格式为：yyyy-mm-dd hh:mm:ss",
+		"prefix": "ngx.utctime",
+		"body": [
+			"local $str = ngx.utctime()"
+		]
+	},
+	"ngx.cookie_time": {
+		"description": "返回一个格式化的字符串, 可以作为cookie过期时间",
+		"prefix": "ngx.cookie_time",
+		"body": [
+			"local $str = ngx.cookie_time($sec)"
+		]
+	},
+	"ngx.http_time": {
+		"description": "返回格式化字符串可以用作http头时间,如 Last-Modified 头",
+		"prefix": "ngx.http_time",
+		"body": [
+			"local $str = ngx.http_time($sec)"
+		]
+	},
+	"ngx.parse_http_time": {
+		"description": "将字符串转换成时间戳",
+		"prefix": "ngx.parse_http_time",
+		"body": [
+			"local $sec = ngx.parse_http_time($str)"
+		]
+	},
+	"ngx.is_subrequest": {
+		"description": "判断当前处理程序是否 nginx 的一个子请求，如果是则返回true，否则将返回false",
+		"prefix": "ngx.is_subrequest",
+		"body": [
+			"local $value = ngx.is_subrequest()"
+		]
+	},
+	"ngx.get_phase": {
+		"description": "检索当前运行的阶段名称，如: init, 用于 init_by_lua 的上下文等",
+		"prefix": "ngx.get_phase",
+		"body": [
+			"local $str = ngx.get_phase()"
+		]
+	},
+	"ngx.on_abort": {
+		"description": "注册一个回调函数，当客户机过早关闭(下游)连接时自动调用。",
+		"prefix": "ngx.on_abort",
+		"body": [
+			"local ok, err = ngx.on_abort($callback)"
+		]
+	}
+}

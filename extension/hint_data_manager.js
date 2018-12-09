@@ -3,6 +3,7 @@ let vscode = require('vscode'),
 	{ readdirSync, statSync, existsSync } = require('fs');
 
 const DIRECTIVES_FILE = `${__dirname}/../hint_data/directives.json`;
+const DIRECTIVES_LUA_FILE = `${__dirname}/../hint_data/directives_lua.json`;
 const VARIABLES_FILE = `${__dirname}/../hint_data/variables.json`;
 
 let directivesCompletionItems = [],
@@ -25,8 +26,13 @@ function getSortPrefix(index) {
 function initialize() {
 	directivesCompletionItems = [];
 	varCompletionItems = [];
-	directivesItems = require(DIRECTIVES_FILE);
-	varItems = require(VARIABLES_FILE);
+    directivesItems = Array.prototype.concat(
+        require(DIRECTIVES_FILE), 
+        require(DIRECTIVES_LUA_FILE)
+    );
+	varItems = Array.prototype.concat(
+        require(VARIABLES_FILE),
+    );
 
 	directivesItems.forEach((directive, index) => {
 		let isCoreFunc = directive.module == 'Core functionality';

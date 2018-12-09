@@ -1,0 +1,130 @@
+{
+  "ngx.shared.DICT": {
+    "description": "获取已定义的字典表",
+    "prefix": "ngx.shared.DICT",
+    "body": [
+      "ngx.shared.$dict"
+    ]
+  },
+  "ngx.shared.DICT.get": {
+    "description": "根据 key 获取字典表中的值, 如果 key 不存在或过期，返回 nil",
+    "prefix": "ngx.shared.DICT.get",
+    "body": [
+      "local value, flags = ngx.shared.$dict:get($key)"
+    ]
+  },
+  "ngx.shared.DICT.get_stale": {
+    "description": "根据 key 获取字典表中的值, 如果 key 不存在或过期，返回 nil",
+    "prefix": "ngx.shared.DICT.get_stale",
+    "body": [
+      "local value, flags, stale = ngx.shared.$dict:get_stale($key)"
+    ]
+  },
+  "ngx.shared.DICT.set": {
+    "description": "保存字典表中 key 的值（可以设置过期时间）",
+    "prefix": "ngx.shared.DICT.set",
+    "body": [
+      "local success, err, forcible = ngx.shared.$dict:set($key, $value, $exptime?, $flags?)"
+    ]
+  },    
+ "ngx.shared.DICT.safe_set": {
+    "description": "保存字典表中 key 的值（可以设置过期时间）",
+    "prefix": "ngx.shared.DICT.safe_set",
+    "body": [
+      "loca ok, err = ngx.shared.$dict:safe_set($key, $value, $exptime?, $flags?)"
+    ]
+  },
+ "ngx.shared.DICT.add": {
+    "description": "添加字典表中 key 的值，如 key 值存在返回失败",
+    "prefix": "ngx.shared.DICT.add",
+    "body": [
+      "local success, err, forcible = ngx.shared.$dict:add($key, $value, $exptime?, $flags?)"
+    ]
+  }, 
+ "ngx.shared.DICT.safe_add": {
+    "description": "添加字典表中 key 的值，如 key 值存在返回失败",
+    "prefix": "ngx.shared.DICT.safe_add",
+    "body": [
+      "local ok, err = ngx.shared.$dict:safe_add($key, $value, $exptime?, $flags?)"
+    ]
+  },
+ "ngx.shared.DICT.replace": {
+    "description": "修改字典表中 key 的值，如 key 值不存在返回失败",
+    "prefix": "ngx.shared.DICT.replace",
+    "body": [
+      "local success, err, forcible = ngx.shared.$dict:replace($key, $value, $exptime?, $flags?)"
+    ]
+  },
+ "ngx.shared.DICT.delete": {
+    "description": "删除字典表中的 key ",
+    "prefix": "ngx.shared.DICT.delete",
+    "body": [
+      "ngx.shared.$1:delete($key)"
+    ]
+  },
+ "ngx.shared.DICT.incr": {
+    "description": "增添 key 中的值， newval 为原值加上新的值",
+    "prefix": "ngx.shared.DICT.incr",
+    "body": [
+      "local newval, err, forcible? = ngx.shared.$dict:incr($key, $value, $init?)"
+    ]
+  },
+ "ngx.shared.DICT.lpush": {
+    "description": "向字典头部增添 key ，返回 key 的数量",
+    "prefix": "ngx.shared.DICT.lpush",
+    "body": [
+      "local length, err = ngx.shared.$dict:lpush($key, $value)"
+    ]
+  },
+ "ngx.shared.DICT.rpush": {
+    "description": "向字典尾部增添 key ，返回 key 的数量",
+    "prefix": "ngx.shared.DICT.rpush",
+    "body": [
+      "local length, err = ngx.shared.$dict:rpush($kye, $value)"
+    ]
+  },
+ "ngx.shared.DICT.lpop": {
+    "description": "从字典中获取和一个 key 值，并删除 key ",
+    "prefix": "ngx.shared.DICT.lpop",
+    "body": [
+      "local val, err = ngx.shared.$dict:lpop($key)"
+    ]
+  },
+ "ngx.shared.DICT.rpop": {
+    "description": "从字典中获取最后一个 key 值，并删除 key ",
+    "prefix": "ngx.shared.DICT.rpop",
+    "body": [
+      "local val, err = ngx.shared.$dict:rpop($key)"
+    ]
+  },
+ "ngx.shared.DICT.llen": {
+    "description": "返回 key 值的个数",
+    "prefix": "ngx.shared.DICT.llen",
+    "body": [
+      "local len, err = ngx.shared.$dict:llen($key)"
+    ]
+  },
+ "ngx.shared.DICT.flush_all": {
+    "description": "清除字典里面的所有数据",
+    "prefix": "ngx.shared.DICT.flush_all",
+    "body": [
+      "ngx.shared.$dict:flush_all()"
+    ]
+  },
+ "ngx.shared.DICT.flush_expired": {
+    "description": "清除字典里面的所有已过期的数据",
+    "prefix": "ngx.shared.DICT.flush_expired",
+    "body": [
+      "ngx.shared.$dict:flush_expired()"
+    ]
+  },  
+ "ngx.shared.DICT.get_keys": {
+    "description": "清除字典里面的所有已过期的数据",
+    "prefix": "ngx.shared.DICT.get_keys",
+    "body": [
+      "local keys = ngx.shared.$dict:get_keys()"
+    ]
+  }
+
+                               
+}

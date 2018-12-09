@@ -1,0 +1,167 @@
+{
+  "ngx.req.is_internal": {
+    "description": "返回一个 boolean 用来表示当前处理的是否一个内部请求",
+    "prefix": "ngx.req.is_internal",
+    "body": [
+      "local $is_internal  = ngx.req.is_internal()"
+    ]
+  },
+  "ngx.req.start_time": {
+    "description": "返回创建请求的时间戳",
+    "prefix": "ngx.req.start_time",
+    "body": [
+      "local $secs = ngx.req.start_time()"
+    ]
+  },
+  "ngx.req.http_version": {
+    "description": "返回请求的 http 协议版本 (1.1/1.0/2.0/nil， nil 表示无法识别)",
+    "prefix": "ngx.req.start_time",
+    "body": [
+      "local $num = ngx.req.http_version()"
+    ]
+  },
+  "ngx.req.raw_header": {
+    "description": "返回请求的 http 头信息，raw 格式",
+    "prefix": "ngx.req.raw_header",
+    "body": [
+      "local $str = ngx.req.raw_header($no_request_line?)"
+    ]    
+  },
+  "ngx.req.get_method": {
+    "description": "返回请求的 http 方法，如 'GET' 'POST'",
+    "prefix": "ngx.req.get_method",
+    "body": [
+      "local $method_name = ngx.req.get_method()"
+    ]    
+  },
+  "ngx.req.set_method": {
+    "description": "重写请求的 http 方法",
+    "prefix": "ngx.req.set_method",
+    "body": [
+      "ngx.req.set_method($method_name)"
+    ]
+  },
+  "ngx.req.set_uri": {
+    "description": "重写请求的 uri 地址, 布尔类型 jump 指是否接受重定向",
+    "prefix": "ngx.req.set_uri",
+    "body": [
+      "ngx.req.set_uri($uri, $jump?)"
+    ]    
+  },
+  "ngx.req.set_uri_args": {
+    "description": "重写请求的 uri 参数，args可以是字符串，也可以是非数组table",
+    "prefix": "ngx.req.set_uri_args",
+    "body": [
+      "ngx.req.set_uri_args({$args})"
+    ]     
+  },
+  "ngx.req.get_uri_args": {
+    "description": "获取请求的 uri 参数, max_args 解析最大的参数个数，不填为默认100个",
+    "prefix": "ngx.req.get_uri_args",
+    "body": [
+      "local $args ngx.req.get_uri_args($max_args?)"
+    ]
+  },
+  "ngx.req.get_post_args": {
+    "description": "获取类型为 application/x-www-form-urlencoded 的 post 参数， 返回 table",
+    "prefix": "ngx.req.get_post_args",
+    "body": [
+      "local $args, err =  ngx.req.get_post_args($max_args)"
+    ]
+  },
+  "ngx.req.get_headers": {
+    "description": "获取请求头信息 (table) ",
+    "prefix": "ngx.req.get_headers",
+    "body": [
+      "local $headers = ngx.req.get_headers($max_headers?, $raw?)"
+    ]
+  },
+  "ngx.req.set_header": {
+    "description": "设置请求头信息",
+    "prefix": "ngx.req.set_header",
+    "body": [
+      "ngx.req.set_header($header_name, $header_value)"
+    ]
+  },
+  "ngx.req.clear_header": {
+    "description": "删除指定的请求头信息",
+    "prefix": "ngx.req.clear_header",
+    "body": [
+      "ngx.req.clear_header($header_name)"
+    ]
+  },
+  "ngx.req.read_body": {
+    "description": "同步读取客户端请求体，不阻塞Nginx事件循环。",
+    "prefix": "ngx.req.read_body",
+    "body": [
+      "ngx.req.read_body()",
+      "local args = ngx.req.get_post_args()"
+    ]    
+  },
+  "ngx.req.discard_body": {
+    "description": "同步读取客户端请求体，不阻塞Nginx事件循环。如果已调用了 read_body 方法后，此方法无效 ",
+    "prefix": "ngx.req.discard_body",
+    "body": [
+      "ngx.req.discard_body()"
+    ]     
+  },
+  "ngx.req.get_body_data": {
+    "description": "同步读取客户端请求内容，不阻塞Nginx事件循环，返加 string 类型的数据",
+    "prefix": "ngx.req.get_body_data",
+    "body": [
+      "local $data = ngx.req.get_body_data()"
+    ]    
+  },
+  "ngx.req.get_body_file": {
+    "description": "检索 request body 部分的文件，返回文件名",
+    "prefix": "ngx.req.get_body_file",
+    "body": [
+      "local $file_name, $err = ngx.req.get_body_file()",
+      "if not $err then",
+      "  local fd, err = io.open($file_name, 'r')",
+      "end"
+    ]    
+  },
+  "ngx.req.set_body_data": {
+    "description": "重新设置请求的内容,  以前的内容将被清空（释放内存或删除文件）",
+    "prefix": "ngx.req.set_body_data",
+    "body": [
+      "ngx.req.set_body_data($data)"
+    ]    
+  }, 
+  "ngx.req.set_body_file": {
+    "description": "设置请求内容中的文件, auto_clean 指是否请求完成时删除文件，默认为 false",
+    "prefix": "ngx.req.set_body_file",
+    "body": [
+      "ngx.req.set_body_file($file_name, $auto_clean?)"
+    ]    
+  },
+  "ngx.req.init_body": {
+    "description": "初始化 request body 缓存大小（字节）",
+    "prefix": "ngx.req.init_body",
+    "body": [
+      "ngx.req.init_body($buffer_size)"
+    ]    
+  }, 
+  "ngx.req.append_body": {
+    "description": "添加 request body 内容",
+    "prefix": "ngx.req.append_body",
+    "body": [
+      "ngx.req.append_body($data_chunk)"
+    ]    
+  },
+ "ngx.req.finish_body": {
+    "description": "完成创建一个新请求体的构建过程",
+    "prefix": "ngx.req.finish_body",
+    "body": [
+      "ngx.req.finish_body()"
+    ]    
+ },
+ "ngx.req.socket": {
+    "description": "返回一个封装下游连接的只读cosocket对象，raw: 是否全双工",
+    "prefix": "ngx.req.socket",
+    "body": [
+      "local $tcpsock, err = ngx.req.socket($raw?)"
+    ]    
+ }
+}

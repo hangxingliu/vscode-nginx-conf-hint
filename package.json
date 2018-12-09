@@ -41,7 +41,8 @@
 		"vscode": "^1.1.0"
 	},
 	"activationEvents": [
-		"onLanguage:NGINX"
+		"onLanguage:NGINX",
+		"onLanguage:lua"
 	],
 	"contributes": {
 		"languages": [
@@ -60,6 +61,94 @@
 			{
 				"language": "NGINX",
 				"path": "./hint_data/snippets.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/constants.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/dict.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/http_method.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/http_status.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/log.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/ngx.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/regex.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/request.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/socket.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/thread.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./snippets_lua/time.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/constants.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/dict.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/http_method.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/http_status.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/log.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/ngx.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/regex.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/request.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/socket.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/thread.json"
+			},
+			{
+				"language": "lua",
+				"path": "./snippets_lua/time.json"
 			}
 		],
 		"grammars": [
@@ -92,17 +181,17 @@
 							"sublime"
 						],
 						"description": "Syntaxes for Nginx config file, \"original\" or \"sublime\". (Need to reload VS Code)"
-                    },
-                    "nginx-conf-hint.format.align": {
-                        "type": "boolean",
-                        "default": false,
-                        "description": "Set whether to perform alignment formatting"
-                    },
-                    "nginx-conf-hint.format.tabSize": {
-                        "type": "number",
-                        "default": 4,
-                        "description": "The number of spaces a tab is equal to. "
-                    }
+					},
+					"nginx-conf-hint.format.align": {
+						"type": "boolean",
+						"default": false,
+						"description": "Set whether to perform alignment formatting"
+					},
+					"nginx-conf-hint.format.tabSize": {
+						"type": "number",
+						"default": 4,
+						"description": "The number of spaces a tab is equal to.s"
+					}
 				}
 			}
 		],

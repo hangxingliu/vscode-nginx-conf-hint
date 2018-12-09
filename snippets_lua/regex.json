@@ -1,0 +1,37 @@
+{
+  "ngx.re.match": {
+    "description": "使用正则表达式查找并返回匹配的字符串",
+    "prefix": "ngx.re.match",
+    "body": [
+      "local $captures, err = ngx.re.match($subject, $regex, $options?)"
+    ]
+  },
+  "ngx.re.find": {
+    "description": "使用正则表达式查找匹配的字符串位置",
+    "prefix": "ngx.re.find",
+    "body": [
+      "local $from, $to, err = ngx.re.find($subject, $regex, $options?)"
+    ]
+  },
+  "ngx.re.gmatch": {
+    "description": "类似于 ngx.re.match，但是返回一个Lua迭代器",
+    "prefix": "ngx.re.gmatch",
+    "body": [
+      "local $iterator, err = ngx.re.gmatch($subject, $regex, $options?)"
+    ]
+  },
+  "ngx.re.sub": {
+    "description": "使用正则查找并替换字符串",
+    "prefix": "ngx.re.sub",
+    "body": [
+      "local $newstr, n, err = ngx.re.sub($subject, $regex, $replace, $options?)"
+    ]
+  },
+  "ngx.re.gsub": {
+    "description": "使用正则查找并替换字符",
+    "prefix": "ngx.re.gsub",
+    "body": [
+      "local $newstr, n, err = ngx.re.gsub($subject, $regex, $replace, $options?)"
+    ]
+  }      
+}

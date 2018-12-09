@@ -1,0 +1,24 @@
+{
+  "ngx.thread.spawn": {
+    "description": "生成一个新的用户“轻线程”",
+    "prefix": "ngx.thread.spawn",
+    "body": [
+      "local $co = ngx.thread.spawn($func, $arg1, $arg2, ...)"
+    ]
+  },
+  "ngx.thread.wait": {
+    "description": "等待一个或多个子“轻线程”，并返回第一个“轻线程”的结果(成功或错误)。",
+    "prefix": "ngx.thread.wait",
+    "body": [
+      "local ok, $res1, $res2, ... = ngx.thread.wait($thread1, $thread2, ...)"
+    ]
+  },
+  "ngx.thread.kill": {
+    "description": "销毁一个通过 ngx.thread.spawn 创建出来的子线程",
+    "prefix": "ngx.thread.kill",
+    "body": [
+      "local ok, err = ngx.thread.kill($thread)"
+    ]
+  }
+    
+}
