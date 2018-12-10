@@ -19,6 +19,8 @@ let NGINX_LANGUAGE_ID = 'NGINX';
 let DOCUMENT_SELECTOR = [NGINX_LANGUAGE_ID];
 
 let enableStrictCompletion = true;
+let enableFormatAlign = false;
+let editorConfigTabSize = 4
 
 // ==============================
 //      Semantization function
@@ -68,8 +70,11 @@ function getBlockNameCursorIn(document, position){
 };
 
 function applyConfiguration() {
-	let configurations = vscode.workspace.getConfiguration('nginx-conf-hint');
-	enableStrictCompletion = configurations.get('enableStrictCompletion', true);
+    let configurations = vscode.workspace.getConfiguration('nginx-conf-hint');
+    
+    enableStrictCompletion = configurations.get('enableStrictCompletion', true);
+    enableFormatAlign = configurations.get("format").align;
+    editorConfigTabSize = vscode.workspace.getConfiguration("editor").get("tabSize", 4);
 
 	let newSyntaxInConfig = configurations.get('syntax', DEFAULT_SYNTAX);
 	if (!isValidType(newSyntaxInConfig))
@@ -254,17 +259,12 @@ function formatDocument(document, range = null) {
     return new Promise((resolve, reject) => {
         const body = document.getText();
 
-        const nginxFormat = vscode.workspace.getConfiguration('nginx-conf-hint.format');
-        
-        const configAlgin = nginxFormat.get("align");
-        const configSize  = nginxFormat.get("tabSize");
-
-        nginxBeautifier.modifyOptions({INDENTATION: " ".repeat(configSize)});
+        nginxBeautifier.modifyOptions({INDENTATION: " ".repeat(editorConfigTabSize)});
 
         var cleanLines = nginxBeautifier.clean_lines(body);
         cleanLines = nginxBeautifier.join_opening_bracket(cleanLines);
         cleanLines = nginxBeautifier.perform_indentation(cleanLines);
-        if (configAlgin) {
+        if (enableFormatAlign) {
             cleanLines = nginxBeautifier.perform_alignment(cleanLines);
         }
 
