@@ -147,7 +147,7 @@ function directiveApply(modName, baseUrl) {
             item.module = modName;
             item.since = item.since || null;
 
-            const ctx = item.contexts.map(n => `<code>${n}</code></br>`).join('');
+            const ctx = item.contexts.map(n => `<code>${n}</code>`).join(',');
             docObj.name  = name;
             docObj.table = `<table ><tr><th>Syntax:</th><td><code><strong>${item.syntax}</strong></code><br></td></tr><tr><th>Default:</th><td><pre>${item.def}</pre></td></tr><tr><th>Context:</th><td>${ctx}</td></tr></table>`;
             docObj.module= modName;
