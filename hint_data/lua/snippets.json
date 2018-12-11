@@ -1038,5 +1038,325 @@
     "description": "(507) (first added in the v0.9.20 release)",
     "prefix": "ngx.HTTP_INSUFFICIENT_STORAGE",
     "body": "ngx.HTTP_INSUFFICIENT_STORAGE"
+  },
+  "memcached.new": {
+    "description": "Creates a memcached object. In case of failures, returns nil and a string describing the error.It accepts an optional opts table argument. The following options are supported:\n\nkey_transform\nan array table containing two functions for escaping and unescaping the\nmemcached keys, respectively. By default,\nthe memcached keys will be escaped and unescaped as URI components, that is\n\n    memached:new{\n        key_transform = { ngx.escape_uri, ngx.unescape_uri }\n    }",
+    "prefix": "memcached.new",
+    "body": "local memc, err = memcached:new($opts?)"
+  },
+  "memcached.connect": {
+    "description": "local ok, err = memc:connect(\"unix:/path/to/unix.sock\")\nAttempts to connect to the remote host and port that the memcached server is listening to or a local unix domain socket file listened by the memcached server.Before actually resolving the host name and connecting to the remote backend, this method will always look up the connection pool for matched idle connections created by previous calls of this method.",
+    "prefix": "memcached.connect",
+    "body": "local ok, err = memc:connect($host, $port)"
+  },
+  "memcached.set": {
+    "description": "Inserts an entry into memcached unconditionally. If the key already exists, overrides it.The value argument could also be a Lua table holding multiple Lua\nstrings that are supposed to be concatenated as a whole\n(without any delimiters). For example,    memc:set(\"dog\", {\"a \", {\"kind of\"}, \" animal\"})is functionally equivalent to    memc:set(\"dog\", \"a kind of animal\")The exptime parameter is optional and defaults to 0 (meaning never expires). The expiration time is in seconds.The flags parameter is optional and defaults to 0.",
+    "prefix": "memcached.set",
+    "body": "local ok, err = memc:set($key, $value, $exptime, $flags)"
+  },
+  "memcached.set_timeout": {
+    "description": "Sets the timeout (in ms) protection for subsequent operations, including the connect method.Returns 1 when successful and nil plus a string describing the error otherwise.",
+    "prefix": "memcached.set_timeout",
+    "body": "local ok, err = memc:set_timeout($time)"
+  },
+  "memcached.set_keepalive": {
+    "description": "Puts the current memcached connection immediately into the ngx_lua cosocket connection pool.You can specify the max idle timeout (in ms) when the connection is in the pool and the maximal size of the pool every nginx worker process.In case of success, returns 1. In case of errors, returns nil with a string describing the error.Only call this method in the place you would have called the close method instead. Calling this method will immediately turn the current memcached object into the closed state. Any subsequent operations other than connect() on the current objet will return the closed error.",
+    "prefix": "memcached.set_keepalive",
+    "body": "local ok, err = memc:set_keepalive($max_idle_timeout, $pool_size)"
+  },
+  "memcached.get_reused_times": {
+    "description": "This method returns the (successfully) reused times for the current connection. In case of error, it returns nil and a string describing the error.If the current connection does not come from the built-in connection pool, then this method always returns 0, that is, the connection has never been reused (yet). If the connection comes from the connection pool, then the return value is always non-zero. So this method can also be used to determine if the current connection comes from the pool.",
+    "prefix": "memcached.get_reused_times",
+    "body": "local times, err = memc:get_reused_times()"
+  },
+  "memcached.close": {
+    "description": "Closes the current memcached connection and returns the status.In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "memcached.close",
+    "body": "local ok, err = memc:close()"
+  },
+  "memcached.add": {
+    "description": "Inserts an entry into memcached if and only if the key does not exist.The value argument could also be a Lua table holding multiple Lua\nstrings that are supposed to be concatenated as a whole\n(without any delimiters). For example,    memc:add(\"dog\", {\"a \", {\"kind of\"}, \" animal\"})is functionally equivalent to    memc:add(\"dog\", \"a kind of animal\")The exptime parameter is optional and defaults to 0 (meaning never expires). The expiration time is in seconds.The flags parameter is optional, defaults to 0.In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "memcached.add",
+    "body": "local ok, err = memc:add($key, $value, $exptime, $flags)"
+  },
+  "memcached.replace": {
+    "description": "Inserts an entry into memcached if and only if the key does exist.The value argument could also be a Lua table holding multiple Lua\nstrings that are supposed to be concatenated as a whole\n(without any delimiters). For example,    memc:replace(\"dog\", {\"a \", {\"kind of\"}, \" animal\"})is functionally equivalent to    memc:replace(\"dog\", \"a kind of animal\")The exptime parameter is optional and defaults to 0 (meaning never expires). The expiration time is in seconds.The flags parameter is optional, defaults to 0.In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "memcached.replace",
+    "body": "local ok, err = memc:replace($key, $value, $exptime, $flags)"
+  },
+  "memcached.append": {
+    "description": "Appends the value to an entry with the same key that already exists in memcached.The value argument could also be a Lua table holding multiple Lua\nstrings that are supposed to be concatenated as a whole\n(without any delimiters). For example,    memc:append(\"dog\", {\"a \", {\"kind of\"}, \" animal\"})is functionally equivalent to    memc:append(\"dog\", \"a kind of animal\")The exptime parameter is optional and defaults to 0 (meaning never expires). The expiration time is in seconds.The flags parameter is optional, defaults to 0.In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "memcached.append",
+    "body": "local ok, err = memc:append($key, $value, $exptime, $flags)"
+  },
+  "memcached.prepend": {
+    "description": "Prepends the value to an entry with the same key that already exists in memcached.The value argument could also be a Lua table holding multiple Lua\nstrings that are supposed to be concatenated as a whole\n(without any delimiters). For example,    memc:prepend(\"dog\", {\"a \", {\"kind of\"}, \" animal\"})is functionally equivalent to    memc:prepend(\"dog\", \"a kind of animal\")The exptime parameter is optional and defaults to 0 (meaning never expires). The expiration time is in seconds.The flags parameter is optional and defaults to 0.In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "memcached.prepend",
+    "body": "local ok, err = memc:prepend($key, $value, $exptime, $flags)"
+  },
+  "memcached.get": {
+    "description": "Get a single entry or multiple entries in the memcached server via a single key or a table of keys.Let us first discuss the case When the key is a single string.The key's value and associated flags value will be returned if the entry is found and no error happens.In case of errors, nil values will be turned for value and flags and a 3rd (string) value will also be returned for describing the error.If the entry is not found, then three nil values will be returned.Then let us discuss the case when the a Lua table of multiple keys are provided.In this case, a Lua table holding the key-result pairs will be always returned in case of success. Each value corresponding each key in the table is also a table holding two values, the key's value and the key's flags. If a key does not exist, then there is no responding entries in the results table.In case of errors, nil will be returned, and the second return value will be a string describing the error.",
+    "prefix": "memcached.get",
+    "body": "local value, flags, err = memc:get($key)"
+  },
+  "memcached.gets": {
+    "description": "local results, err = memc:gets($keys)\nJust like the get method, but will also return the CAS unique value associated with the entry in addition to the key's value and flags.This method is usually used together with the cas method.",
+    "prefix": "memcached.gets",
+    "body": "local value, flags, cas_unique, err = memc:gets($key)"
+  },
+  "memcached.cas": {
+    "description": "Just like the set method but does a check and set operation, which means \"store this data but\nonly if no one else has updated since I last fetched it.\"The cas_unique argument can be obtained from the gets method.",
+    "prefix": "memcached.cas",
+    "body": "local ok, err = memc:cas($key, $value, $cas_unique, $exptime?, $flags?)"
+  },
+  "memcached.touch": {
+    "description": "Update the expiration time of an existing key.Returns 1 for success or nil with a string describing the error otherwise.This method was first introduced in the v0.11 release.",
+    "prefix": "memcached.touch",
+    "body": "local ok, err = memc:touch($key, $exptime)"
+  },
+  "memcached.flush_all": {
+    "description": "Flushes (or invalidates) all the existing entries in the memcached server immediately (by default) or after the expiration\nspecified by the time argument (in seconds).In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "memcached.flush_all",
+    "body": "local ok, err = memc:flush_all($time?)"
+  },
+  "memcached.delete": {
+    "description": "Deletes the key from memcached immediately.The key to be deleted must already exist in memcached.In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "memcached.delete",
+    "body": "local ok, err = memc:delete($key)"
+  },
+  "memcached.incr": {
+    "description": "Increments the value of the specified key by the integer value specified in the delta argument.Returns the new value after incrementation in success, and nil with a string describing the error in case of failures.",
+    "prefix": "memcached.incr",
+    "body": "local new_value, err = memc:incr($key, $delta)"
+  },
+  "memcached.decr": {
+    "description": "Decrements the value of the specified key by the integer value specified in the delta argument.Returns the new value after decrementation in success, and nil with a string describing the error in case of failures.",
+    "prefix": "memcached.decr",
+    "body": "local new_value, err = memc:decr($key, $value)"
+  },
+  "memcached.stats": {
+    "description": "Returns memcached server statistics information with an optional args argument.In case of success, this method returns a lua table holding all of the lines of the output; in case of failures, it returns nil with a string describing the error.If the args argument is omitted, general server statistics is returned. Possible args argument values are items, sizes, slabs, among others.",
+    "prefix": "memcached.stats",
+    "body": "local lines, err = memc:stats($args?)"
+  },
+  "memcached.version": {
+    "description": "Returns the server version number, like 1.2.8.In case of error, it returns nil with a string describing the error.",
+    "prefix": "memcached.version",
+    "body": "local version, err = memc:version($args?)"
+  },
+  "memcached.quit": {
+    "description": "Tells the server to close the current memcached connection.Returns 1 in case of success and nil other wise. In case of failures, another string value will also be returned to describe the error.Generally you can just directly call the close method to achieve the same effect.",
+    "prefix": "memcached.quit",
+    "body": "local ok, err = memc:quit()"
+  },
+  "memcached.verbosity": {
+    "description": "Sets the verbosity level used by the memcached server. The level argument should be given integers only.Returns 1 in case of success and nil other wise. In case of failures, another string value will also be returned to describe the error.",
+    "prefix": "memcached.verbosity",
+    "body": "local ok, err = memc:verbosity($level)"
+  },
+  "mysql.new": {
+    "description": "Creates a MySQL connection object. In case of failures, returns nil and a string describing the error.",
+    "prefix": "mysql.new",
+    "body": "local db, err = mysql:new()"
+  },
+  "mysql.connect": {
+    "description": "Attempts to connect to the remote MySQL server.The options argument is a Lua table holding the following keys:\n\nhost\nthe host name for the MySQL server.\n\n\nport\nthe port that the MySQL server is listening on. Default to 3306.\n\n\npath\nthe path of the unix socket file listened by the MySQL server.\n\n\ndatabase\nthe MySQL database name.\n\n\nuser\nMySQL account name for login.\n\n\npassword\nMySQL account password for login (in clear text).\n\n\ncharset\nthe character set used on the MySQL connection, which can be different from the default charset setting.\nThe following values are accepted: big5, dec8, cp850, hp8, koi8r, latin1, latin2,\nswe7, ascii, ujis, sjis, hebrew, tis620, euckr, koi8u, gb2312, greek,\ncp1250, gbk, latin5, armscii8, utf8, ucs2, cp866, keybcs2, macce,\nmacroman, cp852, latin7, utf8mb4, cp1251, utf16, utf16le, cp1256,\ncp1257, utf32, binary, geostd8, cp932, eucjpms, gb18030.\n\n\nmax_packet_size\nthe upper limit for the reply packets sent from the MySQL server (default to 1MB).\n\n\nssl\nIf set to true, then uses SSL to connect to MySQL (default to false). If the MySQL\nserver does not have SSL support\n(or just disabled), the error string \"ssl disabled on server\" will be returned.\n\n\nssl_verify\nIf set to true, then verifies the validity of the server SSL certificate (default to false).\nNote that you need to configure the lua_ssl_trusted_certificate\nto specify the CA (or server) certificate used by your MySQL server. You may also\nneed to configure lua_ssl_verify_depth\naccordingly.\n\n\npool\nthe name for the MySQL connection pool. if omitted, an ambiguous pool name will be generated automatically with the string template user:database:host:port or user:database:path. (this option was first introduced in v0.08.)\n\n\ncompact_arrays\nwhen this option is set to true, then the query and read_result methods will return the array-of-arrays structure for the resultset, rather than the default array-of-hashes structure.\n\nBefore actually resolving the host name and connecting to the remote backend, this method will always look up the connection pool for matched idle connections created by previous calls of this method.",
+    "prefix": "mysql.connect",
+    "body": "local ok, err, errcode, sqlstate = db:connect($options)"
+  },
+  "mysql.set_timeout": {
+    "description": "Sets the timeout (in ms) protection for subsequent operations, including the connect method.",
+    "prefix": "mysql.set_timeout",
+    "body": "db:set_timeout($time)"
+  },
+  "mysql.set_keepalive": {
+    "description": "Puts the current MySQL connection immediately into the ngx_lua cosocket connection pool.You can specify the max idle timeout (in ms) when the connection is in the pool and the maximal size of the pool every nginx worker process.In case of success, returns 1. In case of errors, returns nil with a string describing the error.Only call this method in the place you would have called the close method instead. Calling this method will immediately turn the current resty.mysql object into the closed state. Any subsequent operations other than connect() on the current objet will return the closed error.",
+    "prefix": "mysql.set_keepalive",
+    "body": "local ok, err = db:set_keepalive($max_idle_timeout, $pool_size)"
+  },
+  "mysql.get_reused_times": {
+    "description": "This method returns the (successfully) reused times for the current connection. In case of error, it returns nil and a string describing the error.If the current connection does not come from the built-in connection pool, then this method always returns 0, that is, the connection has never been reused (yet). If the connection comes from the connection pool, then the return value is always non-zero. So this method can also be used to determine if the current connection comes from the pool.",
+    "prefix": "mysql.get_reused_times",
+    "body": "local times, err = db:get_reused_times()"
+  },
+  "mysql.close": {
+    "description": "Closes the current mysql connection and returns the status.In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "mysql.close",
+    "body": "local ok, err = db:close()"
+  },
+  "mysql.send_query": {
+    "description": "Sends the query to the remote MySQL server without waiting for its replies.Returns the bytes successfully sent out in success and otherwise returns nil and a string describing the error.You should use the read_result method to read the MySQL replies afterwards.",
+    "prefix": "mysql.send_query",
+    "body": "local bytes, err = db:send_query($query)"
+  },
+  "mysql.read_result": {
+    "description": "local res, err, errcode, sqlstate = db:read_result($nrows)\nReads in one result returned from the MySQL server.It returns a Lua table (res) describing the MySQL OK packet or result set packet for the query result.For queries corresponding to a result set, it returns an array holding all the rows. Each row holds key-value pairs for each data fields. For instance,    {\n        { name = \"Bob\", age = 32, phone = ngx.null },\n        { name = \"Marry\", age = 18, phone = \"10666372\"}\n    }For queries that do not correspond to a result set, it returns a Lua table like this:    {\n        insert_id = 0,\n        server_status = 2,\n        warning_count = 1,\n        affected_rows = 32,\n        message = nil\n    }If more results are following the current result, a second err return value will be given the string again. One should always check this (second) return value and if it is again, then she should call this method again to retrieve more results. This usually happens when the original query contains multiple statements (separated by semicolon in the same query string) or calling a MySQL procedure. See also Multi-Resultset Support.In case of errors, this method returns at most 4 values: nil, err, errcode, and sqlstate. The err return value contains a string describing the error, the errcode return value holds the MySQL error code (a numerical value), and finally, the sqlstate return value contains the standard SQL error code that consists of 5 characters. Note that, the errcode and sqlstate might be nil if MySQL does not return them.The optional argument nrows can be used to specify an approximate number of rows for the result set. This value can be used\nto pre-allocate space in the resulting Lua table for the result set. By default, it takes the value 4.",
+    "prefix": "mysql.read_result",
+    "body": "local res, err, errcode, sqlstate = db:read_result()"
+  },
+  "mysql.query": {
+    "description": "local res, err, errcode, sqlstate = db:query($query, $nrows)\nThis is a shortcut for combining the send_query call and the first read_result call.You should always check if the err return value  is again in case of success because this method will only call read_result only once for you. See also Multi-Resultset Support.",
+    "prefix": "mysql.query",
+    "body": "local res, err, errcode, sqlstate = db:query($query)"
+  },
+  "mysql.server_ver": {
+    "description": "Returns the MySQL server version string, like \"5.1.64\".You should only call this method after successfully connecting to a MySQL server, otherwise nil will be returned.",
+    "prefix": "mysql.server_ver",
+    "body": "local str = db:server_ver()"
+  },
+  "mysql.set_compact_arrays": {
+    "description": "Sets whether to use the \"compact-arrays\" structure for the resultsets returned by subsequent queries. See the compact_arrays option for the connect method for more details.This method was first introduced in the v0.09 release.",
+    "prefix": "mysql.set_compact_arrays",
+    "body": "db:set_compact_arrays($boolean)"
+  },
+  "redis.new": {
+    "description": "Creates a redis object. In case of failures, returns nil and a string describing the error.",
+    "prefix": "redis.new",
+    "body": "local red, err = redis:new()"
+  },
+  "redis.connect": {
+    "description": "local ok, err = red:connect(\"unix:/path/to/unix.sock\", options_table?)\nAttempts to connect to the remote host and port that the redis server is listening to or a local unix domain socket file listened by the redis server.Before actually resolving the host name and connecting to the remote backend, this method will always look up the connection pool for matched idle connections created by previous calls of this method.An optional Lua table can be specified as the last argument to this method to specify various connect options:\n\npool\nSpecifies a custom name for the connection pool being used. If omitted, then the connection pool name will be generated from the string template <host>:<port> or <unix-socket-path>.\n\n",
+    "prefix": "redis.connect",
+    "body": "local ok, err = red:connect($host, $port, $options_table?)"
+  },
+  "redis.set_timeout": {
+    "description": "Sets the timeout (in ms) protection for subsequent operations, including the connect method.",
+    "prefix": "redis.set_timeout",
+    "body": "red:set_timeout($time)"
+  },
+  "redis.set_keepalive": {
+    "description": "Puts the current Redis connection immediately into the ngx_lua cosocket connection pool.You can specify the max idle timeout (in ms) when the connection is in the pool and the maximal size of the pool every nginx worker process.In case of success, returns 1. In case of errors, returns nil with a string describing the error.Only call this method in the place you would have called the close method instead. Calling this method will immediately turn the current redis object into the closed state. Any subsequent operations other than connect() on the current object will return the closed error.",
+    "prefix": "redis.set_keepalive",
+    "body": "local ok, err = red:set_keepalive($max_idle_timeout, $pool_size)"
+  },
+  "redis.get_reused_times": {
+    "description": "This method returns the (successfully) reused times for the current connection. In case of error, it returns nil and a string describing the error.If the current connection does not come from the built-in connection pool, then this method always returns 0, that is, the connection has never been reused (yet). If the connection comes from the connection pool, then the return value is always non-zero. So this method can also be used to determine if the current connection comes from the pool.",
+    "prefix": "redis.get_reused_times",
+    "body": "local times, err = red:get_reused_times()"
+  },
+  "redis.close": {
+    "description": "Closes the current redis connection and returns the status.In case of success, returns 1. In case of errors, returns nil with a string describing the error.",
+    "prefix": "redis.close",
+    "body": "local ok, err = red:close()"
+  },
+  "redis.init_pipeline": {
+    "description": "red:init_pipeline($n)\nEnable the redis pipelining mode. All subsequent calls to Redis command methods will automatically get cached and will send to the server in one run when the commit_pipeline method is called or get cancelled by calling the cancel_pipeline method.This method always succeeds.If the redis object is already in the Redis pipelining mode, then calling this method will discard existing cached Redis queries.The optional n argument specifies the (approximate) number of commands that are going to add to this pipeline, which can make things a little faster.",
+    "prefix": "redis.init_pipeline",
+    "body": "red:init_pipeline()"
+  },
+  "redis.commit_pipeline": {
+    "description": "Quits the pipelining mode by committing all the cached Redis queries to the remote server in a single run. All the replies for these queries will be collected automatically and are returned as if a big multi-bulk reply at the highest level.This method returns nil and a Lua string describing the error upon failures.",
+    "prefix": "redis.commit_pipeline",
+    "body": "local results, err = red:commit_pipeline()"
+  },
+  "redis.cancel_pipeline": {
+    "description": "Quits the pipelining mode by discarding all existing cached Redis commands since the last call to the init_pipeline method.This method always succeeds.If the redis object is not in the Redis pipelining mode, then this method is a no-op.",
+    "prefix": "redis.cancel_pipeline",
+    "body": "red:cancel_pipeline()"
+  },
+  "redis.hmset": {
+    "description": "local red:hmset($myhash, { field1 = value1, $field2 \nSpecial wrapper for the Redis \"hmset\" command.When there are only three arguments (including the \"red\" object\nitself), then the last argument must be a Lua table holding all the field/value pairs.",
+    "prefix": "redis.hmset",
+    "body": "red:hmset($myhash, $field1, $value1, $field2, $value2, ...)"
+  },
+  "redis.array_to_hash": {
+    "description": "Auxiliary function that converts an array-like Lua table into a hash-like table.This method was first introduced in the v0.11 release.",
+    "prefix": "redis.array_to_hash",
+    "body": "local hash = red:array_to_hash($array)"
+  },
+  "redis.read_reply": {
+    "description": "Reading a reply from the redis server. This method is mostly useful for the Redis Pub/Sub API, for example,    local cjson = require \"cjson\"\n    local redis = require \"resty.redis\"\n\n    local red = redis:new()\n    local red2 = redis:new()\n\n    red:set_timeout(1000) -- 1 sec\n    red2:set_timeout(1000) -- 1 sec\n\n    local ok, err = red:connect(\"127.0.0.1\", 6379)\n    if not ok then\n        ngx.say(\"1: failed to connect: \", err)\n        return\n    end\n\n    ok, err = red2:connect(\"127.0.0.1\", 6379)\n    if not ok then\n        ngx.say(\"2: failed to connect: \", err)\n        return\n    end\n\n    local res, err = red:subscribe(\"dog\")\n    if not res then\n        ngx.say(\"1: failed to subscribe: \", err)\n        return\n    end\n\n    ngx.say(\"1: subscribe: \", cjson.encode(res))\n\n    res, err = red2:publish(\"dog\", \"Hello\")\n    if not res then\n        ngx.say(\"2: failed to publish: \", err)\n        return\n    end\n\n    ngx.say(\"2: publish: \", cjson.encode(res))\n\n    res, err = red:read_reply()\n    if not res then\n        ngx.say(\"1: failed to read reply: \", err)\n        return\n    end\n\n    ngx.say(\"1: receive: \", cjson.encode(res))\n\n    red:close()\n    red2:close()Running this example gives the output like this:1: subscribe: [\"subscribe\",\"dog\",1]\n2: publish: 1\n1: receive: [\"message\",\"dog\",\"Hello\"]\nThe following class methods are provieded:",
+    "prefix": "redis.read_reply",
+    "body": "local res, err = red:read_reply()"
+  },
+  "redis.add_commands": {
+    "description": "WARNING this method is now deprecated since we already do automatic Lua method generation\nfor any redis commands the user attempts to use and thus we no longer need this.Adds new redis commands to the resty.redis class. Here is an example:    local redis = require \"resty.redis\"\n\n    redis.add_commands(\"foo\", \"bar\")\n\n    local red = redis:new()\n\n    red:set_timeout(1000) -- 1 sec\n\n    local ok, err = red:connect(\"127.0.0.1\", 6379)\n    if not ok then\n        ngx.say(\"failed to connect: \", err)\n        return\n    end\n\n    local res, err = red:foo(\"a\")\n    if not res then\n        ngx.say(\"failed to foo: \", err)\n    end\n\n    res, err = red:bar()\n    if not res then\n        ngx.say(\"failed to bar: \", err)\n    end",
+    "prefix": "redis.add_commands",
+    "body": "local hash = redis.add_commands($cmd_name1, $cmd_name2, ...)"
+  },
+  "dns.new": {
+    "description": "Creates a dns.resolver object. Returns nil and an message string on error.It accepts a opts table argument. The following options are supported:\n\nnameservers\na list of nameservers to be used. Each nameserver entry can be either a single hostname string or a table holding both the hostname string and the port number. The nameserver is picked up by a simple round-robin algorithm for each query method call. This option is required.\n\n\nretrans\nthe total number of times of retransmitting the DNS request when receiving a DNS response times out according to the timeout setting. Defaults to 5 times. When trying to retransmit the query, the next nameserver according to the round-robin algorithm will be picked up.\n\n\ntimeout\nthe time in milliseconds for waiting for the respond for a single attempt of request transmition. note that this is ''not'' the maximal total waiting time before giving up, the maximal total waiting time can be calculated by the expression timeout x retrans. The timeout setting can also be changed by calling the set_timeout method. The default timeout setting is 2000 milliseconds, or 2 seconds.\n\n\nno_recurse\na boolean flag controls whether to disable the \"recursion desired\" (RD) flag in the UDP request. Defaults to false.\n\n",
+    "prefix": "dns.new",
+    "body": "local r, err = class:new($opts)"
+  },
+  "dns.query": {
+    "description": "Performs a DNS standard query to the nameservers specified by the new method,\nand returns all the answer records in an array-like Lua table. In case of errors, it will\nreturn nil and a string describing the error instead.If the server returns a non-zero error code, the fields errcode and errstr will be set accordingly in the Lua table returned.Each entry in the answers returned table value is also a hash-like Lua table\nwhich usually takes some of the following fields:\n\nname\nThe resource record name.\n\n\ntype\nThe current resource record type, possible values are 1 (TYPE_A), 5 (TYPE_CNAME), 28 (TYPE_AAAA), and any other values allowed by RFC 1035.\n\n\naddress\nThe IPv4 or IPv6 address in their textual representations when the resource record type is either 1 (TYPE_A) or 28 (TYPE_AAAA), respectively. Secussesive 16-bit zero groups in IPv6 addresses will not be compressed by default, if you want that, you need to call the compress_ipv6_addr static method instead.\n\n\nsection\nThe identifier of the section that the current answer record belongs to. Possible values are 1 (SECTION_AN), 2 (SECTION_NS), and 3 (SECTION_AR).\n\n\ncname\nThe (decoded) record data value for CNAME resource records. Only present for CNAME records.\n\n\nttl\nThe time-to-live (TTL) value in seconds for the current resource record.\n\n\nclass\nThe current resource record class, possible values are 1 (CLASS_IN) or any other values allowed by RFC 1035.\n\n\npreference\nThe preference integer number for MX resource records. Only present for MX type records.\n\n\nexchange\nThe exchange domain name for MX resource records. Only present for MX type records.\n\n\nnsdname\nA domain-name which specifies a host which should be authoritative for the specified class and domain. Usually present for NS type records.\n\n\nrdata\nThe raw resource data (RDATA) for resource records that are not recognized.\n\n\ntxt\nThe record value for TXT records. When there is only one character string in this record, then this field takes a single Lua string. Otherwise this field takes a Lua table holding all the strings.\n\n\nptrdname\nThe record value for PTR records.\n\nThis method also takes an optional options argument table, which takes the following fields:\n\nqtype\nThe type of the question. Possible values are 1 (TYPE_A), 5 (TYPE_CNAME), 28 (TYPE_AAAA), or any other QTYPE value specified by RFC 1035 and RFC 3596. Default to 1 (TYPE_A).\n\n\nauthority_section\nWhen set to a true value, the answers return value includes the Authority section of the DNS response. Default to false.\n\n\nadditional_section\nWhen set to a true value, the answers return value includes the Additional section of the DNS response. Default to false.\n\nThe optional parameter tries can be provided as an empty table, and will be\nreturned as a third result. The table will be an array with the error message\nfor each (if any) failed try.When data truncation happens, the resolver will automatically retry using the TCP transport mode\nto query the current nameserver. All TCP connections are short lived.",
+    "prefix": "dns.query",
+    "body": "local answers, err, tries? = r:query($name, $options?, $tries?)"
+  },
+  "dns.tcp_query": {
+    "description": "Just like the query method, but enforce the TCP transport mode instead of UDP.All TCP connections are short lived.Here is an example:    local resolver = require \"resty.dns.resolver\"\n\n    local r, err = resolver:new{\n        nameservers = { \"8.8.8.8\" }\n    }\n    if not r then\n        ngx.say(\"failed to instantiate resolver: \", err)\n        return\n    end\n\n    local ans, err = r:tcp_query(\"www.google.com\", { qtype = r.TYPE_A })\n    if not ans then\n        ngx.say(\"failed to query: \", err)\n        return\n    end\n\n    local cjson = require \"cjson\"\n    ngx.say(\"records: \", cjson.encode(ans))",
+    "prefix": "dns.tcp_query",
+    "body": "local answers, err = r:tcp_query($name, $options?)"
+  },
+  "dns.set_timeout": {
+    "description": "Overrides the current timeout setting by the time argument in milliseconds for all the nameserver peers.",
+    "prefix": "dns.set_timeout",
+    "body": "r:set_timeout($time)"
+  },
+  "dns.compress_ipv6_addr": {
+    "description": "Compresses the successive 16-bit zero groups in the textual format of the IPv6 address.For example,    local resolver = require \"resty.dns.resolver\"\n    local compress = resolver.compress_ipv6_addr\n    local new_addr = compress(\"FF01:0:0:0:0:0:0:101\")will yield FF01::101 in the new_addr return value.",
+    "prefix": "dns.compress_ipv6_addr",
+    "body": "local compressed = resty.dns.resolver.compress_ipv6_addr($address)"
+  },
+  "dns.expand_ipv6_addr": {
+    "description": "Expands the successive 16-bit zero groups in the textual format of the IPv6 address.For example,    local resolver = require \"resty.dns.resolver\"\n    local expand = resolver.expand_ipv6_addr\n    local new_addr = expand(\"FF01::101\")will yield FF01:0:0:0:0:0:0:101 in the new_addr return value.",
+    "prefix": "dns.expand_ipv6_addr",
+    "body": "local expanded = resty.dns.resolver.expand_ipv6_addr($address)"
+  },
+  "dns.arpa_str": {
+    "description": "Generates the reverse domain name for PTR lookups for both IPv4 and IPv6 addresses. Compressed IPv6 addresses\nwill be automatically expanded.For example,    local resolver = require \"resty.dns.resolver\"\n    local ptr4 = resolver.arpa_str(\"1.2.3.4\")\n    local ptr6 = resolver.arpa_str(\"FF01::101\")will yield 4.3.2.1.in-addr.arpa for ptr4 and 1.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.F.F.ip6.arpa for ptr6.",
+    "prefix": "dns.arpa_str",
+    "body": "local arpa_record = resty.dns.resolver.arpa_str($address)"
+  },
+  "dns.reverse_query": {
+    "description": "Performs a PTR lookup for both IPv4 and IPv6 addresses. This function is basically a wrapper for the query command\nwhich uses the arpa_str command to convert the IP address on the fly.",
+    "prefix": "dns.reverse_query",
+    "body": "local answers, err = r:reverse_query($address)"
+  },
+  "lock.new": {
+    "description": "local obj, err = lock:new($dict_name, $opts)\nCreates a new lock object instance by specifying the shared dictionary name (created by lua_shared_dict) and an optional options table opts.In case of failure, returns nil and a string describing the error.The options table accepts the following options:\nexptime\nSpecifies expiration time (in seconds) for the lock entry in the shared memory dictionary. You can specify up to 0.001 seconds. Default to 30 (seconds). Even if the invoker does not call unlock or the object holding the lock is not GC'd, the lock will be released after this time. So deadlock won't happen even when the worker process holding the lock crashes.\ntimeout\nSpecifies the maximal waiting time (in seconds) for the lock method calls on the current object instance. You can specify up to 0.001 seconds. Default to 5 (seconds). This option value cannot be bigger than exptime. This timeout is to prevent a lock method call from waiting forever.\nYou can specify 0 to make the lock method return immediately without waiting if it cannot acquire the lock right away.\nstep\nSpecifies the initial step (in seconds) of sleeping when waiting for the lock. Default to 0.001 (seconds). When the lock method is waiting on a busy lock, it sleeps by steps. The step size is increased by a ratio (specified by the ratio option) until reaching the step size limit (specified by the max_step option).\nratio\nSpecifies the step increasing ratio. Default to 2, that is, the step size doubles at each waiting iteration.\nmax_step\nSpecifies the maximal step size (i.e., sleep interval, in seconds) allowed. See also the step and ratio options). Default to 0.5 (seconds).\n",
+    "prefix": "lock.new",
+    "body": "local obj, err = lock:new($dict_name)"
+  },
+  "lock.lock": {
+    "description": "Tries to lock a key across all the Nginx worker processes in the current Nginx server instance. Different keys are different locks.The length of the key string must not be larger than 65535 bytes.Returns the waiting time (in seconds) if the lock is successfully acquired. Otherwise returns nil and a string describing the error.The waiting time is not from the wallclock, but rather is from simply adding up all the waiting \"steps\". A nonzero elapsed return value indicates that someone else has just hold this lock. But a zero return value cannot gurantee that no one else has just acquired and released the lock.When this method is waiting on fetching the lock, no operating system threads will be blocked and the current Lua \"light thread\" will be automatically yielded behind the scene.It is strongly recommended to always call the unlock() method to actively release the lock as soon as possible.If the unlock() method is never called after this method call, the lock will get released when\nthe current resty.lock object instance is collected automatically by the Lua GC.\nthe exptime for the lock entry is reached.\nCommon errors for this method call is\n\"timeout\"\n: The timeout threshold specified by the timeout option of the new method is exceeded.\n\"locked\"\n: The current resty.lock object instance is already holding a lock (not necessarily of the same key).\nOther possible errors are from ngx_lua's shared dictionary API.It is required to create different resty.lock instances for multiple simultaneous locks (i.e., those around different keys).",
+    "prefix": "lock.lock",
+    "body": "local elapsed, err = obj:lock($key)"
+  },
+  "lock.unlock": {
+    "description": "Releases the lock held by the current resty.lock object instance.Returns 1 on success. Returns nil and a string describing the error otherwise.If you call unlock when no lock is currently held, the error \"unlocked\" will be returned.",
+    "prefix": "lock.unlock",
+    "body": "local ok, err = obj:unlock()"
+  },
+  "lock.expire": {
+    "description": "Sets the TTL of the lock held by the current resty.lock object instance. This will reset the\ntimeout of the lock to timeout seconds if it is given, otherwise the timeout provided while\ncalling new will be used.Note that the timeout supplied inside this function is independent from the timeout provided while\ncalling new. Calling expire() will not change the timeout value specified inside new\nand subsequent expire(nil) call will still use the timeout number from new.Returns true on success. Returns nil and a string describing the error otherwise.If you call expire when no lock is currently held, the error \"unlocked\" will be returned.",
+    "prefix": "lock.expire",
+    "body": "local ok, err = obj:expire($timeout)"
+  },
+  "lrucache.new": {
+    "description": "Creates a new cache instance. If failed, returns nil and a string describing the error.The max_items argument specifies the maximal number of items held in the cache.The load-factor argument designates the \"load factor\" of the FFI-based hash-table used internally by resty.lrucache.pureffi;\nthe default value is 0.5 (i.e. 50%); if the load factor is specified, it will be clamped\nto the range of [0.1, 1] (i.e. if load factor is greater than 1, it will be saturated to\n1; likewise, if load-factor is smaller than 0.1, it will be clamped to 0.1). This argument is only meaningful for resty.lrucache.pureffi.",
+    "prefix": "lrucache.new",
+    "body": "local cache, err = lrucache.new($max_items [, $load_factor])"
+  },
+  "lrucache.set": {
+    "description": "Sets a key with a value and an expiration time.The ttl argument specifies the expiration time period. The time value is in seconds, but you can also specify the fraction number part, like 0.25. A nil ttl argument value means never expired (which is the default).When the cache is full, the cache will automatically evict the least recently used item.",
+    "prefix": "lrucache.set",
+    "body": "cache:set($key, $value, $ttl)"
+  },
+  "lrucache.get": {
+    "description": "Fetches a value with the key. If the key does not exist in the cache or has already expired, a nil value will be returned.Starting from v0.03, the stale data is also returned as the second return value if available.",
+    "prefix": "lrucache.get",
+    "body": "local data, stale_data = cache:get($key)"
+  },
+  "lrucache.delete": {
+    "description": "Removes an item specified by the key from the cache.",
+    "prefix": "lrucache.delete",
+    "body": "cache:delete($key)"
+  },
+  "lrucache.flush_all": {
+    "description": "Flushes all the existing data (if any) in the current cache instance. This is an O(1) operation and should be much faster than create a brand new cache instance.Note: the flush_all() method of resty.lrucache.pureffi is an O(n) operation though.",
+    "prefix": "lrucache.flush_all",
+    "body": "cache:flush_all()"
   }
 }

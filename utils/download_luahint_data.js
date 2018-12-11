@@ -75,6 +75,12 @@ http.init(ENABLE_CACHE);
 directiveApply("lua-nginx-module", BASE_URL);
 nginxApiApply(BASE_URL);
 someConstantApply();
+restyApiApply("memcached", "https://github.com/openresty/lua-resty-memcached");
+restyApiApply("mysql", "https://github.com/openresty/lua-resty-mysql");
+restyApiApply("redis", "https://github.com/openresty/lua-resty-redis");
+restyApiApply("dns", "https://github.com/openresty/lua-resty-dns");
+restyApiApply("lock", "https://github.com/openresty/lua-resty-lock");
+restyApiApply("lrucache", "https://github.com/openresty/lua-resty-lrucache");
 finish();
 
 function directiveApply(modName, baseUrl) {
@@ -213,6 +219,75 @@ function nginxApiApply(baseUrl) {
             item.body = item.body || name;
             snippetsResult[name] = item;
         })
+    });
+}
+
+function restyApiApply(prefix, baseUrl) 
+{
+    http.get('Nginx Resty Api page', baseUrl, html => {
+        checker.ok();
+    
+        start('Analyzing Resty Api');
+        let $ = cheerio.load(html);
+
+        $(".entry-content ul li a").each((i, ele) => {
+            if ($(ele).attr('href') == '#methods') {
+                let directiveLists = $(ele).next("ul").find("li a");
+
+                directiveLists.each((i, ele) => {
+                    let name = $(ele).text();
+                    let directive = $("#user-content-"+ name.toLocaleLowerCase().replace(/[\.:]/g,""));
+                    if (directive.length == 0) return;
+        
+                    let item = newSnippetsObject();
+         
+                    let temp = directive.parent();
+                    while (temp = temp.next()) {
+                        const character = temp.text();
+                        if (character == SIGN_END) 
+                            break;
+                    
+                        let match = character.match(SIGN_SYNTAX);
+                        if (match) {
+                            let body = match[1].trim();
+                            match = body.match(/\((\w.*?)\)/)
+                            if (match) {
+                                let params = match[1].split(",").map(val => {
+                                    val = val.trim();
+                                    return /^[a-zA-Z]+/.test(val) ? "$" + val : val;
+                                });
+                                body = body.replace(/\(\w.*?\)/, "(" + params.join(", ") + ")");
+                            }
+        
+                            let [left, right] = body.split("=");
+                            if (left && right) {
+                                if (!left.includes("local")) {
+                                    left = "local " + left;
+                                }
+                                body = `${left}=${right}`;
+                            }
+                            if (item.body) {
+                                item.description += body + "\n";
+                            }else {
+                                item.body = body;
+                            }
+                            continue;
+                        }
+            
+                        match = character.match(SIGN_CONTEXT);
+                        if (match) continue;
+        
+                        item.description += character;
+                    }
+                   
+                    item.prefix = `${prefix}.${name}`
+                    item.body = item.body || name;
+                    snippetsResult[item.prefix] = item;
+                })
+                return true;    
+            }
+        });
+        
     });
 }
 
