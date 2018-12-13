@@ -24,7 +24,8 @@
 	"author": "hangxingliu",
 	"main": "./extension/main",
 	"scripts": {
-		"test": "mocha ./test/*.js"
+		"test": "mocha ./test/*.js",
+		"lint:eslint": "eslint ."
 	},
 	"extensionDependencies": [],
 	"dependencies": {},
@@ -32,6 +33,7 @@
 		"@hangxingliu/assert": "^0.1.1",
 		"chalk": "^2.4.1",
 		"cheerio": "^0.22.0",
+		"eslint": "^5.10.0",
 		"html-minifier": "^3.5.17",
 		"mocha": "^5.2.0",
 		"request": "^2.87.0",
