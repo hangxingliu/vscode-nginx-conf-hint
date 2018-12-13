@@ -3,14 +3,19 @@
 
 let vscode = require('vscode'),
 	fs = require('fs'),
-    extension = require('./vscode_helper'),
-    glob = require('glob');
+	extension = require('./vscode_helper');
 
 const schemeNginxDocument = 'nginx-doc';
 const templatesFolder = `${__dirname}/document_templates/`;
 
-const DIRECTIVES_DOC_FILE = `${__dirname}/../hint_data/**/directives_document.json`;
-const VARIABLES_DOC_FILE = `${__dirname}/../hint_data/**/variables_document.json`;
+const DIRECTIVES_DOC_FILES = [
+	`${__dirname}/../hint_data/directives_document.json`,
+	`${__dirname}/../hint_data/lua/directives_document.json`,
+];
+const VARIABLES_DOC_FILES = [
+	`${__dirname}/../hint_data/variables_document.json`,
+	`${__dirname}/../hint_data/lua/variables_document.json`,
+];
 
 const UNAVAILABLE = 'This document is unavailable now, please reopen this document';
 let templates = {
@@ -78,14 +83,9 @@ function generateVariablesHTML(nginxModule) {
 
 function initialize(context) {
     let subscriptions = context.subscriptions;
-    
-    const options = { sync : true, absolute: true };
-    glob(DIRECTIVES_DOC_FILE, options).forEach(item =>
-		directivesDocItems = directivesDocItems.concat(require(item))
-	);
-    glob(VARIABLES_DOC_FILE, options).forEach(item =>
-		variablesDocItems = variablesDocItems.concat(require(item))
-	);
+
+	directivesDocItems = [].concat.apply([], DIRECTIVES_DOC_FILES.map(it => require(it)));
+	variablesDocItems = [].concat.apply([], VARIABLES_DOC_FILES.map(it => require(it)));
 
 	for(let module of variablesDocItems) {
 		for (let varName in module.vars) {
