@@ -1,9 +1,10 @@
 let vscode = require('vscode'),
 	{ isAbsolute, join, resolve, dirname } = require('path'),
-	{ readdirSync, statSync, existsSync } = require('fs');
+    { readdirSync, statSync, existsSync } = require('fs'),
+    glob = require('glob')
 
-const DIRECTIVES_FILE = `${__dirname}/../hint_data/directives.json`;
-const VARIABLES_FILE = `${__dirname}/../hint_data/variables.json`;
+const DIRECTIVES_FILE = `${__dirname}/../hint_data/**/directives.json`;
+const VARIABLES_FILE = `${__dirname}/../hint_data/**/variables.json`;
 
 let directivesCompletionItems = [],
 	varCompletionItems = [],
@@ -24,9 +25,15 @@ function getSortPrefix(index) {
 
 function initialize() {
 	directivesCompletionItems = [];
-	varCompletionItems = [];
-	directivesItems = require(DIRECTIVES_FILE);
-	varItems = require(VARIABLES_FILE);
+    varCompletionItems = [];
+
+    const options = { sync : true, absolute: true };
+    glob(DIRECTIVES_FILE, options).forEach(item =>
+		directivesItems = directivesItems.concat(require(item))
+	);
+    glob(VARIABLES_FILE, options).forEach(item =>
+		varItems = varItems.concat(require(item))
+	);
 
 	directivesItems.forEach((directive, index) => {
 		let isCoreFunc = directive.module == 'Core functionality';

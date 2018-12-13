@@ -11,12 +11,16 @@ const {
 	WARNING, AS_MODAL,
 } = require('./vscode_helper');
 
+const nginxBeautifier = require("./nginxbeautifier.js");
+
 const DEFAULT_SYNTAX = 'original';
 
 let NGINX_LANGUAGE_ID = 'NGINX';
 let DOCUMENT_SELECTOR = [NGINX_LANGUAGE_ID];
 
 let enableStrictCompletion = true;
+let enableFormatAlign = false;
+let editorConfigTabSize = 4
 
 // ==============================
 //      Semantization function
@@ -66,8 +70,11 @@ function getBlockNameCursorIn(document, position){
 };
 
 function applyConfiguration() {
-	let configurations = vscode.workspace.getConfiguration('nginx-conf-hint');
-	enableStrictCompletion = configurations.get('enableStrictCompletion', true);
+    let configurations = vscode.workspace.getConfiguration('nginx-conf-hint');
+    
+    enableStrictCompletion = configurations.get('enableStrictCompletion', true);
+    enableFormatAlign = configurations.get("format").align;
+    editorConfigTabSize = vscode.workspace.getConfiguration("editor").get("tabSize", 4);
 
 	let newSyntaxInConfig = configurations.get('syntax', DEFAULT_SYNTAX);
 	if (!isValidType(newSyntaxInConfig))
@@ -221,8 +228,19 @@ function activate(context) {
 			return nginxDocument.openVariableDoc(text.trim());
 
 		return showErrorMessage(`"${text}" is not a nginx directive or nginx embedded variables!`);
-	});
+    });
+    
+    disposable[5] = vscode.languages.registerDocumentFormattingEditProvider(NGINX_LANGUAGE_ID, {
+        provideDocumentFormattingEdits(document) {
+            return formatDocument(document);
+        }
+    });
 
+    disposable[6] = vscode.languages.registerDocumentRangeFormattingEditProvider(NGINX_LANGUAGE_ID, {
+        provideDocumentRangeFormattingEdits(document, range) {
+            return formatDocument(document, range);
+        }
+    });
 
 	subscriptions.push(...disposable);
 
@@ -230,6 +248,45 @@ function activate(context) {
 }
 
 function deactivate() { }
+
+
+/**
+ * 
+ * @param {vscode.TextDocument} document 
+ * @param {vscode.Range} range 
+ */
+function formatDocument(document, range = null) {
+    return new Promise((resolve, reject) => {
+        const body = document.getText();
+
+        nginxBeautifier.modifyOptions({INDENTATION: " ".repeat(editorConfigTabSize)});
+
+        var cleanLines = nginxBeautifier.clean_lines(body);
+        cleanLines = nginxBeautifier.join_opening_bracket(cleanLines);
+        cleanLines = nginxBeautifier.perform_indentation(cleanLines);
+        if (enableFormatAlign) {
+            cleanLines = nginxBeautifier.perform_alignment(cleanLines);
+        }
+
+        const firstLine = document.lineAt(0);
+        const lastLine  = document.lineAt(document.lineCount - 1);
+        range = range || new vscode.Range(
+            firstLine.range.start.line,
+            firstLine.range.start.character,
+            lastLine.range.end.line,
+            lastLine.range.end.character
+        );
+
+        var newBody = cleanLines
+            .slice(range.start.line, range.end.line + 1)
+            .join(endOfLine(document.eol));
+		resolve([vscode.TextEdit.replace(range, newBody)]);
+    });
+}
+
+function endOfLine(eol) {
+    return eol === vscode.EndOfLine.LF ? "\n" : "\r\n";
+}
 
 exports.activate = activate;
 exports.deactivate = deactivate;

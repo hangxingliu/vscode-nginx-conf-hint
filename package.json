@@ -27,7 +27,9 @@
 		"test": "mocha ./test/*.js"
 	},
 	"extensionDependencies": [],
-	"dependencies": {},
+	"dependencies": {
+		"glob": "^7.1.3"
+	},
 	"devDependencies": {
 		"@hangxingliu/assert": "^0.1.1",
 		"chalk": "^2.4.1",
@@ -41,7 +43,8 @@
 		"vscode": "^1.1.0"
 	},
 	"activationEvents": [
-		"onLanguage:NGINX"
+		"onLanguage:NGINX",
+		"onLanguage:lua"
 	],
 	"contributes": {
 		"languages": [
@@ -60,6 +63,14 @@
 			{
 				"language": "NGINX",
 				"path": "./hint_data/snippets.json"
+			},
+			{
+				"language": "NGINX",
+				"path": "./hint_data/lua/snippets.json"
+			},
+			{
+				"language": "lua",
+				"path": "./hint_data/lua/snippets.json"
 			}
 		],
 		"grammars": [
@@ -92,6 +103,11 @@
 							"sublime"
 						],
 						"description": "Syntaxes for Nginx config file, \"original\" or \"sublime\". (Need to reload VS Code)"
+					},
+					"nginx-conf-hint.format.align": {
+						"type": "boolean",
+						"default": false,
+						"description": "Set whether to perform alignment formatting"
 					}
 				}
 			}
