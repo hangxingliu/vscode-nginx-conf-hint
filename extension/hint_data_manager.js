@@ -30,7 +30,7 @@ function getSortPrefix(index) {
 
 function initialize() {
 	directivesCompletionItems = [];
-    varCompletionItems = [];
+	varCompletionItems = [];
 
 	directivesItems = [].concat.apply([], DIRECTIVES_FILES.map(it => require(it)));
 	varItems = [].concat.apply([], VARIABLES_FILES.map(it => require(it)));

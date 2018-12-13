@@ -82,7 +82,7 @@ function generateVariablesHTML(nginxModule) {
 
 
 function initialize(context) {
-    let subscriptions = context.subscriptions;
+	let subscriptions = context.subscriptions;
 
 	directivesDocItems = [].concat.apply([], DIRECTIVES_DOC_FILES.map(it => require(it)));
 	variablesDocItems = [].concat.apply([], VARIABLES_DOC_FILES.map(it => require(it)));

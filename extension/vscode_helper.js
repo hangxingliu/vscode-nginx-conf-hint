@@ -35,9 +35,9 @@ function showConfirm(title, btnOk, btnCancel, flags = 0) {
  * @returns {string}
  */
 function getTextBeforeCursor(document, position) {
-    var start = new vscode.Position(position.line, 0);
-    var range = new vscode.Range(start, position);
-    return document.getText(range);
+	var start = new vscode.Position(position.line, 0);
+	var range = new vscode.Range(start, position);
+	return document.getText(range);
 }
 
 /**

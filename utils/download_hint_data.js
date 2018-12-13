@@ -46,8 +46,8 @@ let start = name => console.log(`${name} ...`),
 		table: '',
 		doc: '',
 		module: '',
-        link: '',
-        name: ''
+		link: '',
+		name: ''
 	}), newVariableDocObject = () => ({
 		module: '',
 		vars: {},
