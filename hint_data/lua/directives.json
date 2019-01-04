@@ -200,7 +200,7 @@
     "syntax": [
       "init_by_lua_block { lua-script }"
     ],
-    "def": "init_by_lua_block {};",
+    "def": "init_by_lua_block {}",
     "contexts": [
       "http"
     ],
@@ -258,7 +258,7 @@
     "syntax": [
       "init_worker_by_lua_block { lua-script }"
     ],
-    "def": "init_worker_by_lua_block {};",
+    "def": "init_worker_by_lua_block {}",
     "contexts": [
       "http"
     ],
@@ -326,7 +326,7 @@
     "syntax": [
       "set_by_lua_block $res { lua-script }"
     ],
-    "def": "set_by_lua_block {};",
+    "def": "set_by_lua_block {}",
     "contexts": [
       "server",
       "server if",
@@ -392,7 +392,7 @@
     "syntax": [
       "content_by_lua_block { lua-script }"
     ],
-    "def": "content_by_lua_block {};",
+    "def": "content_by_lua_block {}",
     "contexts": [
       "location",
       "location if"
@@ -473,7 +473,7 @@
     "syntax": [
       "rewrite_by_lua_block { lua-script }"
     ],
-    "def": "rewrite_by_lua_block {};",
+    "def": "rewrite_by_lua_block {}",
     "contexts": [
       "http",
       "server",
@@ -549,7 +549,7 @@
     "syntax": [
       "access_by_lua_block { lua-script }"
     ],
-    "def": "access_by_lua_block {};",
+    "def": "access_by_lua_block {}",
     "contexts": [
       "http",
       "server",
@@ -619,7 +619,7 @@
     "syntax": [
       "header_filter_by_lua_block { lua-script }"
     ],
-    "def": "header_filter_by_lua_block {};",
+    "def": "header_filter_by_lua_block {}",
     "contexts": [
       "http",
       "server",
@@ -701,7 +701,7 @@
     "syntax": [
       "body_filter_by_lua_block { lua-script-str }"
     ],
-    "def": "body_filter_by_lua_block {};",
+    "def": "body_filter_by_lua_block {}",
     "contexts": [
       "http",
       "server",
@@ -769,7 +769,7 @@
     "syntax": [
       "log_by_lua_block { lua-script }"
     ],
-    "def": "log_by_lua_block {};",
+    "def": "log_by_lua_block {}",
     "contexts": [
       "http",
       "server",
@@ -812,7 +812,7 @@
     "syntax": [
       "balancer_by_lua_block { lua-script }"
     ],
-    "def": "balancer_by_lua_block {};",
+    "def": "balancer_by_lua_block {}",
     "contexts": [
       "upstream"
     ],
@@ -877,7 +877,7 @@
     "syntax": [
       "ssl_certificate_by_lua_block { lua-script }"
     ],
-    "def": "ssl_certificate_by_lua_block {};",
+    "def": "ssl_certificate_by_lua_block {}",
     "contexts": [
       "server"
     ],
@@ -928,7 +928,7 @@
     "syntax": [
       "ssl_session_fetch_by_lua_block { lua-script }"
     ],
-    "def": "ssl_session_fetch_by_lua_block {};",
+    "def": "ssl_session_fetch_by_lua_block {}",
     "contexts": [
       "http"
     ],
@@ -978,7 +978,7 @@
     "syntax": [
       "ssl_session_store_by_lua_block { lua-script }"
     ],
-    "def": "ssl_session_store_by_lua_block {};",
+    "def": "ssl_session_store_by_lua_block {}",
     "contexts": [
       "http"
     ],

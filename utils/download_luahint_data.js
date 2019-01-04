@@ -142,7 +142,7 @@ function directiveApply(modName, baseUrl) {
 				if (name.endsWith("by_lua")) {
 					item.def = name + " '';"
 				}else if (name.endsWith("by_lua_block")) {
-					item.def = name + " {};"
+					item.def = name + " {}"
 				}else if (name.endsWith("by_lua_file")) {
 					item.def = name + " .lua;"
 				}else {
