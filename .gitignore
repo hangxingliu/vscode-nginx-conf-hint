@@ -1,3 +1,10 @@
+# ignore archive files
+*.tar
+*.tgz
+*.7z
+*.zip
+*.vsix
+
 # ignore mark file about new syntax tip
 extension/new_syntax_tip_has_been_shown
 
@@ -15,9 +22,6 @@ utils/cache-*
 # ignore vscode.d.ts and vscode.proposed.d.ts
 vscode.d.ts
 vscode.proposed.d.ts
-
-# ignore vsix
-*.vsix
 
 # Logs
 logs

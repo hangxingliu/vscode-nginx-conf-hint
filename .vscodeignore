@@ -1,3 +1,10 @@
+# ignore archive files
+*.tar
+*.tgz
+*.7z
+*.zip
+*.vsix
+
 # ignore mark file about new syntax tip
 extension/new_syntax_tip_has_been_shown
 
@@ -30,13 +37,7 @@ utils/**
 # eslint
 .eslintrc.json
 
-
-# binary archives
-*.tar
-*.tgz
-*.vsix
 *.d.ts
-
 
 # screenshot image (because link of screenshot in README is under github)
 images/screenshots.gif
