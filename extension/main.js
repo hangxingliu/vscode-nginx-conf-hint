@@ -2,7 +2,7 @@
 /// <reference path="../vscode.d.ts" />
 const vscode = require('vscode');
 const fs = require('fs');
-const nginxDocument = require('./open_nginx_document');
+const nginxDocument = require('./documents/open_nginx_document');
 const hint = require('./hint_data_manager');
 const { getCurrentSyntaxType, applySyntaxFile, isValidType } = require('./syntax_manager');
 const {
