@@ -266,7 +266,7 @@
   },
   {
     "name": "$fastcgi_script_name",
-    "desc": "request URI or, if a URI ends with a slash, request URI with an index file\nname configured by the fastcgi_index directive appended to it.\nThis variable can be used to set the\nSCRIPT_FILENAME and PATH_TRANSLATED\nparameters that determine the script name in PHP.\nFor example, for the “/info/” request with the\nfollowing directives\n\nfastcgi_index index.php;\nfastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;\n\nthe SCRIPT_FILENAME parameter will be equal to\n“/home/www/scripts/php/info/index.php”.\n\n\nWhen using the fastcgi_split_path_info directive,\nthe $fastcgi_script_name variable equals the value of\nthe first capture set by the directive.",
+    "desc": "request URI or, if a URI ends with a slash, request URI with an index file\nname configured by the fastcgi_index directive appended to it.\nThis variable can be used to set the\nSCRIPT_FILENAME and PATH_TRANSLATED\nparameters that determine the script name in PHP.\nFor example, for the “/info/” request with the\nfollowing directives\nfastcgi_index index.php;\nfastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;\n\nthe SCRIPT_FILENAME parameter will be equal to\n“/home/www/scripts/php/info/index.php”.\n\n\nWhen using the fastcgi_split_path_info directive,\nthe $fastcgi_script_name variable equals the value of\nthe first capture set by the directive.",
     "module": "ngx_http_fastcgi_module"
   },
   {
@@ -366,7 +366,7 @@
   },
   {
     "name": "$ssl_ciphers",
-    "desc": "returns the list of ciphers supported by the client (1.11.7).\nKnown ciphers are listed by names, unknown are shown in hexadecimal,\nfor example:\n\nAES128-SHA:AES256-SHA:0x00ff\n\n\nThe variable is fully supported only when using OpenSSL version 1.0.2 or higher.\nWith older versions, the variable is available\nonly for new sessions and lists only known ciphers.",
+    "desc": "returns the list of ciphers supported by the client (1.11.7).\nKnown ciphers are listed by names, unknown are shown in hexadecimal,\nfor example:\nAES128-SHA:AES256-SHA:0x00ff\n\n\nThe variable is fully supported only when using OpenSSL version 1.0.2 or higher.\nWith older versions, the variable is available\nonly for new sessions and lists only known ciphers.",
     "module": "ngx_http_ssl_module"
   },
   {
@@ -436,7 +436,12 @@
   },
   {
     "name": "$ssl_curves",
-    "desc": "returns the list of curves supported by the client (1.11.7).\nKnown curves are listed by names, unknown are shown in hexadecimal,\nfor example:\n\n0x001d:prime256v1:secp521r1:secp384r1\n\n\nThe variable is supported only when using OpenSSL version 1.0.2 or higher.\nWith older versions, the variable value will be an empty string.\n\n\nThe variable is available only for new sessions.",
+    "desc": "returns the list of curves supported by the client (1.11.7).\nKnown curves are listed by names, unknown are shown in hexadecimal,\nfor example:\n0x001d:prime256v1:secp521r1:secp384r1\n\n\nThe variable is supported only when using OpenSSL version 1.0.2 or higher.\nWith older versions, the variable value will be an empty string.\n\n\nThe variable is available only for new sessions.",
+    "module": "ngx_http_ssl_module"
+  },
+  {
+    "name": "$ssl_early_data",
+    "desc": "returns “1” if\nTLS 1.3 early data is used\nand the handshake is not complete, otherwise “” (1.15.3).",
     "module": "ngx_http_ssl_module"
   },
   {
@@ -487,6 +492,11 @@
   {
     "name": "$upstream_bytes_received",
     "desc": "number of bytes received from an upstream server (1.11.4).\nValues from several connections\nare separated by commas and colons like addresses in the\n$upstream_addr variable.",
+    "module": "ngx_http_upstream_module"
+  },
+  {
+    "name": "$upstream_bytes_sent",
+    "desc": "number of bytes sent to an upstream server (1.15.8).\nValues from several connections\nare separated by commas and colons like addresses in the\n$upstream_addr variable.",
     "module": "ngx_http_upstream_module"
   },
   {
@@ -671,7 +681,7 @@
   },
   {
     "name": "$ssl_ciphers",
-    "desc": "returns the list of ciphers supported by the client (1.11.7).\nKnown ciphers are listed by names, unknown are shown in hexadecimal,\nfor example:\n\nAES128-SHA:AES256-SHA:0x00ff\n\n\nThe variable is fully supported only when using OpenSSL version 1.0.2 or higher.\nWith older versions, the variable is available\nonly for new sessions and lists only known ciphers.",
+    "desc": "returns the list of ciphers supported by the client (1.11.7).\nKnown ciphers are listed by names, unknown are shown in hexadecimal,\nfor example:\nAES128-SHA:AES256-SHA:0x00ff\n\n\nThe variable is fully supported only when using OpenSSL version 1.0.2 or higher.\nWith older versions, the variable is available\nonly for new sessions and lists only known ciphers.",
     "module": "ngx_stream_ssl_module"
   },
   {
@@ -726,7 +736,7 @@
   },
   {
     "name": "$ssl_curves",
-    "desc": "returns the list of curves supported by the client (1.11.7).\nKnown curves are listed by names, unknown are shown in hexadecimal,\nfor example:\n\n0x001d:prime256v1:secp521r1:secp384r1\n\n\nThe variable is supported only when using OpenSSL version 1.0.2 or higher.\nWith older versions, the variable value will be an empty string.\n\n\nThe variable is available only for new sessions.",
+    "desc": "returns the list of curves supported by the client (1.11.7).\nKnown curves are listed by names, unknown are shown in hexadecimal,\nfor example:\n0x001d:prime256v1:secp521r1:secp384r1\n\n\nThe variable is supported only when using OpenSSL version 1.0.2 or higher.\nWith older versions, the variable value will be an empty string.\n\n\nThe variable is available only for new sessions.",
     "module": "ngx_stream_ssl_module"
   },
   {
@@ -750,6 +760,11 @@
     "module": "ngx_stream_ssl_module"
   },
   {
+    "name": "$ssl_preread_protocol",
+    "desc": "the highest SSL protocol version supported by the client (1.15.2)",
+    "module": "ngx_stream_ssl_preread_module"
+  },
+  {
     "name": "$ssl_preread_server_name",
     "desc": "server name requested through SNI",
     "module": "ngx_stream_ssl_preread_module"
@@ -765,13 +780,13 @@
     "module": "ngx_stream_upstream_module"
   },
   {
-    "name": "$upstream_bytes_sent",
-    "desc": "number of bytes sent to an upstream server (1.11.4).\nValues from several connections\nare separated by commas like addresses in the\n$upstream_addr variable.",
+    "name": "$upstream_bytes_received",
+    "desc": "number of bytes received from an upstream server (1.11.4).\nValues from several connections\nare separated by commas like addresses in the\n$upstream_addr variable.",
     "module": "ngx_stream_upstream_module"
   },
   {
-    "name": "$upstream_bytes_received",
-    "desc": "number of bytes received from an upstream server (1.11.4).\nValues from several connections\nare separated by commas like addresses in the\n$upstream_addr variable.",
+    "name": "$upstream_bytes_sent",
+    "desc": "number of bytes sent to an upstream server (1.11.4).\nValues from several connections\nare separated by commas like addresses in the\n$upstream_addr variable.",
     "module": "ngx_stream_upstream_module"
   },
   {

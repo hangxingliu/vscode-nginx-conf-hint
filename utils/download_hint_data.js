@@ -16,84 +16,93 @@ const SNIPPETS_OUTPUT_FILE = `${OUTPUT}/snippets.json`;
 const DIRECTIVES_DOC_OUTPUT_FILE = `${OUTPUT}/directives_document.json`;
 const VARIABLES_DOC_OUTPUT_FILE = `${OUTPUT}/variables_document.json`;
 
-let checker = require('./lib/checker'),
-	chalk = require('chalk').default,
-	snippetGenerator = require('./lib/snippet_generator'),
-	http = require('./lib/http_with_cache'),
-	html = require('./lib/html'),
-	io = require('./lib/io'),
-	url = require('url'),
-	cheerio = require('cheerio');
+const chalk = require('chalk').default;
+const url = require('url');
+const cheerio = require('cheerio');
+
+const checker = require('./lib/checker');
+const snippetGenerator = require('./lib/snippet_generator');
+const http = require('./lib/http_with_cache');
+const html = require('./lib/html');
+const io = require('./lib/io');
 
 const bold = any => chalk.bold(String(any));
 const removeBlank = any => String(any).replace(/\s/g, '');
 
-let start = name => console.log(`${name} ...`),
-	newVariableObject = () => ({
-		name: '',
-		desc: '',
-		module: ''
-	}), newDirectiveObject = () => ({
-		name: '',
-		syntax: [],
-		def: '',
-		contexts: [],
-		desc: '',
-		notes: [],
-		since: '',
-		module: ''
-	}), newDirectiveDocObject = () => ({
-		table: '',
-		doc: '',
-		module: '',
-		link: '',
-		name: ''
-	}), newVariableDocObject = () => ({
-		module: '',
-		vars: {},
-		doc: ''
-	});
+let start = name => console.log(`${name} ...`);
+
+const newVariableObject = () => ({
+	name: '',
+	desc: '',
+	module: ''
+});
+const newDirectiveObject = () => ({
+	name: '',
+	syntax: [],
+	def: '',
+	contexts: [],
+	desc: '',
+	notes: [],
+	since: '',
+	module: ''
+});
+const newDirectiveDocObject = () => ({
+	table: '',
+	doc: '',
+	module: '',
+	link: '',
+	name: ''
+});
+const newVariableDocObject = () => ({
+	module: '',
+	vars: {},
+	doc: ''
+});
 
 
 //==========================
 //     START      =======>
 let pageList = [];
-let directivesResult = [],
-	variablesResult = [],
-	directivesDocResult = [],
-	variablesDocResult = [],
-	snippetsResult = {},
-	lastDirectivesLength = 0,
-	lastVariablesLength = 0;
+let directivesResult = [];
+let variablesResult = [];
+let directivesDocResult = [];
+let variablesDocResult = [];
+let snippetsResult = {};
+let lastDirectivesLength = 0;
+let lastVariablesLength = 0;
 
-http.init(ENABLE_CACHE);
-http.get('Nginx document index page', BASE_URL, html => {
-	checker.ok();
+main();
 
-	start('Analyzing sub document page links');
-	let $ = cheerio.load(html),
-		title = $('center h4').filter((i, e) => $(e).text().trim() == SIGN_TITLE);
-	checker.lengthEquals('document page title "Modules reference"', title, 1);
+function main() {
+	http.init(ENABLE_CACHE);
+	http.get('Nginx document index page', BASE_URL, html => {
+		checker.ok();
 
-	let directiveLists = title.parent().nextAll('ul.compact');
-	checker.lengthEquals('ul.compact', directiveLists, 6, checker.LEVEL_WARN);
+		start('Analyzing sub document page links');
+		let $ = cheerio.load(html),
+			title = $('center h4').filter((i, e) => $(e).text().trim() == SIGN_TITLE);
+		checker.lengthEquals('document page title "Modules reference"', title, 1);
 
-	directiveLists.each((i, list) => {
-		//ignore
-		//  Alphabetical index of directives
-		//  Alphabetical index of variables
-		if (i == 0) return;
-		let links = $(list).find('a'), link;
-		checker.lengthAtLease('<a> in ul.compact', links, 1);
-		links.each(i => {
-			link = links.eq(i);
-			pageList.push({ uri: link.attr('href'), name: link.text().trim() });
+		let directiveLists = title.parent().nextAll('ul.compact');
+		checker.lengthEquals('ul.compact', directiveLists, 6, checker.LEVEL_WARN);
+
+		directiveLists.each((i, list) => {
+			//ignore
+			//  Alphabetical index of directives
+			//  Alphabetical index of variables
+			if (i == 0) return;
+			let links = $(list).find('a'), link;
+			checker.lengthAtLease('<a> in ul.compact', links, 1);
+			links.each(i => {
+				link = links.eq(i);
+				pageList.push({ uri: link.attr('href'), name: link.text().trim() });
+			});
 		});
-	});
-	checker.ok(`Got ${bold(pageList.length)} sub document pages`);
+		checker.ok(`Got ${bold(pageList.length)} sub document pages`);
 
-	handlerSubDocumentPage();
-});
+		handlerSubDocumentPage();
+	});
+}
 
 function finish() {
 	start('Generating snippet object array');
@@ -133,7 +142,7 @@ function handlerSubDocumentPage() {
 
 		checker.lengthAtLease(`directives info of ${name}: .directive`, directives, 1);
 
-		directives.each( i => {
+		directives.each(i => {
 			let item = newDirectiveObject(),
 				docObj = newDirectiveDocObject();
 
@@ -188,23 +197,23 @@ function handlerSubDocumentPage() {
 				elementPointer.next('p, blockquote.note, blockquote.example, dl.compact')).length) {
 				let tagName = elementPointer.prop('tagName');
 				switch (tagName) {
-				case 'P':
-					if (!elementPointer.text().trim()) continue;
-					if (!item.desc)
-						item.desc = elementPointer.text().replace(/\n/g, '');
-					docObj.doc += $.html(elementPointer);
-					break;
-				case 'DL':
-					docObj.doc += $.html(elementPointer);
-					break;
-				case 'BLOCKQUOTE':
-					let className = elementPointer.attr('class').trim();
-					if (className == 'note')
-						item.notes.push(elementPointer.text());
-					else if (className != 'example')
-						checker.warn(`there is a blockquote tag with unknown class name (${className}) ` +
-							`after directive (${item.name})`);
-					docObj.doc += $.html(elementPointer);
+					case 'P':
+						if (!elementPointer.text().trim()) continue;
+						if (!item.desc)
+							item.desc = elementPointer.text().replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
+						docObj.doc += $.html(elementPointer);
+						break;
+					case 'DL':
+						docObj.doc += $.html(elementPointer);
+						break;
+					case 'BLOCKQUOTE':
+						let className = elementPointer.attr('class').trim();
+						if (className == 'note')
+							item.notes.push(elementPointer.text());
+						else if (className != 'example')
+							checker.warn(`there is a blockquote tag with unknown class name (${className}) ` +
+								`after directive (${item.name})`);
+						docObj.doc += $.html(elementPointer);
 				}
 			}
 
