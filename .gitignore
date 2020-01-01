@@ -1,3 +1,5 @@
+package-lock.json
+
 # ignore archive files
 *.tar
 *.tgz
