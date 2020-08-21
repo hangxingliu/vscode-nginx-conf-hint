@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 //@ts-check
 
-const chalk = require('chalk').default;
+const chalk = require('chalk');
 const request = require('request');
 const fs = require('fs');
 
@@ -60,5 +60,5 @@ function download(name) {
  * @param {string} ctx
  */
 function writeFile(targetFile, type, ctx) {
-	fs.writeFileSync(targetFile, ctx.replace('?>', `?>\n<!-- vscode-nginx-conf-hint { syntax-type: ${type} }; is 42;  -->`));
+	fs.writeFileSync(targetFile, ctx.replace('?>', `?>\n<!-- vscode-nginx-conf-hint { syntax-type: ${type} }  -->`));
 }
