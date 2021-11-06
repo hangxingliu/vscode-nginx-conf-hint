@@ -4,6 +4,7 @@
 *.7z
 *.zip
 *.vsix
+*.log
 
 # ignore mark file about new syntax tip
 extension/new_syntax_tip_has_been_shown

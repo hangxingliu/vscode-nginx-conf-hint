@@ -5,7 +5,7 @@ node_js:
   - 'node'
 
 script:
-  - "npm run lint:eslint"
+  # - "npm run lint:eslint"
   - "npm test"
 
 notifications:

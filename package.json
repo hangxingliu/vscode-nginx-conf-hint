@@ -30,15 +30,16 @@
 	"extensionDependencies": [],
 	"dependencies": {},
 	"devDependencies": {
+		"@babel/core": "^7",
+		"@babel/eslint-parser": "^7",
 		"@hangxingliu/assert": "^0.1.1",
-		"babel-eslint": "^10.0.3",
+		"@types/vscode": "*",
 		"chalk": "^3.0.0",
-		"cheerio": "^1.0.0-rc.3",
-		"eslint": "^6.8.0",
+		"cheerio": "1.0.0-rc.10",
+		"eslint": "^8",
 		"html-minifier": "^4.0.0",
-		"mocha": "^6.2.2",
-		"request": "^2.88.0",
-		"vscode": "^1.1.36"
+		"mocha": "^9",
+		"request": "^2.88.0"
 	},
 	"engines": {
 		"vscode": "^1.1.0"
