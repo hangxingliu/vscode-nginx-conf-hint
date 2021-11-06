@@ -63,7 +63,7 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 ## Contributor
 
 - [@tiansin](https://github.com/tiansin)
-
+- [@latipun7](https://github.com/latipun7)
 
 
 [nginx-doc]: https://nginx.org/en/docs/
