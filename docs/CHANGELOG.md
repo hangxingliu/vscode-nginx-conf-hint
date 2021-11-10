@@ -33,3 +33,6 @@
 
 1. fixed wrong description in `README.md`
 2. add devDependencies into `package.json`
+
+[shanoor-syntax]: https://github.com/shanoor/vscode-nginx/blob/master/syntaxes/nginx.tmLanguage
+[sublime-syntax]: https://github.com/brandonwamboldt/sublime-nginx/blob/master/Syntaxes/nginx.tmLanguage

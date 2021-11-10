@@ -37,7 +37,7 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 2. remove dependent extension `shanoor.vscode-nginx`.
 3. update Nginx hint data(directives and variables) to latest.
 
-[CHANGELOG.md][changelog]
+[CHANGELOG.md][docs/changelog]
 
 ## Declaration
 
@@ -54,7 +54,7 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 
 [Pull Request][pr] & [Issues][issues]
 
-[CONTRIBUTING.md](CONTRIBUTING.md)
+[CONTRIBUTING.md](docs/CONTRIBUTING.md)
 
 ## Author
 
@@ -75,5 +75,5 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 [icon-nginx]: https://github.com/shanoor/vscode-nginx/blob/master/nginx_logo.png
 [issues]: https://github.com/hangxingliu/vscode-nginx-conf-hint/issues
 [pr]: https://github.com/hangxingliu/vscode-nginx-conf-hint/pulls
-[changelog]: https://github.com/hangxingliu/vscode-nginx-conf-hint/blob/master/CHANGELOG.md
+[changelog]: https://github.com/hangxingliu/vscode-nginx-conf-hint/blob/master/docs/CHANGELOG.md
 [paypal]: https://www.paypal.me/hangxingliu
