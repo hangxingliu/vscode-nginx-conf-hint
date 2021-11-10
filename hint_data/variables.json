@@ -35,6 +35,11 @@
     "module": "ngx_http_core_module"
   },
   {
+    "name": "$connection_time",
+    "desc": "connection time in seconds with a milliseconds resolution (1.19.10)",
+    "module": "ngx_http_core_module"
+  },
+  {
     "name": "$content_length",
     "desc": "“Content-Length” request header field",
     "module": "ngx_http_core_module"
@@ -111,12 +116,22 @@
   },
   {
     "name": "$proxy_protocol_addr",
-    "desc": "client address from the PROXY protocol header, or an empty string otherwise\n(1.5.12)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
+    "desc": "client address from the PROXY protocol header (1.5.12)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
     "module": "ngx_http_core_module"
   },
   {
     "name": "$proxy_protocol_port",
-    "desc": "client port from the PROXY protocol header, or an empty string otherwise\n(1.11.0)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
+    "desc": "client port from the PROXY protocol header (1.11.0)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
+    "module": "ngx_http_core_module"
+  },
+  {
+    "name": "$proxy_protocol_server_addr",
+    "desc": "server address from the PROXY protocol header (1.17.6)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
+    "module": "ngx_http_core_module"
+  },
+  {
+    "name": "$proxy_protocol_server_port",
+    "desc": "server port from the PROXY protocol header (1.17.6)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
     "module": "ngx_http_core_module"
   },
   {
@@ -280,6 +295,16 @@
     "module": "ngx_http_gzip_module"
   },
   {
+    "name": "$limit_conn_status",
+    "desc": "keeps the result of limiting the number of connections (1.17.6):\nPASSED,\nREJECTED, or\nREJECTED_DRY_RUN",
+    "module": "ngx_http_limit_conn_module"
+  },
+  {
+    "name": "$limit_req_status",
+    "desc": "keeps the result of limiting the request processing rate (1.17.6):\nPASSED,\nDELAYED,\nREJECTED,\nDELAYED_DRY_RUN, or\nREJECTED_DRY_RUN",
+    "module": "ngx_http_limit_req_module"
+  },
+  {
     "name": "$memcached_key",
     "desc": "Defines a key for obtaining response from a memcached server.",
     "module": "ngx_http_memcached_module"
@@ -360,8 +385,13 @@
     "module": "ngx_http_ssi_module"
   },
   {
+    "name": "$ssl_alpn_protocol",
+    "desc": "returns the protocol selected by ALPN during the SSL handshake,\nor an empty string otherwise (1.21.4);",
+    "module": "ngx_http_ssl_module"
+  },
+  {
     "name": "$ssl_cipher",
-    "desc": "returns the string of ciphers used\nfor an established SSL connection;",
+    "desc": "returns the name of the cipher used\nfor an established SSL connection;",
     "module": "ngx_http_ssl_module"
   },
   {
@@ -675,8 +705,13 @@
     "module": "ngx_stream_realip_module"
   },
   {
+    "name": "$ssl_alpn_protocol",
+    "desc": "returns the protocol selected by ALPN during the SSL handshake,\nor an empty string otherwise (1.21.4);",
+    "module": "ngx_stream_ssl_module"
+  },
+  {
     "name": "$ssl_cipher",
-    "desc": "returns the string of ciphers used\nfor an established SSL connection;",
+    "desc": "returns the name of the cipher used\nfor an established SSL connection;",
     "module": "ngx_stream_ssl_module"
   },
   {

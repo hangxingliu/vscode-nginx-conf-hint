@@ -21,7 +21,7 @@
   },
   "Block location": {
     "prefix": "location",
-    "body": "location ${location:/} {\n\t$0\n}"
+    "body": "location ${1:/} {\n\t${0}\n}"
   },
   "Block ifinlocation": {
     "prefix": "ifinlocation",
@@ -37,16 +37,16 @@
   },
   "Block upstream": {
     "prefix": "upstream",
-    "body": "upstream ${upstream_name} {\n\t$0\n}"
+    "body": "upstream ${1} {\n\t${0}\n}"
   },
   "Block server with directives": {
     "prefix": "server",
     "body": [
       "server {",
-      "\tlisten ${address:80};",
-      "\tserver_name ${server_names};",
-      "\taccess_log  ${logs/server.access.log} main;",
-      "\t$0",
+      "\tlisten ${1:80};",
+      "\tserver_name ${2};",
+      "\taccess_log  ${3:logs/server.access.log} main;",
+      "\t${0}",
       "}"
     ]
   }
