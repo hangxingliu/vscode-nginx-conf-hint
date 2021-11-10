@@ -1,4 +1,7 @@
 {
 	"nginx-conf-hint.enableStrictCompletion": false,
-	"nginx-conf-hint.syntax": "sublime"
+	"nginx-conf-hint.syntax": "sublime",
+	"files.associations": {
+		"*.conf.disabled": "NGINX"
+	}
 }
