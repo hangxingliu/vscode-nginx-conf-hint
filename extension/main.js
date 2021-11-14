@@ -95,6 +95,11 @@ function applyConfiguration() {
 }
 
 function displayNewSyntaxTip() {
+	let configurations = vscode.workspace.getConfiguration('nginx-conf-hint');
+	/** @type {string} */
+	let syntaxConfig = configurations.get('syntax', DEFAULT_SYNTAX);
+	if (syntaxConfig === 'sublime') return;
+
 	const newSyntaxTipLockFile = `${__dirname}/new_syntax_tip_has_been_shown`;
 	fs.stat(newSyntaxTipLockFile, (err, stat) => {
 		if (stat) return; // file is existed

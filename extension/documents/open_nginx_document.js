@@ -44,7 +44,7 @@ function getDocURI(type, name) {
 
 function getViewColumnForDoc() {
 	return vscode.window.activeTextEditor
-		? vscode.window.activeTextEditor.viewColumn
+		? (vscode.window.activeTextEditor.viewColumn + 1)
 		: vscode.ViewColumn.One;
 }
 
