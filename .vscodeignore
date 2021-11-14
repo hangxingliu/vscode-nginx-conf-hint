@@ -1,9 +1,25 @@
-# ignore archive files
+# github files
+.github
+
+# artifacts
+artifacts
+
+# scripts and utils
+scripts
+utils
+
+# macos files
+.DS_Store
+._*
+.nmimrc
+
+# archive files and logs
 *.tar
 *.tgz
 *.7z
 *.zip
 *.vsix
+*.log
 
 # ignore mark file about new syntax tip
 extension/new_syntax_tip_has_been_shown
@@ -28,10 +44,6 @@ node_modules/@types/**
 # cache files
 utils/cache
 utils/cache-**
-
-
-# utils
-utils/**
 
 
 # eslint

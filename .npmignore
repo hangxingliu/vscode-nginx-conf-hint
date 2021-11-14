@@ -1,3 +1,13 @@
+# github files
+.github
+
+# artifacts
+artifacts
+
+# macos files
+.DS_Store
+._*
+
 # ignore archive files
 *.tar
 *.tgz

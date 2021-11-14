@@ -1,4 +1,9 @@
-package-lock.json
+/artifacts
+
+# macos files
+.DS_Store
+._*
+.nmimrc
 
 # ignore archive files
 *.tar
