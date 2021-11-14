@@ -1,5 +1,12 @@
 # CHANGELOG
 
+### 0.2.0 (2021-11-14)
+
+1. update syntax and hint data.
+	- Contributor: [@latipun7](https://github.com/latipun7)
+2. add support for lua module and conf formatter
+	- Contributor: [@tiansin](https://github.com/tiansin)
+
 ### 0.1.0 (2018-07-09)
 
 1. syntax of nginx.conf is provided inside.
