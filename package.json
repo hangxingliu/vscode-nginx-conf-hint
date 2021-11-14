@@ -28,12 +28,15 @@
 		"lint:eslint": "eslint .",
 		"build:utils": "tsc -p tsconfig.utils.json"
 	},
+	"extensionKind": [
+		"ui",
+		"workspace"
+	],
 	"extensionDependencies": [],
 	"dependencies": {},
 	"devDependencies": {
 		"@babel/core": "^7",
 		"@babel/eslint-parser": "^7",
-		"@hangxingliu/assert": "^0.1.1",
 		"@types/node": "^16.11.7",
 		"@types/vscode": "*",
 		"axios": "^0.24.0",
@@ -42,8 +45,6 @@
 		"eslint": "^8",
 		"html-minifier": "^4.0.0",
 		"https-proxy-agent": "^5.0.0",
-		"mocha": "^9",
-		"request": "^2.88.0",
 		"ts-node": "^10.4.0",
 		"typescript": "^4.4.4"
 	},
