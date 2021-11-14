@@ -33,6 +33,7 @@ You can report bug or send a feature suggestion in [Github Issues Page][issues].
 	- Contributor: [@latipun7](https://github.com/latipun7)
 2. add support for lua module and conf formatter
 	- Contributor: [@tiansin](https://github.com/tiansin)
+3. add `goto nginx document` into tooltip hover (issue#9)
 
 ### 0.1.0 (2018-07-09)
 

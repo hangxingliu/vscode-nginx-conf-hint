@@ -164,6 +164,8 @@ function genDirectiveHoverHintItem(directiveItem) {
 	if (!it) return null;
 
 	let hover = [
+		/** @todo optimize here */
+		`[goto nginx document](https://nginx.org/en/docs/http/${it.module}.html#${it.name})`,
 		`**${it.name}** ${it.module}` +
 		(it.since ? `since **${it.since}**` : '')
 	];

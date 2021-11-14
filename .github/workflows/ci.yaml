@@ -15,7 +15,7 @@ jobs:
       - name: Install and build
         run: |
           yarn install &&
-          yarn test
+          yarn run build:utils
       - name: Build packages
         run: |
           yarn add vsce &&
