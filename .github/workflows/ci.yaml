@@ -18,9 +18,9 @@ jobs:
           yarn run build:utils
       - name: Build packages
         run: |
-          yarn add vsce &&
-          bash ./scripts/build-vscode-artifact.sh &&
-          bash ./scripts/build-npm-package.sh
+          bash ./scripts/build-npm-package.sh &&
+          yarn add --dev vsce &&
+          bash ./scripts/build-vscode-artifact.sh
       - uses: actions/upload-artifact@v2
         with:
           name: vscode-extension
@@ -31,5 +31,5 @@ jobs:
         with:
           name: npm-package
           path: |
-            artifacts/npm/*.vsix
+            artifacts/npm/*.tgz
             artifacts/npm/*.list
