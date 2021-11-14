@@ -1,7 +1,6 @@
 # Nginx config file hint(auto-completion) for VS Code
 
-[![npm Version](https://img.shields.io/npm/v/vscode-nginx-conf-hint.svg)](https://www.npmjs.com/package/vscode-nginx-conf-hint)
-[![Build Status](https://travis-ci.org/hangxingliu/vscode-nginx-conf-hint.svg?branch=master)](https://travis-ci.org/hangxingliu/vscode-nginx-conf-hint)
+[![.github/workflows/ci.yaml](https://github.com/hangxingliu/vscode-nginx-conf-hint/actions/workflows/ci.yaml/badge.svg)](https://github.com/hangxingliu/vscode-nginx-conf-hint/actions/workflows/ci.yaml)
 
 An **experimental** extension.   
 And the hint data generated from [nginx document web page][nginx-doc] by [scripts][doc-script]    

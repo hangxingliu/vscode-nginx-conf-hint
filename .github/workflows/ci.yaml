@@ -21,13 +21,13 @@ jobs:
           yarn add vsce &&
           bash ./scripts/build-vscode-artifact.sh &&
           bash ./scripts/build-npm-package.sh
-      - use: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
           name: vscode-extension
           path: |
             artifacts/vscode/*.vsix
             artifacts/vscode/*.list
-      - use: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
           name: npm-package
           path: |
