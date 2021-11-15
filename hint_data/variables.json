@@ -276,7 +276,12 @@
   },
   {
     "name": "$jwt_claim_name",
-    "desc": "returns the value of a specified\nJWT claim",
+    "desc": "returns the value of a specified\nJWT claim\n\n\nFor nested claims and claims including a dot (“.”),\nthe value of the variable cannot be evaluated;\nthe auth_jwt_claim_set directive should be used instead.\n\n\n\nVariable values for tokens encrypted with JWE\nare available only after decryption which occurs during the\nAccess phase.",
+    "module": "ngx_http_auth_jwt_module"
+  },
+  {
+    "name": "$jwt_payload",
+    "desc": "returns the decrypted top-level payload\nof nested\nor encrypted tokens (1.21.2).\nFor nested tokens returns the enclosed JWS token.\nFor encrypted tokens returns JSON with claims.",
     "module": "ngx_http_auth_jwt_module"
   },
   {
@@ -646,12 +651,22 @@
   },
   {
     "name": "$proxy_protocol_addr",
-    "desc": "client address from the PROXY protocol header, or an empty string otherwise\n(1.11.4)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
+    "desc": "client address from the PROXY protocol header (1.11.4)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
     "module": "ngx_stream_core_module"
   },
   {
     "name": "$proxy_protocol_port",
-    "desc": "client port from the PROXY protocol header, or an empty string otherwise\n(1.11.4)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
+    "desc": "client port from the PROXY protocol header (1.11.4)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
+    "module": "ngx_stream_core_module"
+  },
+  {
+    "name": "$proxy_protocol_server_addr",
+    "desc": "server address from the PROXY protocol header (1.17.6)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
+    "module": "ngx_stream_core_module"
+  },
+  {
+    "name": "$proxy_protocol_server_port",
+    "desc": "server port from the PROXY protocol header (1.17.6)\n\nThe PROXY protocol must be previously enabled by setting the\nproxy_protocol parameter\nin the listen directive.",
     "module": "ngx_stream_core_module"
   },
   {
@@ -693,6 +708,11 @@
     "name": "$time_local",
     "desc": "local time in the Common Log Format",
     "module": "ngx_stream_core_module"
+  },
+  {
+    "name": "$limit_conn_status",
+    "desc": "keeps the result of limiting the number of connections (1.17.6):\nPASSED,\nREJECTED, or\nREJECTED_DRY_RUN",
+    "module": "ngx_stream_limit_conn_module"
   },
   {
     "name": "$realip_remote_addr",

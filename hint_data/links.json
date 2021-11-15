@@ -885,6 +885,16 @@
     0
   ],
   [
+    "auth_jwt_type",
+    "http/ngx_http_auth_jwt_module.html#auth_jwt_type",
+    0
+  ],
+  [
+    "auth_jwt_require",
+    "http/ngx_http_auth_jwt_module.html#auth_jwt_require",
+    0
+  ],
+  [
     "$jwt_header_name",
     "http/ngx_http_auth_jwt_module.html#var_jwt_header_",
     1
@@ -892,6 +902,11 @@
   [
     "$jwt_claim_name",
     "http/ngx_http_auth_jwt_module.html#var_jwt_claim_",
+    1
+  ],
+  [
+    "$jwt_payload",
+    "http/ngx_http_auth_jwt_module.html#var_jwt_payload",
     1
   ],
   [
@@ -1590,8 +1605,43 @@
     0
   ],
   [
+    "js_body_filter",
+    "http/ngx_http_js_module.html#js_body_filter",
+    0
+  ],
+  [
     "js_content",
     "http/ngx_http_js_module.html#js_content",
+    0
+  ],
+  [
+    "js_fetch_ciphers",
+    "http/ngx_http_js_module.html#js_fetch_ciphers",
+    0
+  ],
+  [
+    "js_fetch_protocols",
+    "http/ngx_http_js_module.html#js_fetch_protocols",
+    0
+  ],
+  [
+    "js_fetch_trusted_certificate",
+    "http/ngx_http_js_module.html#js_fetch_trusted_certificate",
+    0
+  ],
+  [
+    "js_fetch_verify_depth",
+    "http/ngx_http_js_module.html#js_fetch_verify_depth",
+    0
+  ],
+  [
+    "js_header_filter",
+    "http/ngx_http_js_module.html#js_header_filter",
+    0
+  ],
+  [
+    "js_import",
+    "http/ngx_http_js_module.html#js_import",
     0
   ],
   [
@@ -1607,6 +1657,11 @@
   [
     "js_set",
     "http/ngx_http_js_module.html#js_set",
+    0
+  ],
+  [
+    "js_var",
+    "http/ngx_http_js_module.html#js_var",
     0
   ],
   [
@@ -1950,6 +2005,11 @@
     0
   ],
   [
+    "proxy_cookie_flags",
+    "http/ngx_http_proxy_module.html#proxy_cookie_flags",
+    0
+  ],
+  [
     "proxy_cookie_path",
     "http/ngx_http_proxy_module.html#proxy_cookie_path",
     0
@@ -2102,6 +2162,11 @@
   [
     "proxy_ssl_ciphers",
     "http/ngx_http_proxy_module.html#proxy_ssl_ciphers",
+    0
+  ],
+  [
+    "proxy_ssl_conf_command",
+    "http/ngx_http_proxy_module.html#proxy_ssl_conf_command",
     0
   ],
   [
@@ -2975,6 +3040,11 @@
     0
   ],
   [
+    "keepalive_time",
+    "http/ngx_http_upstream_module.html#keepalive_time",
+    0
+  ],
+  [
     "keepalive_timeout",
     "http/ngx_http_upstream_module.html#keepalive_timeout",
     0
@@ -3002,6 +3072,16 @@
   [
     "random",
     "http/ngx_http_upstream_module.html#random",
+    0
+  ],
+  [
+    "resolver",
+    "http/ngx_http_upstream_module.html#resolver",
+    0
+  ],
+  [
+    "resolver_timeout",
+    "http/ngx_http_upstream_module.html#resolver_timeout",
     0
   ],
   [
@@ -3385,6 +3465,11 @@
     0
   ],
   [
+    "uwsgi_ssl_conf_command",
+    "http/ngx_http_uwsgi_module.html#uwsgi_ssl_conf_command",
+    0
+  ],
+  [
     "uwsgi_ssl_crl",
     "http/ngx_http_uwsgi_module.html#uwsgi_ssl_crl",
     0
@@ -3617,6 +3702,16 @@
   [
     "proxy_pass_error_message",
     "mail/ngx_mail_proxy_module.html#proxy_pass_error_message",
+    0
+  ],
+  [
+    "proxy_protocol",
+    "mail/ngx_mail_proxy_module.html#proxy_protocol",
+    0
+  ],
+  [
+    "proxy_smtp_auth",
+    "mail/ngx_mail_proxy_module.html#proxy_smtp_auth",
     0
   ],
   [
@@ -3890,6 +3985,16 @@
     1
   ],
   [
+    "$proxy_protocol_server_addr",
+    "stream/ngx_stream_core_module.html#var_proxy_protocol_server_addr",
+    1
+  ],
+  [
+    "$proxy_protocol_server_port",
+    "stream/ngx_stream_core_module.html#var_proxy_protocol_server_port",
+    1
+  ],
+  [
     "$remote_addr",
     "stream/ngx_stream_core_module.html#var_remote_addr",
     1
@@ -4035,6 +4140,11 @@
     0
   ],
   [
+    "limit_conn_dry_run",
+    "stream/ngx_stream_limit_conn_module.html#limit_conn_dry_run",
+    0
+  ],
+  [
     "limit_conn_log_level",
     "stream/ngx_stream_limit_conn_module.html#limit_conn_log_level",
     0
@@ -4043,6 +4153,11 @@
     "limit_conn_zone",
     "stream/ngx_stream_limit_conn_module.html#limit_conn_zone",
     0
+  ],
+  [
+    "$limit_conn_status",
+    "stream/ngx_stream_limit_conn_module.html#var_limit_conn_status",
+    1
   ],
   [
     "access_log",
