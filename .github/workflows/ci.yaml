@@ -15,7 +15,8 @@ jobs:
       - name: Install and build
         run: |
           yarn install &&
-          yarn run build:utils
+          yarn run build:utils &&
+          yarn run build:desktop-ext
       - name: Build packages
         run: |
           bash ./scripts/build-npm-package.sh &&

@@ -10,6 +10,7 @@ jobs:
       - name: Install and build
         run: |
           yarn install &&
+          yarn run build:desktop-ext &&
           yarn add vsce
       - name: Publish VS Code extension
         env:
