@@ -1,0 +1,276 @@
+import { names } from "./match-names";
+import type { SyntaxPattern } from "./types";
+import type { DirectiveItem } from "../extension/types";
+
+const commonDirectiveNames = new Set<string>();
+const _directives: DirectiveItem[] = require('../../hint_data/directives.json');
+_directives.forEach(it => commonDirectiveNames.add(it.name));
+
+const blockDirectives = [
+	'events',
+	'http',
+	'mail',
+	'stream',
+	'server',
+	'location',
+	'limit_except',
+	'if',
+	'upstream',
+	'types',
+	'map',
+];
+blockDirectives.forEach(it => commonDirectiveNames.delete(it));
+
+
+const noBodyDirectives = _directives.filter(it => {
+	if (it.syntax.length !== 1) return false;
+	const syntax = it.syntax[0].replace(/\s+/g, '')
+	return syntax === (it.name + ';')
+}).map(it => it.name);
+noBodyDirectives.forEach(it => commonDirectiveNames.delete(it));
+
+
+const skipDirectives = [
+	'return',
+	'rewrite',
+];
+skipDirectives.forEach(it => commonDirectiveNames.delete(it));
+
+
+const directivesGroupBy = Array.from(groupByPrefix(Array.from(commonDirectiveNames)).entries());
+
+const commentPattern: SyntaxPattern = { match: /\#.*/, name: names.comment, }
+
+/**
+ * @see https://macromates.com/manual/en/language_grammars
+ *
+ * this is an array with the actual rules used to parse the document. In this example there are two rules (line 6-8 and 9-17). Rules will be explained in the next section.
+ */
+export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
+	commentPattern,
+	...blockDirectives.map((it): SyntaxPattern | SyntaxPattern[] => {
+		switch (it) {
+			case 'location': {
+				// expaned patterns for 'location'
+				// Syntax:	location [ = | ~ | ~* | ^~ ] uri { ... }
+				// location @name { ... }
+				// Default:	—
+				// Context:	server, location
+				const name = names.meta.context(it);
+				return [{
+					name,
+					begin: /\b(location) +[\^]?~[\*]? +(.*?)\{/,
+					end: /\}/,
+					beginCaptures: {
+						'1': names.contextDirective,
+						'2': names.string.regexp,
+
+					},
+					patterns: [{ include: '$self' }],
+				},
+				{
+					name,
+					begin: /\b(location) +(.*?)\{/,
+					end: /\}/,
+					beginCaptures: {
+						'1': names.contextDirective,
+						'2': names.entityName.context,
+					},
+					patterns: [{ include: '$self' }],
+				}];
+			}
+			case 'upstream': {
+				return {
+					name: names.meta.context(it),
+					begin: /\b(upstream) +(.*?)\{/,
+					end: /\}/,
+					beginCaptures: {
+						'1': names.contextDirective,
+						'2': names.entityName.context,
+					},
+					patterns: [{ include: '$self' }],
+				}
+			}
+			case 'if': {
+				return {
+					name: names.meta.context(it),
+					begin: /\b(if) +\(/,
+					end: /\)/,
+					beginCaptures: {
+						'1': names.controlKeyword,
+					},
+					patterns: [{ include: '#if_condition' }],
+				}
+			}
+			case 'map': {
+				return {
+					name: names.meta.context(it),
+					/** map $http_user_agent $mobile { */
+					begin: /\b(map) +(\$)([A-Za-z0-9\_]+) +(\$)([A-Za-z0-9\_]+) *\{/,
+					end: /\}/,
+					beginCaptures: {
+						'1': names.contextDirective,
+						'2': names.$,
+						'3': names.variable.parameter,
+						'4': names.$,
+						'5': names.variable.other,
+					},
+					patterns: [
+						{ include: '#values' },
+						{ match: ';', name: names.terminator },
+						commentPattern
+					]
+				}
+			}
+			default: return {
+				name: names.meta.context(it),
+				begin: new RegExp(`\\b(${it}) +\\{`),
+				end: /\}/,
+				beginCaptures: {
+					'1': names.contextDirective,
+				},
+				patterns: [{ include: '$self' }],
+			}
+		}
+	}),
+	{
+		name: names.meta.block,
+		begin: /\{/,
+		end: /\}/,
+		patterns: [{ include: '$self' }],
+	},
+	{
+		begin: /\b(return)\b/,
+		end: ';',
+		beginCaptures: {
+			'1': names.controlKeyword,
+		},
+	},
+	{
+		begin: /\b(rewrite)\s+/,
+		end: '(last|break|redirect|permanent)?(;)',
+		beginCaptures: {
+			'1': names.directiveKeyword,
+		},
+		endCaptures: {
+			'1': names.otherKeyword,
+			'2': names.terminator,
+		},
+		patterns: [{ include: '#values' }],
+	},
+	{
+		begin: /\b(server)\s+/,
+		end: ';',
+		beginCaptures: {
+			'1': names.directiveKeyword,
+		},
+		endCaptures: {
+			'1': names.terminator,
+		},
+		patterns: [{ include: '#server_parameters' }],
+	},
+	{
+		comment: 'Directives without value',
+		begin: '\\b(' + noBodyDirectives.join('|') + ')\\b',
+		end: '(;|$)',
+		beginCaptures: {
+			'1': names.directiveKeyword,
+		},
+		endCaptures: {
+			'1': names.terminator,
+		},
+	},
+	...directivesGroupBy.map(([prefix, suffix]) => {
+		if (!prefix) {
+			return {
+				begin: '\\b(' + suffix.join('|') + ')\\b',
+				end: /;/,
+				beginCaptures: {
+					'1': names.directiveKeyword,
+				},
+				endCaptures: {
+					'0': names.terminator,
+				},
+				patterns: [{ include: '#values' }],
+			} as SyntaxPattern;
+		}
+		return {
+			begin: '\\b(' + prefix + ')(' + suffix.join('|') + ')\\b',
+			end: /;/,
+			beginCaptures: {
+				'1': names.directiveKeyword,
+				'2': names.directiveKeyword,
+			},
+			endCaptures: {
+				'0': names.terminator,
+			},
+			patterns: [{ include: '#values' }],
+
+		};
+	}),
+	{
+		comment: 'Unknown directives',
+		begin: /\b([a-zA-Z0-9\_]+)\s+/,
+		end: /(;|$)/,
+		beginCaptures: {
+			'1': names.unknownDirective,
+		},
+		endCaptures: {
+			'1': names.terminator,
+		},
+		patterns: [{ include: '#values' }],
+	},
+	{
+		comment: 'MIME types to file extension',
+		begin: /\b([a-z]+\/[a-z0-9\-\.\+]+)\b/,
+		end: /(;)/,
+		beginCaptures: {
+			'1': names.string.mimeType,
+		},
+		endCaptures: {
+			'1': names.terminator,
+		},
+		patterns: [{ include: '#values' }],
+	},
+
+];
+
+
+function groupByPrefix(strings: string[]) {
+	const mapList = new Map<string, string[]>();
+	const emptyPrefix: string[] = [];
+
+	for (let i = 0; i < strings.length; i++) {
+		const str = strings[i];
+		let index = str.indexOf('_')
+		if (index <= 0) {
+			emptyPrefix.push(str);
+			continue;
+		}
+		index++;
+		const prefix = str.slice(0, index);
+		const suffix = str.slice(index);
+
+		if (!suffix) {
+			emptyPrefix.push(str);
+			continue;
+		}
+		const list = mapList.get(prefix);
+		if (list) {
+			list.push(suffix);
+			continue;
+		}
+		mapList.set(prefix, [suffix]);
+	}
+
+	const keys = Array.from(mapList.keys());
+	for (let i = 0; i < keys.length; i++) {
+		const key = keys[i];
+		const values = mapList.get(key);
+		if (values.length > 1) continue;
+		emptyPrefix.push(key + values[0]);
+		mapList.delete(key);
+	}
+	mapList.set('', emptyPrefix);
+	return mapList;
+}

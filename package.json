@@ -28,7 +28,7 @@
 		"lint:eslint": "eslint .",
 		"build:desktop-ext": "tsc -p tsconfig.extension.json",
 		"build:utils": "tsc -p tsconfig.utils.json",
-		"build:syntax": "ts-node ./src/syntax/generate-tmLanguage.ts"
+		"build:syntax": "ts-node --project tsconfig.syntax.json ./src/syntax/generate-tmLanguage.ts"
 	},
 	"extensionKind": [
 		"ui",
