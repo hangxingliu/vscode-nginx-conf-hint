@@ -14,7 +14,7 @@
       "\nPrior to version 1.11.3, the default value was on.\n"
     ],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "accept_mutex_delay",
@@ -28,7 +28,7 @@
     "desc": "If accept_mutex is enabled, specifies the maximum time during which a worker process will try to restart accepting new connections if another worker process is currently accepting new connections.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "daemon",
@@ -42,7 +42,7 @@
     "desc": "Determines whether nginx should become a daemon. Mainly used during development.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "debug_connection",
@@ -58,7 +58,7 @@
       "\nFor this directive to work, nginx needs to\nbe built with --with-debug,\nsee “A debugging log”.\n"
     ],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "debug_points",
@@ -72,7 +72,7 @@
     "desc": "This directive is used for debugging.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "env",
@@ -86,7 +86,7 @@
     "desc": "By default, nginx removes all environment variables inherited from its parent process except the TZ variable. This directive allows preserving some of the inherited variables, changing their values, or creating new environment variables. These variables are then:",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "error_log",
@@ -108,7 +108,7 @@
       "\nThe directive can be specified on the\nstream level\nstarting from version 1.7.11,\nand on the mail level\nstarting from version 1.9.0.\n"
     ],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "events",
@@ -122,7 +122,7 @@
     "desc": "Provides the configuration file context in which the directives that affect connection processing are specified.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "include",
@@ -136,7 +136,7 @@
     "desc": "Includes another file, or files matching the specified mask, into configuration. Included files should consist of syntactically correct directives and blocks.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "load_module",
@@ -150,7 +150,7 @@
     "desc": "Loads a dynamic module.",
     "notes": [],
     "since": "1.9.11",
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "lock_file",
@@ -164,7 +164,7 @@
     "desc": "nginx uses the locking mechanism to implement accept_mutex and serialize access to shared memory. On most systems the locks are implemented using atomic operations, and this directive is ignored. On other systems the “lock file” mechanism is used. This directive specifies a prefix for the names of lock files.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "master_process",
@@ -178,7 +178,7 @@
     "desc": "Determines whether worker processes are started. This directive is intended for nginx developers.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "multi_accept",
@@ -194,7 +194,7 @@
       "\nThe directive is ignored if kqueue\nconnection processing method is used, because it reports\nthe number of new connections waiting to be accepted.\n"
     ],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "pcre_jit",
@@ -210,7 +210,7 @@
       "\nThe JIT is available in PCRE libraries starting from version 8.20\nbuilt with the --enable-jit configuration parameter.\nWhen the PCRE library is built with nginx (--with-pcre=),\nthe JIT support is enabled via the\n--with-pcre-jit configuration parameter.\n"
     ],
     "since": "1.1.12",
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "pid",
@@ -224,7 +224,7 @@
     "desc": "Defines a file that will store the process ID of the main process.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "ssl_engine",
@@ -238,7 +238,7 @@
     "desc": "Defines the name of the hardware SSL accelerator.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "thread_pool",
@@ -252,7 +252,7 @@
     "desc": "Defines the name and parameters of a thread pool used for multi-threaded reading and sending of files without blocking worker processes.",
     "notes": [],
     "since": "1.7.11",
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "timer_resolution",
@@ -266,7 +266,7 @@
     "desc": "Reduces timer resolution in worker processes, thus reducing the number of gettimeofday() system calls made. By default, gettimeofday() is called each time a kernel event is received. With reduced resolution, gettimeofday() is only called once per specified interval.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "use",
@@ -280,7 +280,7 @@
     "desc": "Specifies the connection processing method to use. There is normally no need to specify it explicitly, because nginx will by default use the most efficient method.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "user",
@@ -294,7 +294,7 @@
     "desc": "Defines user and group credentials used by worker processes. If group is omitted, a group whose name equals that of user is used.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "worker_aio_requests",
@@ -308,7 +308,7 @@
     "desc": "When using aio with the epoll connection processing method, sets the maximum number of outstanding asynchronous I/O operations for a single worker process.",
     "notes": [],
     "since": "1.1.4",
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "worker_connections",
@@ -322,7 +322,7 @@
     "desc": "Sets the maximum number of simultaneous connections that can be opened by a worker process.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "worker_cpu_affinity",
@@ -339,7 +339,7 @@
       "\nThe directive is only available on FreeBSD and Linux.\n"
     ],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "worker_priority",
@@ -353,7 +353,7 @@
     "desc": "Defines the scheduling priority for worker processes like it is done by the nice command: a negative number means higher priority. Allowed range normally varies from -20 to 20.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "worker_processes",
@@ -369,7 +369,7 @@
       "\nThe auto parameter is supported starting from\nversions 1.3.8 and 1.2.5.\n"
     ],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "worker_rlimit_core",
@@ -383,7 +383,7 @@
     "desc": "Changes the limit on the largest size of a core file (RLIMIT_CORE) for worker processes. Used to increase the limit without restarting the main process.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "worker_rlimit_nofile",
@@ -397,7 +397,7 @@
     "desc": "Changes the limit on the maximum number of open files (RLIMIT_NOFILE) for worker processes. Used to increase the limit without restarting the main process.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "worker_shutdown_timeout",
@@ -411,7 +411,7 @@
     "desc": "Configures a timeout for a graceful shutdown of worker processes. When the time expires, nginx will try to close all the connections currently open to facilitate shutdown.",
     "notes": [],
     "since": "1.11.11",
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "working_directory",
@@ -425,7 +425,7 @@
     "desc": "Defines the current working directory for a worker process. It is primarily used when writing a core-file, in which case a worker process should have write permission for the specified directory.",
     "notes": [],
     "since": null,
-    "module": "Core functionality"
+    "module": "ngx_core_module"
   },
   {
     "name": "absolute_redirect",
@@ -742,7 +742,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Defines the URI that will be shown for the specified errors. A uri value can contain variables.",
     "notes": [
@@ -935,7 +935,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Limits the rate of response transmission to a client. The rate is specified in bytes per second. The zero value disables rate limiting. The limit is set per a request, and so if a client simultaneously opens two connections, the overall rate will be twice as much as the specified limit.",
     "notes": [],
@@ -952,7 +952,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Sets the initial amount after which the further transmission of a response to a client will be rate limited. Parameter value can contain variables (1.17.0).",
     "notes": [],
@@ -1362,7 +1362,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Sets the root directory for requests. For example, with the following configuration",
     "notes": [],
@@ -1427,7 +1427,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Enables or disables the use of sendfile().",
     "notes": [
@@ -1808,7 +1808,7 @@
     "contexts": [
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Enables collection of virtual http or stream server status information in the specified zone. Several servers may share the same zone.",
     "notes": [],
@@ -2119,7 +2119,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Adds the specified charset to the “Content-Type” response header field. If this charset is different from the charset specified in the source_charset directive, a conversion is performed.",
     "notes": [],
@@ -2168,7 +2168,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Determines whether a conversion should be performed for answers received from a proxied or a FastCGI/uwsgi/SCGI/gRPC server when the answers already carry a charset in the “Content-Type” response header field. If conversion is enabled, a charset specified in the received response is used as a source charset.",
     "notes": [
@@ -2187,7 +2187,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Defines the source charset of a response. If this charset is different from the charset specified in the charset directive, a conversion is performed.",
     "notes": [],
@@ -2892,7 +2892,7 @@
     "def": null,
     "contexts": [
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Sets the address of a FastCGI server. The address can be specified as a domain name or IP address, and a port:",
     "notes": [],
@@ -3358,7 +3358,7 @@
     "def": null,
     "contexts": [
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Sets the gRPC server address. The address can be specified as a domain name or IP address, and a port:",
     "notes": [],
@@ -3698,7 +3698,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Enables or disables gzipping of responses.",
     "notes": [],
@@ -3861,7 +3861,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Adds the specified field to a response header provided that the response code equals 200, 201 (1.3.10), 204, 206, 301, 302, 303, 304, 307 (1.1.16, 1.0.13), or 308 (1.13.0). Parameter value can contain variables.",
     "notes": [],
@@ -3878,7 +3878,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Adds the specified field to the end of a response provided that the response code equals 200, 201, 206, 301, 302, 303, 307, or 308. Parameter value can contain variables.",
     "notes": [],
@@ -3896,7 +3896,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Enables or disables adding or modifying the “Expires” and “Cache-Control” response header fields provided that the response code equals 200, 201 (1.3.10), 204, 206, 301, 302, 303, 304, 307 (1.1.16, 1.0.13), or 308 (1.13.0). The parameter can be a positive or negative time.",
     "notes": [],
@@ -4403,7 +4403,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation",
+      "if",
       "limit_except"
     ],
     "desc": "Sets the path, format, and configuration for a buffered log write. Several logs can be specified on the same configuration level. Logging to syslog can be configured by specifying the “syslog:” prefix in the first parameter. The special value off cancels all access_log directives on the current level. If the format is not specified then the predefined “combined” format is used.",
@@ -4625,7 +4625,7 @@
     "def": null,
     "contexts": [
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Sets the memcached server address. The address can be specified as a domain name or IP address, and a port:",
     "notes": [],
@@ -5492,7 +5492,7 @@
     "def": null,
     "contexts": [
       "location",
-      "ifinlocation",
+      "if",
       "limit_except"
     ],
     "desc": "Sets the protocol and address of a proxied server and an optional URI to which a location should be mapped. As a protocol, “http” or “https” can be specified. The address can be specified as a domain name or IP address, and an optional port:",
@@ -6704,7 +6704,7 @@
     "def": null,
     "contexts": [
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Sets the address of an SCGI server. The address can be specified as a domain name or IP address, and a port:",
     "notes": [],
@@ -7048,7 +7048,7 @@
       "http",
       "server",
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Enables or disables processing of SSI commands in responses.",
     "notes": [],
@@ -8731,7 +8731,7 @@
     "def": null,
     "contexts": [
       "location",
-      "ifinlocation"
+      "if"
     ],
     "desc": "Sets the protocol and address of a uwsgi server. As a protocol, “uwsgi” or “suwsgi” (secured uwsgi, uwsgi over SSL) can be specified. The address can be specified as a domain name or IP address, and a port:",
     "notes": [

@@ -16,11 +16,13 @@ const ERROR = ' - ' + red('ERROR');
 const DONE = blue.bold('DONE');
 
 export const print = {
+	warnings: 0,
 	error: (reason = '') => {
 		console.error(ERROR, reason);
 		process.exit(1);
 	},
 	warning: (reason = '') => {
+		print.warnings++;
 		console.warn(WARN, reason);
 	},
 	ok: (msg = '') => {
@@ -45,6 +47,17 @@ export function lengthShouldBeMoreThanOrEqual<T extends { length: number }>(
 	const actual = arrayOrString?.length;
 	if ((arrayOrString?.length >= length) === false)
 		print[level](`length of ${bold(name)} is ${String(actual)}, it is less than ${bold(length)}`);
+	return arrayOrString;
+}
+export function lengthShouldBeEqual<T extends { length: number }>(
+	name: string,
+	arrayOrString: T,
+	length = 1,
+	level = AssertLevel.WARNING
+): T {
+	const actual = arrayOrString?.length;
+	if (arrayOrString?.length !== length)
+		print[level](`length of ${bold(name)} is ${String(actual)}, it is not equal to ${bold(length)}`);
 	return arrayOrString;
 }
 
@@ -119,7 +132,7 @@ export async function getText(name: string, url: string): Promise<string> {
 	console.log(`Getting http resource "${name}" ...`);
 	let response: AxiosResponse;
 	try {
-		response = await axios(url, { httpsAgent });
+		response = await axios(url, { proxy: false, httpsAgent });
 	} catch (error) {
 		console.error(error);
 		print.error(`Get http resource failed: ${error.message}`);

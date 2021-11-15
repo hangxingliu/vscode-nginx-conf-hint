@@ -3,5 +3,16 @@
 	"nginx-conf-hint.syntax": "sublime",
 	"files.associations": {
 		"*.conf.disabled": "NGINX"
+	},
+	"editor.tokenColorCustomizations": {
+		"textMateRules": [
+			{
+				"scope": ["keyword.directive"],
+				"settings": {
+					"foreground": "#569CD6",
+					"fontStyle": "bold"
+				}
+			}
+		]
 	}
 }

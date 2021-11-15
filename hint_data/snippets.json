@@ -23,17 +23,13 @@
     "prefix": "location",
     "body": "location ${1:/} {\n\t${0}\n}"
   },
-  "Block ifinlocation": {
-    "prefix": "ifinlocation",
-    "body": "ifinlocation {\n\t$0\n}"
+  "Block if": {
+    "prefix": "if",
+    "body": "if {\n\t$0\n}"
   },
   "Block limit_except": {
     "prefix": "limit_except",
     "body": "limit_except {\n\t$0\n}"
-  },
-  "Block if": {
-    "prefix": "if",
-    "body": "if {\n\t$0\n}"
   },
   "Block upstream": {
     "prefix": "upstream",

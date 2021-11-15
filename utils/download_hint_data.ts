@@ -1,88 +1,101 @@
 #!/usr/bin/env node
 
 import { hintDataFiles, nginxDocsBaseURL } from "./config";
-import { resolveURL, compressHTML, getText, loadHtml, print, initHttpCache, shouldBeEqual, AssertLevel, bold, lengthShouldBeMoreThanOrEqual, writeMultipleJSON } from "./helper";
-import type { DirectiveDocs, DirectiveItem, VariableItem } from "../extension/types";
-
-const SIGN_TITLE = 'Modules reference';
-const SIGN_TABLE_HEAD = 'Syntax:Default:Context:';
-const SIGN_SINCE_VERSION = /^This directive appeared in versions? (\d+\.\d+\.\d+)/;
-
-const removeBlank = any => String(any).replace(/\s/g, '');
+import { resolveURL, compressHTML, getText, loadHtml, print, initHttpCache, shouldBeEqual, AssertLevel, bold, lengthShouldBeMoreThanOrEqual, writeMultipleJSON, lengthShouldBeEqual } from "./helper";
+import type { DirectiveDocs, DirectiveItem, LinkItem, VariableItem } from "../extension/types";
 
 //==========================
 //     START      =======>
-let pageList = [];
-let directivesResult: DirectiveItem[] = [];
-let variablesResult: VariableItem[] = [];
-let directivesDocResult: DirectiveDocs[] = [];
-let variablesDocResult = [];
-
-let lastDirectivesLength = 0;
-let lastVariablesLength = 0;
+const directivesResult: DirectiveItem[] = [];
+const variablesResult: VariableItem[] = [];
+const directivesDocResult: DirectiveDocs[] = [];
+const variablesDocResult = [];
+const linksResult: LinkItem[] = [];
 
 main().catch(error => print.error(error.stack));
 async function main() {
 	initHttpCache();
-	const html = await getText('docs index page', nginxDocsBaseURL);
+
+	const html = await getText('nginx docs', nginxDocsBaseURL);
 	const $ = loadHtml(html);
-	const $title = $('center h4').filter((i, e) => $(e).text().trim() == SIGN_TITLE);
-	shouldBeEqual('document page title "Modules reference"', $title.length, 1);
 
-	print.start('processing document index page links');
+	print.start('processing nginx document home page');
 
-	let directiveLists = $title.parent().nextAll('ul.compact');
-	shouldBeEqual('length(ul.compact)', directiveLists.length, 6, AssertLevel.WARNING);
+	const titleShouleBe = 'Modules reference'
+	const $title = $('center h4').filter((i, e) => $(e).text().trim() == titleShouleBe);
+	lengthShouldBeEqual(`document page title "${titleShouleBe}"`, $title, 1);
+
+	const directiveLists = $title.parent().nextAll('ul.compact');
+	lengthShouldBeEqual('length(ul.compact)', directiveLists, 6);
+
+	const modulesUris: string[] = [];
 	directiveLists.each((i, list) => {
-		//ignore
-		//  Alphabetical index of directives
-		//  Alphabetical index of variables
-		if (i == 0) return;
-		const $links = $(list).find('a');
-		lengthShouldBeMoreThanOrEqual(`ul.compact[${i}] a`, $links, 1);
-
-		$links.each(i => {
-			const link = $links.eq(i);
-			pageList.push({ uri: link.attr('href'), name: link.text().trim() });
-		});
+		const $list = $(list);
+		switch (i) {
+			case 0: {
+				const lines = $list.text().split('\n').map(it => it.trim()).filter(it => it);
+				shouldBeEqual(`ul.compact[0][0]`, lines[0], 'Alphabetical index of directives');
+				shouldBeEqual(`ul.compact[0][1]`, lines[1], 'Alphabetical index of variables');
+				return;
+			}
+			default: {
+				const $links = $(list).find('a');
+				lengthShouldBeMoreThanOrEqual(`ul.compact[${i}] a`, $links, 1);
+				$links.each((j, link) => {
+					const $link = $(link);
+					const linkText = $link.text().trim();
+					if (linkText !== 'Core functionality' && !linkText.startsWith('ngx_')) {
+						print.warning(`ul.compact[${i}][${j}] has unknown title "${linkText}"`);
+						return;
+					}
+					modulesUris.push($link.attr('href'));
+				});
+			}
+		}
+		return;
 	});
-	print.ok(`Got ${bold(pageList.length)} sub document pages`);
-
-	for (let i = 0; i < pageList.length; i++) {
-		const { uri, name } = pageList[i];
-		await prcoessDocsHTML(name, uri);
-	}
-	finish();
+	print.ok(`Got ${bold(modulesUris.length)} module document pages`);
+	for (let i = 0; i < modulesUris.length; i++)
+		await processModuleDocs(modulesUris[i]);
+	await finish();
 }
 
-function finish() {
-	// start('Generating snippet object array');
-	// snippetsResult = snippetGenerator.generate(directivesResult);
-	// checker.ok();
-
+async function finish() {
 	print.start('Writing hint data to files');
-	writeMultipleJSON([
+	await writeMultipleJSON([
 		[hintDataFiles.directives, directivesResult],
 		[hintDataFiles.directivesDocs, directivesDocResult],
 		[hintDataFiles.variables, variablesResult],
 		[hintDataFiles.variablesDocs, variablesDocResult],
+		[hintDataFiles.links, linksResult],
 	]);
 	print.ok();
 	console.log(`Total directives count: ${bold(directivesResult.length)}`);
 	console.log(`Total variables count: ${bold(variablesResult.length)}`);
+	if (print.warnings)
+		console.log(`Total warnings: ${bold(print.warnings)}`);
+
+	require('./generate_snippets')
 	return print.done();
 }
 
-async function prcoessDocsHTML(docsName: string, docsUri: string) {
+
+
+async function processModuleDocs(docsUri: string) {
+	const count = { directives: 0, variables: 0 };
+
 	const fullURL = `${nginxDocsBaseURL}${docsUri}`;
+
+	const docsName = docsUri.match(/(?:^|\/)(\w+)\.html$/)[1];
 	const html = await getText(docsName, fullURL);
 	const $ = loadHtml(html);
 
 	const $directives = $('.directive');
 	const $varContainer = $('a[name=variables]');
 	const info = [`$directives.length=${$directives.length}`, `$varContainer.length=${$varContainer.length}`].join(' ')
-	print.start(`Processing docs ${bold(docsName)} (${info})`);
+	print.start(`Processing module ${bold(docsName)} docs (${info})`);
 
+	//#region process directives
 	lengthShouldBeMoreThanOrEqual(`directives info of ${docsName}: $directives`, $directives, 1);
 	$directives.each(i => {
 		const item: DirectiveItem = {
@@ -106,8 +119,8 @@ async function prcoessDocsHTML(docsName: string, docsUri: string) {
 		docObj.table = compressHTML($directive.html()).replace('cellspacing=\"0\"', '');
 
 		//check table item available
-		const title_check = removeBlank($directive.find('table th').text());
-		shouldBeEqual('directive define table head', title_check, SIGN_TABLE_HEAD);
+		const title_check = $directive.find('table th').text().replace(/\s/g, '');
+		shouldBeEqual('directive define table head', title_check, 'Syntax:Default:Context:');
 
 		const directiveDef = $directive.find('table td');
 		shouldBeEqual('directive define item', directiveDef.length, 3);
@@ -134,12 +147,19 @@ async function prcoessDocsHTML(docsName: string, docsUri: string) {
 		item.def = directiveDefault.text().trim();
 		item.def = item.def == '—' ? null : item.def;
 
-		item.contexts = removeBlank(directiveContext.text()).split(',');
+		item.contexts = directiveContext.text().split(',')
+			.map(it => {
+				it = it.trim()
+				const mtx = it.match(/(\w+)\s+in\s+(\w+)/);
+				if (mtx) it = mtx[1];
+				return it;
+			}).filter(it => it);
 		lengthShouldBeMoreThanOrEqual(`directive contexts (${item.name})`, item.contexts, 1);
 
 		item.since = $directive.find('p').text().trim() || null;
 		if (item.since) {
-			item.since = (item.since.match(SIGN_SINCE_VERSION) || ['', null])[1];
+			const sinceVersionRegexp = /^This directive appeared in versions? (\d+\.\d+\.\d+)/;
+			item.since = (item.since.match(sinceVersionRegexp) || ['', null])[1];
 			lengthShouldBeMoreThanOrEqual(`directive since version (${item.name})`, item.since, 1);
 		}
 
@@ -180,7 +200,11 @@ async function prcoessDocsHTML(docsName: string, docsUri: string) {
 
 		directivesResult.push(item);
 		directivesDocResult.push(docObj);
+		linksResult.push([item.name, docObj.link, 0]);
+		count.directives++;
 	});
+	//#endregion process directives
+
 
 	if ($varContainer.length) {
 		const docObj = {
@@ -237,18 +261,14 @@ async function prcoessDocsHTML(docsName: string, docsUri: string) {
 
 			docObj.vars[item.name] = elementId;
 			variablesResult.push(item);
+			linksResult.push([item.name, `${docsUri}#${elementId}`, 1]);
+			count.variables++;
 		});
-
 		variablesDocResult.push(docObj);
 	}
 
-	const diffDirectives = directivesResult.length - lastDirectivesLength;
-	const diffVariables = variablesResult.length - lastVariablesLength;
-
-	diffDirectives && console.log(` - Directives count: ${bold(diffDirectives)}`);
-	diffVariables && console.log(` - Variables count: ${bold(diffVariables)}`);
-	lastDirectivesLength += diffDirectives;
-	lastVariablesLength += diffVariables;
+	count.directives && console.log(` - Directives count: ${bold(count.directives)}`);
+	count.variables && console.log(` - Variables count: ${bold(count.variables)}`);
 	print.ok();
 
 	function resolveDocumentHTML(docHTML: string) {
