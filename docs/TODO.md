@@ -4,6 +4,12 @@
 - [ ] cache the block name cursor located in
 - [ ] make hint senmantic
   - reference: <https://github.com/tmont/nginx-conf>
+- [ ] support <https://vscode.dev>
+
+Update syntax:
+
+- <https://macromates.com/manual/en/language_grammars#naming_conventions>
+- <https://www.apeth.com/nonblog/stories/textmatebundle.html>
 
 ## Finished
 

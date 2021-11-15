@@ -4,18 +4,31 @@
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
-		 {
-            "name": "Launch Extension",
-            "type": "extensionHost",
-            "request": "launch",
-            "runtimeExecutable": "${execPath}",
-            "args": [
-				"--extensionDevelopmentPath=${workspaceRoot}",
-				"${workspaceRoot}/example_files"
-			],
-            "stopOnEntry": false,
-            "sourceMaps": false
-		},
+		{
+		   "name": "Launch Extension",
+		   "type": "extensionHost",
+		   "request": "launch",
+		   "runtimeExecutable": "${execPath}",
+		   "args": [
+			   "--extensionDevelopmentPath=${workspaceRoot}",
+			   "${workspaceRoot}/example_files"
+		   ],
+		   "stopOnEntry": false,
+		   "sourceMaps": false
+	   },
+	   {
+		  "name": "Launch Web Extension",
+		  "type": "extensionHost",
+		  "request": "launch",
+		  "runtimeExecutable": "${execPath}",
+		  "args": [
+			  "--extensionDevelopmentPath=${workspaceRoot}",
+			  "--extensionDevelopmentKind=web",
+			  "${workspaceRoot}/example_files"
+		  ],
+		  "stopOnEntry": false,
+		  "sourceMaps": false
+	  },
 		{
 			"type": "node",
 			"request": "launch",

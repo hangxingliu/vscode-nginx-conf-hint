@@ -25,3 +25,5 @@ export type SnippetItem = {
 	prefix: string;
 	body: string;
 }
+
+export type LinkItem = [name: string, link: string, isVar: 0 | 1];

@@ -1,18 +1,21 @@
 {
 	"nginx-conf-hint.enableStrictCompletion": false,
-	"nginx-conf-hint.syntax": "sublime",
 	"files.associations": {
 		"*.conf.disabled": "NGINX"
 	},
+	// "workbench.colorTheme": "Visual Studio Light",
 	"editor.tokenColorCustomizations": {
-		"textMateRules": [
-			{
-				"scope": ["keyword.directive"],
-				"settings": {
-					"foreground": "#569CD6",
-					"fontStyle": "bold"
+		"[Solarized Light]": {
+			"textMateRules": [
+				{
+					"scope": [
+						"keyword.directive"
+					],
+					"settings": {
+						"foreground": "#0f5e72"
+					}
 				}
-			}
-		]
+			]
+		}
 	}
 }
