@@ -26,7 +26,9 @@
 	"scripts": {
 		"test": "mocha ./test/*.js",
 		"lint:eslint": "eslint .",
-		"build:utils": "tsc -p tsconfig.utils.json"
+		"build:desktop-ext": "tsc -p tsconfig.extension.json",
+		"build:utils": "tsc -p tsconfig.utils.json",
+		"build:syntax": "ts-node ./src/syntax/generate-tmLanguage.ts"
 	},
 	"extensionKind": [
 		"ui",
@@ -63,7 +65,11 @@
 					"NGINX"
 				],
 				"extensions": [
-					".conf"
+					".conf",
+					"mime.types",
+					"fastcgi_params",
+					"scgi_params",
+					"uwsgi_params"
 				],
 				"configuration": "./nginx.configuration.json"
 			}
@@ -86,7 +92,7 @@
 			{
 				"language": "NGINX",
 				"scopeName": "source.nginx",
-				"path": "./syntaxes/nginx.tmLanguage"
+				"path": "./src/syntax/nginx.tmLanguage"
 			}
 		],
 		"commands": [
@@ -103,15 +109,6 @@
 						"type": "boolean",
 						"default": true,
 						"description": "only complete directives related to the block where cursor is located"
-					},
-					"nginx-conf-hint.syntax": {
-						"type": "string",
-						"default": "original",
-						"enum": [
-							"original",
-							"sublime"
-						],
-						"description": "Syntaxes for Nginx config file, \"original\" or \"sublime\". (Need to reload VS Code)"
 					},
 					"nginx-conf-hint.format.align": {
 						"type": "boolean",
@@ -138,10 +135,5 @@
 	"bugs": {
 		"url": "https://github.com/hangxingliu/vscode-nginx-conf-hint/issues"
 	},
-	"homepage": "https://github.com/hangxingliu/vscode-nginx-conf-hint",
-	"__metadata": {
-		"id": "c3d3e8fb-c61d-4edf-8fb8-32298bc763f9",
-		"publisherDisplayName": "Liu Yue",
-		"publisherId": "43f8445f-f00e-4e08-ab0f-21e398616231"
-	}
+	"homepage": "https://github.com/hangxingliu/vscode-nginx-conf-hint"
 }
