@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>nginx directive: ${name}</title>
+		<style type="text/css">
+			body {line-height: 1.4em;}
+			h1, h2, h3 {font-weight: 100}
+			h1 small {font-size: 60%}
+			h2 small {font-size: 80%}
+
+			.directive {margin: 1em 1em 1em 0;padding: .7em .7em .7em 1em;}
+			.vscode-light .directive{
+				border-top: 2px solid rgba(0, 0, 0, .2);
+				background: rgba(0,0,0,.1);
+			}
+			.vscode-dark .directive{
+				border-top: 2px solid rgba(255, 255, 255, .2);
+				background: rgba(255,255,255,.1);
+			}
+			/*.vscode-high-contrast .directive{}*/
+
+			.directive th,
+			.directive td {vertical-align: baseline;}
+			.directive th {padding-right: .5em;text-align: left;}
+
+			blockquote {margin: 1em ;padding: .5em 0 .5em .5em;}
+			blockquote.note {
+				border: 2px dotted rgba(0, 0, 0, .2);
+				line-height: 1.2em;
+				text-align: justify;
+			}
+			blockquote.example {
+				border-left: 2px solid rgba(0, 0, 0, .2);
+				padding: 0 0 0 .5em;
+			}
+
+			dl dt {margin: .5em 0 .2em 0;}
+		</style>
+	</head>
+
+	<body>
+		<h1><strong>${name}</strong> <small>${length} (Nginx Directive) </small></h1>
+		<br/>
+		${items}
+	</body>
+</html>
