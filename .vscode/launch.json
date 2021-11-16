@@ -25,9 +25,13 @@
 				"--extensionDevelopmentKind=web",
 				"${workspaceFolder}/example_files"
 			],
+			"debugWebWorkerHost": true,
 			"stopOnEntry": true,
-			"sourceMaps": false,
-			"preLaunchTask": "npm: build:desktop-ext"
+			"sourceMaps": true,
+			"outFiles": [
+				"${workspaceFolder}/artifacts/web-ext/*.js"
+			],
+			"preLaunchTask": "npm: dev:web-ext"
 		},
 		{
 			"type": "node",
