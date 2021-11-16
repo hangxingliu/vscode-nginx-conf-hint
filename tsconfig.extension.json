@@ -4,7 +4,7 @@
     "declaration": false,
     "removeComments": false,
     "target": "ES2019",
-    "sourceMap": false,
+    "sourceMap": true,
     "skipLibCheck": true
   },
   "include": ["src/extension"]

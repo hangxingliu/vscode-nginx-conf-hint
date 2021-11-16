@@ -1,8 +1,12 @@
+# vscode test web
+.vscode-test-web
+
 # github files
 .github
 
 # artifacts
-artifacts
+artifacts/npm
+artifacts/vscode
 
 # scripts and utils
 scripts

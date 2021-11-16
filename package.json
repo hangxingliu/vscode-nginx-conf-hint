@@ -22,7 +22,7 @@
 	],
 	"publisher": "hangxingliu",
 	"author": "hangxingliu",
-	"main": "./extension/main",
+	"main": "./src/extension/main.desktop.js",
 	"scripts": {
 		"test": "mocha ./test/*.js",
 		"lint:eslint": "eslint .",
