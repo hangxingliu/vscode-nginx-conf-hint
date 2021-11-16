@@ -1,4 +1,5 @@
 import { names } from "./match-names";
+import { includeRepo } from "./repository";
 import type { SyntaxPattern } from "./types";
 import type { DirectiveItem } from "../extension/types";
 
@@ -59,12 +60,12 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 				const name = names.meta.context(it);
 				return [{
 					name,
-					begin: /\b(location) +[\^]?~[\*]? +(.*?)\{/,
+					begin: /\b(location) +([\^]?~[\*]?|=) +(.*?)\{/,
 					end: /\}/,
 					beginCaptures: {
 						'1': names.contextDirective,
-						'2': names.string.regexp,
-
+						'2': names.operator,
+						'3': names.string.regexp,
 					},
 					patterns: [{ include: '$self' }],
 				},
@@ -99,7 +100,7 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 					beginCaptures: {
 						'1': names.controlKeyword,
 					},
-					patterns: [{ include: '#if_condition' }],
+					patterns: [{ include: includeRepo.if_condition }],
 				}
 			}
 			case 'map': {
@@ -116,7 +117,7 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 						'5': names.variable.other,
 					},
 					patterns: [
-						{ include: '#values' },
+						{ include: includeRepo.values },
 						{ match: ';', name: names.terminator },
 						commentPattern
 					]
@@ -156,7 +157,7 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 			'1': names.otherKeyword,
 			'2': names.terminator,
 		},
-		patterns: [{ include: '#values' }],
+		patterns: [{ include: includeRepo.values }],
 	},
 	{
 		begin: /\b(server)\s+/,
@@ -167,7 +168,7 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 		endCaptures: {
 			'1': names.terminator,
 		},
-		patterns: [{ include: '#server_parameters' }],
+		patterns: [{ include: includeRepo.server_parameters }],
 	},
 	{
 		comment: 'Directives without value',
@@ -183,28 +184,32 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 	...directivesGroupBy.map(([prefix, suffix]) => {
 		if (!prefix) {
 			return {
-				begin: '\\b(' + suffix.join('|') + ')\\b',
+				begin: '(["\'\\s]|^)(' + suffix.join('|') + ')(["\'\\s]|$)',
 				end: /;/,
 				beginCaptures: {
 					'1': names.directiveKeyword,
+					'2': names.directiveKeyword,
+					'3': names.directiveKeyword,
 				},
 				endCaptures: {
 					'0': names.terminator,
 				},
-				patterns: [{ include: '#values' }],
+				patterns: [{ include: includeRepo.values }],
 			} as SyntaxPattern;
 		}
 		return {
-			begin: '\\b(' + prefix + ')(' + suffix.join('|') + ')\\b',
+			begin: '(["\'\\s]|^)(' + prefix + ')(' + suffix.join('|') + ')(["\'\\s]|$)',
 			end: /;/,
 			beginCaptures: {
 				'1': names.directiveKeyword,
 				'2': names.directiveKeyword,
+				'3': names.directiveKeyword,
+				'4': names.directiveKeyword,
 			},
 			endCaptures: {
 				'0': names.terminator,
 			},
-			patterns: [{ include: '#values' }],
+			patterns: [{ include: includeRepo.values }],
 
 		};
 	}),
@@ -218,7 +223,7 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 		endCaptures: {
 			'1': names.terminator,
 		},
-		patterns: [{ include: '#values' }],
+		patterns: [{ include: includeRepo.values }],
 	},
 	{
 		comment: 'MIME types to file extension',
@@ -230,7 +235,7 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 		endCaptures: {
 			'1': names.terminator,
 		},
-		patterns: [{ include: '#values' }],
+		patterns: [{ include: includeRepo.values }],
 	},
 
 ];

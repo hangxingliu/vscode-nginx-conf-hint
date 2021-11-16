@@ -148,7 +148,7 @@
       <key>name</key>
       <string>meta.context.location.nginx</string>
       <key>begin</key>
-      <string>\b(location) +[\^]?~[\*]? +(.*?)\{</string>
+      <string>\b(location) +([\^]?~[\*]?|=) +(.*?)\{</string>
       <key>end</key>
       <string>\}</string>
       <key>beginCaptures</key>
@@ -159,6 +159,11 @@
           <string>storage.type.directive.context.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.operator.nginx</string>
+        </dict>
+        <key>3</key>
         <dict>
           <key>name</key>
           <string>string.regexp.nginx</string>
@@ -469,7 +474,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(accept_)(mutex|mutex_delay)\b</string>
+      <string>(["'\s]|^)(accept_)(mutex|mutex_delay)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -480,6 +485,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -503,7 +518,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(debug_)(connection|points)\b</string>
+      <string>(["'\s]|^)(debug_)(connection|points)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -514,6 +529,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -537,7 +562,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(error_)(log|page)\b</string>
+      <string>(["'\s]|^)(error_)(log|page)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -548,6 +573,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -571,7 +606,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(ssl_)(engine|buffer_size|certificate|certificate_key|ciphers|client_certificate|conf_command|crl|dhparam|early_data|ecdh_curve|ocsp|ocsp_cache|ocsp_responder|password_file|prefer_server_ciphers|protocols|reject_handshake|session_cache|session_ticket_key|session_tickets|session_timeout|stapling|stapling_file|stapling_responder|stapling_verify|trusted_certificate|verify_client|verify_depth|alpn|handshake_timeout|preread)\b</string>
+      <string>(["'\s]|^)(ssl_)(engine|buffer_size|certificate|certificate_key|ciphers|client_certificate|conf_command|crl|dhparam|early_data|ecdh_curve|ocsp|ocsp_cache|ocsp_responder|password_file|prefer_server_ciphers|protocols|reject_handshake|session_cache|session_ticket_key|session_tickets|session_timeout|stapling|stapling_file|stapling_responder|stapling_verify|trusted_certificate|verify_client|verify_depth|alpn|handshake_timeout|preread)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -582,6 +617,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -605,7 +650,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(worker_)(aio_requests|connections|cpu_affinity|priority|processes|rlimit_core|rlimit_nofile|shutdown_timeout)\b</string>
+      <string>(["'\s]|^)(worker_)(aio_requests|connections|cpu_affinity|priority|processes|rlimit_core|rlimit_nofile|shutdown_timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -616,6 +661,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -639,7 +694,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(auth_)(delay|basic|basic_user_file|jwt|jwt_claim_set|jwt_header_set|jwt_key_file|jwt_key_request|jwt_leeway|jwt_type|jwt_require|request|request_set|http|http_header|http_pass_client_cert|http_timeout)\b</string>
+      <string>(["'\s]|^)(auth_)(delay|basic|basic_user_file|jwt|jwt_claim_set|jwt_header_set|jwt_key_file|jwt_key_request|jwt_leeway|jwt_type|jwt_require|request|request_set|http|http_header|http_pass_client_cert|http_timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -650,6 +705,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -673,7 +738,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(client_)(body_buffer_size|body_in_file_only|body_in_single_buffer|body_temp_path|body_timeout|header_buffer_size|header_timeout|max_body_size)\b</string>
+      <string>(["'\s]|^)(client_)(body_buffer_size|body_in_file_only|body_in_single_buffer|body_temp_path|body_timeout|header_buffer_size|header_timeout|max_body_size)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -684,6 +749,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -707,7 +782,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(keepalive_)(disable|requests|time|timeout)\b</string>
+      <string>(["'\s]|^)(keepalive_)(disable|requests|time|timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -718,6 +793,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -741,7 +826,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(limit_)(rate|rate_after|conn|conn_dry_run|conn_log_level|conn_status|conn_zone|zone|req|req_dry_run|req_log_level|req_status|req_zone)\b</string>
+      <string>(["'\s]|^)(limit_)(rate|rate_after|conn|conn_dry_run|conn_log_level|conn_status|conn_zone|zone|req|req_dry_run|req_log_level|req_status|req_zone)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -752,6 +837,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -775,7 +870,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(lingering_)(close|time|timeout)\b</string>
+      <string>(["'\s]|^)(lingering_)(close|time|timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -786,6 +881,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -809,7 +914,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(log_)(not_found|subrequest|format)\b</string>
+      <string>(["'\s]|^)(log_)(not_found|subrequest|format)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -820,6 +925,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -843,7 +958,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(max_)(ranges|errors)\b</string>
+      <string>(["'\s]|^)(max_)(ranges|errors)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -854,6 +969,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -877,7 +1002,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(msie_)(padding|refresh)\b</string>
+      <string>(["'\s]|^)(msie_)(padding|refresh)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -888,6 +1013,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -911,7 +1046,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(open_)(file_cache|file_cache_errors|file_cache_min_uses|file_cache_valid|log_file_cache)\b</string>
+      <string>(["'\s]|^)(open_)(file_cache|file_cache_errors|file_cache_min_uses|file_cache_valid|log_file_cache)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -922,6 +1057,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -945,7 +1090,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(send_)(lowat|timeout)\b</string>
+      <string>(["'\s]|^)(send_)(lowat|timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -956,6 +1101,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -979,7 +1134,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(server_)(name|name_in_redirect|names_hash_bucket_size|names_hash_max_size|tokens)\b</string>
+      <string>(["'\s]|^)(server_)(name|name_in_redirect|names_hash_bucket_size|names_hash_max_size|tokens)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -990,6 +1145,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1013,7 +1178,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(tcp_)(nodelay|nopush)\b</string>
+      <string>(["'\s]|^)(tcp_)(nodelay|nopush)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1024,6 +1189,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1047,7 +1222,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(types_)(hash_bucket_size|hash_max_size)\b</string>
+      <string>(["'\s]|^)(types_)(hash_bucket_size|hash_max_size)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1058,6 +1233,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1081,7 +1266,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(variables_)(hash_bucket_size|hash_max_size)\b</string>
+      <string>(["'\s]|^)(variables_)(hash_bucket_size|hash_max_size)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1092,6 +1277,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1115,7 +1310,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(add_)(before_body|after_body|header|trailer)\b</string>
+      <string>(["'\s]|^)(add_)(before_body|after_body|header|trailer)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1126,6 +1321,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1149,7 +1354,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(status_)(zone|format)\b</string>
+      <string>(["'\s]|^)(status_)(zone|format)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1160,6 +1365,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1183,7 +1398,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(autoindex_)(exact_size|format|localtime)\b</string>
+      <string>(["'\s]|^)(autoindex_)(exact_size|format|localtime)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1194,6 +1409,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1217,7 +1442,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(ancient_)(browser|browser_value)\b</string>
+      <string>(["'\s]|^)(ancient_)(browser|browser_value)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1228,6 +1453,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1251,7 +1486,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(modern_)(browser|browser_value)\b</string>
+      <string>(["'\s]|^)(modern_)(browser|browser_value)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1262,6 +1497,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1285,7 +1530,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(charset_)(map|types)\b</string>
+      <string>(["'\s]|^)(charset_)(map|types)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1296,6 +1541,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1319,7 +1574,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(dav_)(access|methods)\b</string>
+      <string>(["'\s]|^)(dav_)(access|methods)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1330,6 +1585,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1353,7 +1618,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(fastcgi_)(bind|buffer_size|buffering|buffers|busy_buffers_size|cache|cache_background_update|cache_bypass|cache_key|cache_lock|cache_lock_age|cache_lock_timeout|cache_max_range_offset|cache_methods|cache_min_uses|cache_path|cache_purge|cache_revalidate|cache_use_stale|cache_valid|catch_stderr|connect_timeout|force_ranges|hide_header|ignore_client_abort|ignore_headers|index|intercept_errors|keep_conn|limit_rate|max_temp_file_size|next_upstream|next_upstream_timeout|next_upstream_tries|no_cache|param|pass|pass_header|pass_request_body|pass_request_headers|read_timeout|request_buffering|send_lowat|send_timeout|socket_keepalive|split_path_info|store|store_access|temp_file_write_size|temp_path)\b</string>
+      <string>(["'\s]|^)(fastcgi_)(bind|buffer_size|buffering|buffers|busy_buffers_size|cache|cache_background_update|cache_bypass|cache_key|cache_lock|cache_lock_age|cache_lock_timeout|cache_max_range_offset|cache_methods|cache_min_uses|cache_path|cache_purge|cache_revalidate|cache_use_stale|cache_valid|catch_stderr|connect_timeout|force_ranges|hide_header|ignore_client_abort|ignore_headers|index|intercept_errors|keep_conn|limit_rate|max_temp_file_size|next_upstream|next_upstream_timeout|next_upstream_tries|no_cache|param|pass|pass_header|pass_request_body|pass_request_headers|read_timeout|request_buffering|send_lowat|send_timeout|socket_keepalive|split_path_info|store|store_access|temp_file_write_size|temp_path)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1364,6 +1629,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1387,7 +1662,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(geoip_)(country|city|org|proxy|proxy_recursive)\b</string>
+      <string>(["'\s]|^)(geoip_)(country|city|org|proxy|proxy_recursive)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1398,6 +1673,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1421,7 +1706,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(grpc_)(bind|buffer_size|connect_timeout|hide_header|ignore_headers|intercept_errors|next_upstream|next_upstream_timeout|next_upstream_tries|pass|pass_header|read_timeout|send_timeout|set_header|socket_keepalive|ssl_certificate|ssl_certificate_key|ssl_ciphers|ssl_conf_command|ssl_crl|ssl_name|ssl_password_file|ssl_protocols|ssl_server_name|ssl_session_reuse|ssl_trusted_certificate|ssl_verify|ssl_verify_depth)\b</string>
+      <string>(["'\s]|^)(grpc_)(bind|buffer_size|connect_timeout|hide_header|ignore_headers|intercept_errors|next_upstream|next_upstream_timeout|next_upstream_tries|pass|pass_header|read_timeout|send_timeout|set_header|socket_keepalive|ssl_certificate|ssl_certificate_key|ssl_ciphers|ssl_conf_command|ssl_crl|ssl_name|ssl_password_file|ssl_protocols|ssl_server_name|ssl_session_reuse|ssl_trusted_certificate|ssl_verify|ssl_verify_depth)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1432,6 +1717,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1455,7 +1750,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(gzip_)(buffers|comp_level|disable|http_version|min_length|proxied|types|vary|static)\b</string>
+      <string>(["'\s]|^)(gzip_)(buffers|comp_level|disable|http_version|min_length|proxied|types|vary|static)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1466,6 +1761,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1489,7 +1794,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(hls_)(buffers|forward_args|fragment|mp4_buffer_size|mp4_max_buffer_size)\b</string>
+      <string>(["'\s]|^)(hls_)(buffers|forward_args|fragment|mp4_buffer_size|mp4_max_buffer_size)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1500,6 +1805,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1523,7 +1838,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(image_)(filter|filter_buffer|filter_interlace|filter_jpeg_quality|filter_sharpen|filter_transparency|filter_webp_quality)\b</string>
+      <string>(["'\s]|^)(image_)(filter|filter_buffer|filter_interlace|filter_jpeg_quality|filter_sharpen|filter_transparency|filter_webp_quality)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1534,6 +1849,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1557,7 +1882,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(js_)(body_filter|content|fetch_ciphers|fetch_protocols|fetch_trusted_certificate|fetch_verify_depth|header_filter|import|include|path|set|var|access|filter|preread)\b</string>
+      <string>(["'\s]|^)(js_)(body_filter|content|fetch_ciphers|fetch_protocols|fetch_trusted_certificate|fetch_verify_depth|header_filter|import|include|path|set|var|access|filter|preread)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1568,6 +1893,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1591,7 +1926,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(map_)(hash_bucket_size|hash_max_size)\b</string>
+      <string>(["'\s]|^)(map_)(hash_bucket_size|hash_max_size)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1602,6 +1937,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1625,7 +1970,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(memcached_)(bind|buffer_size|connect_timeout|force_ranges|gzip_flag|next_upstream|next_upstream_timeout|next_upstream_tries|pass|read_timeout|send_timeout|socket_keepalive)\b</string>
+      <string>(["'\s]|^)(memcached_)(bind|buffer_size|connect_timeout|force_ranges|gzip_flag|next_upstream|next_upstream_timeout|next_upstream_tries|pass|read_timeout|send_timeout|socket_keepalive)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1636,6 +1981,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1659,7 +2014,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(mp4_)(buffer_size|max_buffer_size|limit_rate|limit_rate_after)\b</string>
+      <string>(["'\s]|^)(mp4_)(buffer_size|max_buffer_size|limit_rate|limit_rate_after)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1670,6 +2025,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1693,7 +2058,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(perl_)(modules|require|set)\b</string>
+      <string>(["'\s]|^)(perl_)(modules|require|set)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1704,6 +2069,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1727,7 +2102,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(proxy_)(bind|buffer_size|buffering|buffers|busy_buffers_size|cache|cache_background_update|cache_bypass|cache_convert_head|cache_key|cache_lock|cache_lock_age|cache_lock_timeout|cache_max_range_offset|cache_methods|cache_min_uses|cache_path|cache_purge|cache_revalidate|cache_use_stale|cache_valid|connect_timeout|cookie_domain|cookie_flags|cookie_path|force_ranges|headers_hash_bucket_size|headers_hash_max_size|hide_header|http_version|ignore_client_abort|ignore_headers|intercept_errors|limit_rate|max_temp_file_size|method|next_upstream|next_upstream_timeout|next_upstream_tries|no_cache|pass|pass_header|pass_request_body|pass_request_headers|read_timeout|redirect|request_buffering|send_lowat|send_timeout|set_body|set_header|socket_keepalive|ssl_certificate|ssl_certificate_key|ssl_ciphers|ssl_conf_command|ssl_crl|ssl_name|ssl_password_file|ssl_protocols|ssl_server_name|ssl_session_reuse|ssl_trusted_certificate|ssl_verify|ssl_verify_depth|store|store_access|temp_file_write_size|temp_path|buffer|pass_error_message|protocol|smtp_auth|timeout|protocol_timeout|download_rate|half_close|requests|responses|session_drop|ssl|upload_rate)\b</string>
+      <string>(["'\s]|^)(proxy_)(bind|buffer_size|buffering|buffers|busy_buffers_size|cache|cache_background_update|cache_bypass|cache_convert_head|cache_key|cache_lock|cache_lock_age|cache_lock_timeout|cache_max_range_offset|cache_methods|cache_min_uses|cache_path|cache_purge|cache_revalidate|cache_use_stale|cache_valid|connect_timeout|cookie_domain|cookie_flags|cookie_path|force_ranges|headers_hash_bucket_size|headers_hash_max_size|hide_header|http_version|ignore_client_abort|ignore_headers|intercept_errors|limit_rate|max_temp_file_size|method|next_upstream|next_upstream_timeout|next_upstream_tries|no_cache|pass|pass_header|pass_request_body|pass_request_headers|read_timeout|redirect|request_buffering|send_lowat|send_timeout|set_body|set_header|socket_keepalive|ssl_certificate|ssl_certificate_key|ssl_ciphers|ssl_conf_command|ssl_crl|ssl_name|ssl_password_file|ssl_protocols|ssl_server_name|ssl_session_reuse|ssl_trusted_certificate|ssl_verify|ssl_verify_depth|store|store_access|temp_file_write_size|temp_path|buffer|pass_error_message|protocol|smtp_auth|timeout|protocol_timeout|download_rate|half_close|requests|responses|session_drop|ssl|upload_rate)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1738,6 +2113,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1761,7 +2146,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(real_)(ip_header|ip_recursive)\b</string>
+      <string>(["'\s]|^)(real_)(ip_header|ip_recursive)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1772,6 +2157,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1795,7 +2190,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(referer_)(hash_bucket_size|hash_max_size)\b</string>
+      <string>(["'\s]|^)(referer_)(hash_bucket_size|hash_max_size)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1806,6 +2201,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1829,7 +2234,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(scgi_)(bind|buffer_size|buffering|buffers|busy_buffers_size|cache|cache_background_update|cache_bypass|cache_key|cache_lock|cache_lock_age|cache_lock_timeout|cache_max_range_offset|cache_methods|cache_min_uses|cache_path|cache_purge|cache_revalidate|cache_use_stale|cache_valid|connect_timeout|force_ranges|hide_header|ignore_client_abort|ignore_headers|intercept_errors|limit_rate|max_temp_file_size|next_upstream|next_upstream_timeout|next_upstream_tries|no_cache|param|pass|pass_header|pass_request_body|pass_request_headers|read_timeout|request_buffering|send_timeout|socket_keepalive|store|store_access|temp_file_write_size|temp_path)\b</string>
+      <string>(["'\s]|^)(scgi_)(bind|buffer_size|buffering|buffers|busy_buffers_size|cache|cache_background_update|cache_bypass|cache_key|cache_lock|cache_lock_age|cache_lock_timeout|cache_max_range_offset|cache_methods|cache_min_uses|cache_path|cache_purge|cache_revalidate|cache_use_stale|cache_valid|connect_timeout|force_ranges|hide_header|ignore_client_abort|ignore_headers|intercept_errors|limit_rate|max_temp_file_size|next_upstream|next_upstream_timeout|next_upstream_tries|no_cache|param|pass|pass_header|pass_request_body|pass_request_headers|read_timeout|request_buffering|send_timeout|socket_keepalive|store|store_access|temp_file_write_size|temp_path)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1840,6 +2245,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1863,7 +2278,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(secure_)(link|link_md5|link_secret)\b</string>
+      <string>(["'\s]|^)(secure_)(link|link_md5|link_secret)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1874,6 +2289,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1897,7 +2322,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(session_)(log|log_format|log_zone)\b</string>
+      <string>(["'\s]|^)(session_)(log|log_format|log_zone)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1908,6 +2333,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1931,7 +2366,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(spdy_)(chunk_size|headers_comp)\b</string>
+      <string>(["'\s]|^)(spdy_)(chunk_size|headers_comp)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1942,6 +2377,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1965,7 +2410,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(ssi_)(last_modified|min_file_chunk|silent_errors|types|value_length)\b</string>
+      <string>(["'\s]|^)(ssi_)(last_modified|min_file_chunk|silent_errors|types|value_length)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1976,6 +2421,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -1999,7 +2454,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(sub_)(filter|filter_last_modified|filter_once|filter_types)\b</string>
+      <string>(["'\s]|^)(sub_)(filter|filter_last_modified|filter_once|filter_types)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2010,6 +2465,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2033,7 +2498,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(health_)(check|check_timeout)\b</string>
+      <string>(["'\s]|^)(health_)(check|check_timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2044,6 +2509,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2067,7 +2542,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(userid_)(domain|expires|flags|mark|name|p3p|path|service)\b</string>
+      <string>(["'\s]|^)(userid_)(domain|expires|flags|mark|name|p3p|path|service)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2078,6 +2553,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2101,7 +2586,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(uwsgi_)(bind|buffer_size|buffering|buffers|busy_buffers_size|cache|cache_background_update|cache_bypass|cache_key|cache_lock|cache_lock_age|cache_lock_timeout|cache_max_range_offset|cache_methods|cache_min_uses|cache_path|cache_purge|cache_revalidate|cache_use_stale|cache_valid|connect_timeout|force_ranges|hide_header|ignore_client_abort|ignore_headers|intercept_errors|limit_rate|max_temp_file_size|modifier1|modifier2|next_upstream|next_upstream_timeout|next_upstream_tries|no_cache|param|pass|pass_header|pass_request_body|pass_request_headers|read_timeout|request_buffering|send_timeout|socket_keepalive|ssl_certificate|ssl_certificate_key|ssl_ciphers|ssl_conf_command|ssl_crl|ssl_name|ssl_password_file|ssl_protocols|ssl_server_name|ssl_session_reuse|ssl_trusted_certificate|ssl_verify|ssl_verify_depth|store|store_access|temp_file_write_size|temp_path)\b</string>
+      <string>(["'\s]|^)(uwsgi_)(bind|buffer_size|buffering|buffers|busy_buffers_size|cache|cache_background_update|cache_bypass|cache_key|cache_lock|cache_lock_age|cache_lock_timeout|cache_max_range_offset|cache_methods|cache_min_uses|cache_path|cache_purge|cache_revalidate|cache_use_stale|cache_valid|connect_timeout|force_ranges|hide_header|ignore_client_abort|ignore_headers|intercept_errors|limit_rate|max_temp_file_size|modifier1|modifier2|next_upstream|next_upstream_timeout|next_upstream_tries|no_cache|param|pass|pass_header|pass_request_body|pass_request_headers|read_timeout|request_buffering|send_timeout|socket_keepalive|ssl_certificate|ssl_certificate_key|ssl_ciphers|ssl_conf_command|ssl_crl|ssl_name|ssl_password_file|ssl_protocols|ssl_server_name|ssl_session_reuse|ssl_trusted_certificate|ssl_verify|ssl_verify_depth|store|store_access|temp_file_write_size|temp_path)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2112,6 +2597,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2135,7 +2630,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(http2_)(body_preread_size|chunk_size|idle_timeout|max_concurrent_pushes|max_concurrent_streams|max_field_size|max_header_size|max_requests|push|push_preload|recv_buffer_size|recv_timeout)\b</string>
+      <string>(["'\s]|^)(http2_)(body_preread_size|chunk_size|idle_timeout|max_concurrent_pushes|max_concurrent_streams|max_field_size|max_header_size|max_requests|push|push_preload|recv_buffer_size|recv_timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2146,6 +2641,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2169,7 +2674,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(xslt_)(last_modified|param|string_param|stylesheet|types)\b</string>
+      <string>(["'\s]|^)(xslt_)(last_modified|param|string_param|stylesheet|types)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2180,6 +2685,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2203,7 +2718,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(imap_)(auth|capabilities|client_buffer)\b</string>
+      <string>(["'\s]|^)(imap_)(auth|capabilities|client_buffer)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2214,6 +2729,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2237,7 +2762,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(pop3_)(auth|capabilities)\b</string>
+      <string>(["'\s]|^)(pop3_)(auth|capabilities)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2248,6 +2773,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2271,7 +2806,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(smtp_)(auth|capabilities|client_buffer|greeting_delay)\b</string>
+      <string>(["'\s]|^)(smtp_)(auth|capabilities|client_buffer|greeting_delay)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2282,6 +2817,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2305,7 +2850,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(preread_)(buffer_size|timeout)\b</string>
+      <string>(["'\s]|^)(preread_)(buffer_size|timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2316,6 +2861,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2339,7 +2894,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(zone_)(sync_buffers|sync_connect_retry_interval|sync_connect_timeout|sync_interval|sync_recv_buffer_size|sync_server|sync_ssl|sync_ssl_certificate|sync_ssl_certificate_key|sync_ssl_ciphers|sync_ssl_conf_command|sync_ssl_crl|sync_ssl_name|sync_ssl_password_file|sync_ssl_protocols|sync_ssl_server_name|sync_ssl_trusted_certificate|sync_ssl_verify|sync_ssl_verify_depth|sync_timeout)\b</string>
+      <string>(["'\s]|^)(zone_)(sync_buffers|sync_connect_retry_interval|sync_connect_timeout|sync_interval|sync_recv_buffer_size|sync_server|sync_ssl|sync_ssl_certificate|sync_ssl_certificate_key|sync_ssl_ciphers|sync_ssl_conf_command|sync_ssl_crl|sync_ssl_name|sync_ssl_password_file|sync_ssl_protocols|sync_ssl_server_name|sync_ssl_trusted_certificate|sync_ssl_verify|sync_ssl_verify_depth|sync_timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2350,6 +2905,16 @@
           <string>keyword.directive.nginx</string>
         </dict>
         <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2373,12 +2938,22 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>\b(daemon|env|include|pid|use|user|aio|alias|directio|etag|listen|resolver|root|satisfy|sendfile|allow|deny|api|autoindex|charset|geo|gunzip|gzip|expires|index|keyval|mirror|perl|set|slice|ssi|ssl|zone|state|hash|keepalive|queue|random|sticky|match|userid|protocol|timeout|xclient|starttls|load_module|lock_file|master_process|multi_accept|pcre_jit|thread_pool|timer_resolution|working_directory|absolute_redirect|aio_write|chunked_transfer_encoding|connection_pool_size|default_type|directio_alignment|disable_symlinks|if_modified_since|ignore_invalid_headers|large_client_header_buffers|merge_slashes|output_buffers|port_in_redirect|postpone_output|read_ahead|recursive_error_pages|request_pool_size|reset_timedout_connection|resolver_timeout|sendfile_max_chunk|subrequest_output_buffer_size|try_files|underscores_in_headers|addition_types|override_charset|source_charset|create_full_put_path|min_delete_depth|f4f_buffer_size|gunzip_buffers|keyval_zone|access_log|mirror_request_body|random_index|set_real_ip_from|valid_referers|rewrite_log|uninitialized_variable_warn|split_clients|least_time|sticky_cookie_insert|xml_entities|google_perftools_profiles)\b</string>
+      <string>(["'\s]|^)(daemon|env|include|pid|use|user|aio|alias|directio|etag|listen|resolver|root|satisfy|sendfile|allow|deny|api|autoindex|charset|geo|gunzip|gzip|expires|index|keyval|mirror|perl|set|slice|ssi|ssl|zone|state|hash|keepalive|queue|random|sticky|match|userid|protocol|timeout|xclient|starttls|load_module|lock_file|master_process|multi_accept|pcre_jit|thread_pool|timer_resolution|working_directory|absolute_redirect|aio_write|chunked_transfer_encoding|connection_pool_size|default_type|directio_alignment|disable_symlinks|if_modified_since|ignore_invalid_headers|large_client_header_buffers|merge_slashes|output_buffers|port_in_redirect|postpone_output|read_ahead|recursive_error_pages|request_pool_size|reset_timedout_connection|resolver_timeout|sendfile_max_chunk|subrequest_output_buffer_size|try_files|underscores_in_headers|addition_types|override_charset|source_charset|create_full_put_path|min_delete_depth|f4f_buffer_size|gunzip_buffers|keyval_zone|access_log|mirror_request_body|random_index|set_real_ip_from|valid_referers|rewrite_log|uninitialized_variable_warn|split_clients|least_time|sticky_cookie_insert|xml_entities|google_perftools_profiles)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
       <dict>
         <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
         <dict>
           <key>name</key>
           <string>keyword.directive.nginx</string>
@@ -2595,7 +3170,7 @@
               <key>name</key>
               <string>constant.character.escape.nginx</string>
               <key>match</key>
-              <string>\\"</string>
+              <string>\\["'nt\\]</string>
             </dict>
             <dict>
               <key>include</key>
@@ -2616,7 +3191,7 @@
               <key>name</key>
               <string>constant.character.escape.nginx</string>
               <key>match</key>
-              <string>\\'</string>
+              <string>\\["'nt\\]</string>
             </dict>
             <dict>
               <key>include</key>
@@ -2666,7 +3241,7 @@
         </dict>
         <dict>
           <key>name</key>
-          <string>string.regexp.nginx</string>
+          <string>keyword.operator.nginx</string>
           <key>match</key>
           <string>\\.*\ |\~\*|\~|\!\~\*|\!\~</string>
         </dict>

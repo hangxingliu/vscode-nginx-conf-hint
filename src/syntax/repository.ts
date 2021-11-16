@@ -1,20 +1,26 @@
 import { names } from "./match-names";
 import type { SyntaxPattern } from "./types";
 
+export const includeRepo = {
+	if_condition: '#if_condition',
+	server_parameters: '#server_parameters',
+	variables: '#variables',
+	regexp_and_string: '#regexp_and_string',
+	values: '#values',
+}
+
 /**
  * @see https://macromates.com/manual/en/language_grammars
  *
  * a dictionary (i.e. key/value pairs) of rules which can be included from other places in the grammar. The key is the name of the rule and the value is the actual rule. Further explanation (and example) follow with the description of the include rule key.
  */
 export const syntaxRepository: {
-	[x: string]: {
-		patterns: SyntaxPattern[];
-	}
+	[x in keyof typeof includeRepo]: { patterns: SyntaxPattern[] }
 } = {
 	if_condition: {
 		patterns: [
 			{
-				include: '#variables'
+				include: includeRepo.variables
 			},
 			{
 				match: /\!?\~\*?\s/,
@@ -29,7 +35,7 @@ export const syntaxRepository: {
 				name: names.operator,
 			},
 			{
-				include: '#regexp_and_string',
+				include: includeRepo.regexp_and_string,
 			}
 		]
 	},
@@ -45,7 +51,7 @@ export const syntaxRepository: {
 				}
 			},
 			{
-				include: '#values'
+				include: includeRepo.values
 			}
 		]
 	},
@@ -80,16 +86,16 @@ export const syntaxRepository: {
 				begin: '"', end: '"',
 				name: names.string.doubleQuoted,
 				patterns: [
-					{ match: /\\"/, name: names.string.escaped },
-					{ include: '#variables' },
+					{ match: /\\["'nt\\]/, name: names.string.escaped },
+					{ include: includeRepo.variables },
 				],
 			},
 			{
 				begin: "'", end: "'",
 				name: names.string.singleQuoted,
 				patterns: [
-					{ match: /\\'/, name: names.string.escaped },
-					{ include: '#variables' },
+					{ match: /\\["'nt\\]/, name: names.string.escaped },
+					{ include: includeRepo.variables },
 				],
 			}
 		],
@@ -98,7 +104,7 @@ export const syntaxRepository: {
 	values: {
 		patterns: [
 			{
-				include: '#variables'
+				include: includeRepo.variables
 			},
 			{
 				match: /\#.*/,
@@ -124,9 +130,9 @@ export const syntaxRepository: {
 				name: names.languageConstant,
 			}, {
 				match: /\\.*\ |\~\*|\~|\!\~\*|\!\~/,
-				name: names.string.regexp,
+				name: names.operator,
 			}, {
-				include: '#regexp_and_string'
+				include: includeRepo.regexp_and_string
 			}
 		]
 	}
