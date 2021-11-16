@@ -146,6 +146,7 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 		beginCaptures: {
 			'1': names.controlKeyword,
 		},
+		patterns: [{ include: includeRepo.values }],
 	},
 	{
 		begin: /\b(rewrite)\s+/,
