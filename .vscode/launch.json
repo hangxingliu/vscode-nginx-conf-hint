@@ -5,30 +5,30 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-		   "name": "Launch Extension",
-		   "type": "extensionHost",
-		   "request": "launch",
-		   "runtimeExecutable": "${execPath}",
-		   "args": [
-			   "--extensionDevelopmentPath=${workspaceRoot}",
-			   "${workspaceRoot}/example_files"
-		   ],
-		   "stopOnEntry": false,
-		   "sourceMaps": false
-	   },
-	   {
-		  "name": "Launch Web Extension",
-		  "type": "extensionHost",
-		  "request": "launch",
-		  "runtimeExecutable": "${execPath}",
-		  "args": [
-			  "--extensionDevelopmentPath=${workspaceRoot}",
-			  "--extensionDevelopmentKind=web",
-			  "${workspaceRoot}/example_files"
-		  ],
-		  "stopOnEntry": false,
-		  "sourceMaps": false
-	  },
+			"name": "Launch Extension",
+			"type": "pwa-extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"${workspaceFolder}/example_files"
+			],
+			"stopOnEntry": true,
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build:desktop-ext"
+		},
+		{
+			"name": "Launch Web Extension",
+			"type": "pwa-extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--extensionDevelopmentKind=web",
+				"${workspaceFolder}/example_files"
+			],
+			"stopOnEntry": true,
+			"sourceMaps": false,
+			"preLaunchTask": "npm: build:desktop-ext"
+		},
 		{
 			"type": "node",
 			"request": "launch",
