@@ -90,10 +90,6 @@
 				"path": "./hint_data/snippets.json"
 			},
 			{
-				"language": "NGINX",
-				"path": "./hint_data/lua/snippets.json"
-			},
-			{
 				"language": "lua",
 				"path": "./hint_data/lua/snippets.json"
 			}
@@ -102,7 +98,10 @@
 			{
 				"language": "NGINX",
 				"scopeName": "source.nginx",
-				"path": "./src/syntax/nginx.tmLanguage"
+				"path": "./src/syntax/nginx.tmLanguage",
+				"embeddedLanguages": {
+					"meta.embedded.block.lua": "lua"
+				}
 			}
 		],
 		"commands": [

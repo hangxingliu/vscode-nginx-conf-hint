@@ -49,6 +49,27 @@ const commentPattern: SyntaxPattern = { match: /\#.*/, name: names.comment, }
  */
 export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 	commentPattern,
+	// support OpenResty
+	{
+		name: names.meta.context('lua'),
+		begin: /\b((?:content|rewrite|access|init_worker|init|set|log|balancer|ssl_(?:client_hello|session_fetch|certificate))_by_lua(?:_block)?)\s*\{/,
+		end: /\}/,
+		beginCaptures: {
+			'1': names.contextDirective,
+		},
+		contentName: names.embedded.lua,
+		patterns: [{ include: 'source.lua' }],
+	},
+	{
+		name: names.meta.context('lua'),
+		begin: /\b((?:content|rewrite|access|init_worker|init|set|log|balancer|ssl_(?:client_hello|session_fetch|certificate))_by_lua)\s*'/,
+		end: /'/,
+		beginCaptures: {
+			'1': names.contextDirective,
+		},
+		contentName: names.embedded.lua,
+		patterns: [{ include: 'source.lua' }],
+	},
 	...blockDirectives.map((it): SyntaxPattern | SyntaxPattern[] => {
 		switch (it) {
 			case 'location': {

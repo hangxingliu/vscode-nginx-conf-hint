@@ -123,6 +123,8 @@ export function generate(file: Writable) {
 				write('</dict>', -1)
 			});
 
+			if (pattern.contentName)
+				write(keyTag('contentName', 'string', pattern.contentName));
 			if (pattern.patterns)
 				writePatterns(pattern.patterns);
 			write('</dict>', -1)
@@ -134,7 +136,7 @@ export function generate(file: Writable) {
 	}
 	function tag(
 		tagName: 'dict' | 'array' | 'key' | 'string',
-		content: string | number | RegExp | Array<any>
+		content: string | number | RegExp | Array<string | number | RegExp>
 	) {
 		if (!Array.isArray(content))
 			content = [content];

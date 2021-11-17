@@ -31,6 +31,56 @@
     </dict>
     <dict>
       <key>name</key>
+      <string>meta.context.lua.nginx</string>
+      <key>begin</key>
+      <string>\b((?:content|rewrite|access|init_worker|init|set|log|balancer|ssl_(?:client_hello|session_fetch|certificate))_by_lua(?:_block)?)\s*\{</string>
+      <key>end</key>
+      <string>\}</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>storage.type.directive.context.nginx</string>
+        </dict>
+      </dict>
+      <key>contentName</key>
+      <string>meta.embedded.block.lua</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>source.lua</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>meta.context.lua.nginx</string>
+      <key>begin</key>
+      <string>\b((?:content|rewrite|access|init_worker|init|set|log|balancer|ssl_(?:client_hello|session_fetch|certificate))_by_lua)\s*'</string>
+      <key>end</key>
+      <string>'</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>storage.type.directive.context.nginx</string>
+        </dict>
+      </dict>
+      <key>contentName</key>
+      <string>meta.embedded.block.lua</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>source.lua</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
       <string>meta.context.events.nginx</string>
       <key>begin</key>
       <string>\b(events) +\{</string>
