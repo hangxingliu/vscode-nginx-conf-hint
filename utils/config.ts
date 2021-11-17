@@ -1,15 +1,15 @@
 import { resolve } from "path";
 
 export const cacheDir = resolve(__dirname, 'cache')
-export const syntaxesDir = resolve(__dirname, '../syntaxes');
-export const hintDataDir = resolve(__dirname, '../hint_data');
+export const projectDir = resolve(__dirname, '..');
+export const syntaxesDir = resolve(projectDir, 'src/syntax/references');
+export const hintDataDir = resolve(projectDir, 'src/hint_data');
 
 export const docsTemplatesDir = resolve(__dirname, '../src/extension/documents/templates');
 export const docsTemplateTarget = resolve(docsTemplatesDir, 'index.ts');
 
 export const syntaxFiles = {
-	default: resolve(syntaxesDir, 'nginx.tmLanguage'),
-	original: resolve(syntaxesDir, 'original.nginx.tmLanguage'),
+	original: resolve(syntaxesDir, 'shanoor.nginx.tmLanguage'),
 	sublime: resolve(syntaxesDir, 'sublime.nginx.tmLanguage'),
 }
 export const syntaxURLs = {

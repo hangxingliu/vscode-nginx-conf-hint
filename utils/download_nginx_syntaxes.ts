@@ -19,8 +19,6 @@ async function main() {
 async function download(syntaxName: keyof typeof syntaxURLs) {
 	const url = syntaxURLs[syntaxName];
 	const targetFiles = [syntaxFiles[syntaxName]];
-	if (syntaxName === 'sublime') targetFiles.push(syntaxFiles.default);
-
 	let text = await getText(`${syntaxName} syntax`, url);
 	text = text.replace('?>', `?>\n<!-- vscode-nginx-conf-hint { syntax-type: ${syntaxName} }  -->`)
 	for (let i = 0; i < targetFiles.length; i++)

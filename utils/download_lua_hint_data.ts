@@ -2,7 +2,7 @@
 
 import type { CheerioAPI, Node } from "cheerio";
 import { hintDataFiles, nginxLuaDocsBaseURL, luaRestyDocsURLs } from "./config";
-import { getText, loadHtml, print, initHttpCache, shouldBeEqual, bold, writeMultipleJSON } from "./helper";
+import { getText, loadHtml, print, initHttpCache, bold, writeMultipleJSON } from "./helper";
 import type { DirectiveDocs, DirectiveItem, SnippetItem, VariableItem } from "../extension/types";
 
 const SIGN_END = 'Back to TOC';
@@ -48,8 +48,8 @@ async function main() {
 }
 
 function processDirectiveElement($: CheerioAPI, ele: Node, baseUrl: string, modName: string) {
-	let name = $(ele).text();
-	let directive = $("#user-content-" + name);
+	const name = $(ele).text();
+	const directive = $("#user-content-" + name);
 	if (directive.length == 0) return;
 
 	const item: DirectiveItem = {
@@ -70,7 +70,7 @@ function processDirectiveElement($: CheerioAPI, ele: Node, baseUrl: string, modN
 		name: ''
 	};
 	let temp = directive.parent();
-	while (temp = temp.next()) {
+	while ((temp = temp.next())) {
 		const character = temp.text();
 		if (character == SIGN_END)
 			break;
@@ -129,22 +129,21 @@ function processDirectiveElement($: CheerioAPI, ele: Node, baseUrl: string, modN
 	docObj.table = `<table ><tr><th>Syntax:</th><td><code><strong>${item.syntax}</strong></code><br></td></tr><tr><th>Default:</th><td><pre>${item.def}</pre></td></tr><tr><th>Context:</th><td>${ctx}</td></tr></table>`;
 	docObj.module = modName;
 	docObj.link = baseUrl + `#${name}`;
-	docObj.doc = docObj.doc;
 
 	directivesResult.push(item);
 	directivesDocResult.push(docObj);
 }
 function processSnippetElement($: CheerioAPI, ele: Node) {
-	let name = $(ele).text();
-	let directive = $("#user-content-" + name.toLocaleLowerCase().replace(/[\.:]/g, ""));
+	const name = $(ele).text();
+	const directive = $("#user-content-" + name.toLocaleLowerCase().replace(/[\.:]/g, ""));
 	if (name == 'Introduction' || directive.length == 0) return;
-	let item: SnippetItem = {
+	const item: SnippetItem = {
 		description: '',
 		prefix: '',
 		body: ''
 	};
 	let temp = directive.parent();
-	while (temp = temp.next()) {
+	while ((temp = temp.next())) {
 		const character = temp.text();
 		if (character == SIGN_END)
 			break;
@@ -154,14 +153,16 @@ function processSnippetElement($: CheerioAPI, ele: Node) {
 			let body = match[1].trim();
 			match = body.match(/\((\w.*?)\)/)
 			if (match) {
-				let params = match[1].split(",").map(val => {
+				const params = match[1].split(",").map(val => {
 					val = val.trim();
 					return /^[a-zA-Z]+/.test(val) ? "$" + val : val;
 				});
 				body = body.replace(/\(\w.*?\)/, "(" + params.join(", ") + ")");
 			}
 
-			let [left, right] = body.split("=");
+			const split = body.split("=");
+			const right = split[1];
+			let left = split[0];
 			if (left && right) {
 				if (!left.includes("local")) {
 					left = "local " + left;
@@ -194,10 +195,10 @@ async function processRestyREADME(baseUrl: string, prefix: string) {
 function processRestySnippetElement($: CheerioAPI, ele: Node, baseUrl: string, prefix: string) {
 	if ($(ele).attr('href') !== '#methods') return;
 
-	let directiveLists = $(ele).next("ul").find("li a");
+	const directiveLists = $(ele).next("ul").find("li a");
 	directiveLists.each((i, ele) => {
-		let name = $(ele).text();
-		let directive = $("#user-content-" + name.toLocaleLowerCase().replace(/[\.:]/g, ""));
+		const name = $(ele).text();
+		const directive = $("#user-content-" + name.toLocaleLowerCase().replace(/[\.:]/g, ""));
 		if (directive.length == 0) return;
 
 		const item: SnippetItem = {
@@ -206,7 +207,7 @@ function processRestySnippetElement($: CheerioAPI, ele: Node, baseUrl: string, p
 			body: '',
 		}
 		let temp = directive.parent();
-		while (temp = temp.next()) {
+		while ((temp = temp.next())) {
 			const character = temp.text();
 			if (character == SIGN_END)
 				break;
@@ -216,14 +217,16 @@ function processRestySnippetElement($: CheerioAPI, ele: Node, baseUrl: string, p
 				let body = match[1].trim();
 				match = body.match(/\((\w.*?)\)/)
 				if (match) {
-					let params = match[1].split(",").map(val => {
+					const params = match[1].split(",").map(val => {
 						val = val.trim();
 						return /^[a-zA-Z]+/.test(val) ? "$" + val : val;
 					});
 					body = body.replace(/\(\w.*?\)/, "(" + params.join(", ") + ")");
 				}
 
-				let [left, right] = body.split("=");
+				const split = body.split("=");
+				const right = split[1];
+				let left = split[0];
 				if (left && right) {
 					if (!left.includes("local")) {
 						left = "local " + left;

@@ -4,8 +4,6 @@ import { hintDataFiles, nginxDocsBaseURL } from "./config";
 import { resolveURL, compressHTML, getText, loadHtml, print, initHttpCache, shouldBeEqual, AssertLevel, bold, lengthShouldBeMoreThanOrEqual, writeMultipleJSON, lengthShouldBeEqual } from "./helper";
 import type { DirectiveDocs, DirectiveItem, LinkItem, VariableItem } from "../extension/types";
 
-//==========================
-//     START      =======>
 const directivesResult: DirectiveItem[] = [];
 const variablesResult: VariableItem[] = [];
 const directivesDocResult: DirectiveDocs[] = [];
@@ -57,6 +55,9 @@ async function main() {
 	print.ok(`Got ${bold(modulesUris.length)} module document pages`);
 	for (let i = 0; i < modulesUris.length; i++)
 		await processModuleDocs(modulesUris[i]);
+
+	directivesResult.forEach(addCompletionInfoIntoDirective);
+
 	await finish();
 }
 
@@ -78,8 +79,6 @@ async function finish() {
 	require('./generate_snippets')
 	return print.done();
 }
-
-
 
 async function processModuleDocs(docsUri: string) {
 	const count = { directives: 0, variables: 0 };
@@ -115,7 +114,7 @@ async function processModuleDocs(docsUri: string) {
 			link: '',
 			name: ''
 		};
-		let $directive = $directives.eq(i);
+		const $directive = $directives.eq(i);
 		docObj.table = compressHTML($directive.html()).replace('cellspacing=\"0\"', '');
 
 		//check table item available
@@ -171,7 +170,7 @@ async function processModuleDocs(docsUri: string) {
 		let elementPointer = $directive;
 		while ((elementPointer =
 			elementPointer.next('p, blockquote.note, blockquote.example, dl.compact')).length) {
-			let tagName = elementPointer.prop('tagName');
+			const tagName = elementPointer.prop('tagName');
 			switch (tagName) {
 				case 'P':
 					if (!elementPointer.text().trim()) continue;
@@ -182,14 +181,15 @@ async function processModuleDocs(docsUri: string) {
 				case 'DL':
 					docObj.doc += $.html(elementPointer);
 					break;
-				case 'BLOCKQUOTE':
-					let className = elementPointer.attr('class').trim();
+				case 'BLOCKQUOTE': {
+					const className = elementPointer.attr('class').trim();
 					if (className == 'note')
 						item.notes.push(elementPointer.text());
 					else if (className != 'example')
 						print.warning(`there is a blockquote tag with unknown class name (${className}) ` +
 							`after directive (${item.name})`);
 					docObj.doc += $.html(elementPointer);
+				}
 			}
 		}
 
@@ -213,7 +213,7 @@ async function processModuleDocs(docsUri: string) {
 			doc: ''
 		}
 		docObj.module = docsName;
-		let variablesDescription = $varContainer.next('center').next('p');
+		const variablesDescription = $varContainer.next('center').next('p');
 		let container = variablesDescription.next('dl');
 
 		//Because page of ngx_http_auth_jwt_module
@@ -255,7 +255,7 @@ async function processModuleDocs(docsUri: string) {
 			if (elementTailCheck.length && elementTailCheck.prop('tagName') != 'DT')
 				print.warning(`the tag after description of variable ${item.name} is not "dt"`);
 
-			let elementId = elementVarName.attr('id');
+			const elementId = elementVarName.attr('id');
 			lengthShouldBeMoreThanOrEqual(`attribute "id" of element "dt" ${item.name} `,
 				elementId, 'var_'.length);
 
@@ -275,4 +275,27 @@ async function processModuleDocs(docsUri: string) {
 		return compressHTML(docHTML).replace(/href=[\"\'](.+?)[\"\']/g,
 			(_, href) => `href="${encodeURI(resolveURL(fullURL, decodeURI(href)))}"`);
 	}
+}
+
+function addCompletionInfoIntoDirective(directive: DirectiveItem) {
+	if (directive.syntax.length === 0)
+		return print.warning(`directive["${directive.name}"].syntax is empty"`);
+	const ci: { insert?: string } = {};
+	if (directive.syntax.length === 1) {
+		const syntax = directive.syntax[0];
+		// "accept_mutex on | off;"
+		const params = syntax.slice(directive.name.length).replace(';', '').trim();
+		const testParams = params.replace(/\s/g, '');
+		if (testParams === 'on|off') {
+			ci.insert = `${directive.name} $\{1|on,off|\};$0`;
+		} else {
+			const placeholder = params.replace(/\s+/g, ' ');
+			if (placeholder)
+				ci.insert = `${directive.name} $\{1:${placeholder}\};$0`;
+			else
+				ci.insert = `${directive.name};$0`;
+		}
+	}
+	if (Object.keys(ci).length > 0)
+		directive.ci = ci;
 }
