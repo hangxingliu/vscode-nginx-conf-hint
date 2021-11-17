@@ -10,7 +10,7 @@
 			"request": "launch",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
-				"${workspaceFolder}/example_files"
+				"${workspaceFolder}/test/workspace"
 			],
 			"stopOnEntry": true,
 			"sourceMaps": true,
@@ -23,7 +23,7 @@
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"--extensionDevelopmentKind=web",
-				"${workspaceFolder}/example_files"
+				"${workspaceFolder}/test/workspace"
 			],
 			"debugWebWorkerHost": true,
 			"stopOnEntry": true,
