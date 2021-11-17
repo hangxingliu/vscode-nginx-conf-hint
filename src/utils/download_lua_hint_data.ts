@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 
 import type { CheerioAPI, Node } from "cheerio";
-import { hintDataFiles, nginxLuaDocsBaseURL, luaRestyDocsURLs } from "./config";
-import { getText, loadHtml, print, initHttpCache, bold, writeMultipleJSON } from "./helper";
-import type { DirectiveDocs, DirectiveItem, SnippetItem, VariableItem } from "../extension/types";
+
+import { nginxLuaDocsBaseURL, luaRestyDocsURLs, manifestFiles, ManifestItemType, detailsFile, luaSnippetFile, nginxLuaModuleURLs } from "./config";
+import { getText, loadHtml, print, initHttpCache, JsonFileWriter, writeJSON } from "./helper";
+import type { SnippetItem } from "../extension/types";
+
+const manifestStreams = {
+	lua: new JsonFileWriter(manifestFiles.lua),
+}
 
 const SIGN_END = 'Back to TOC';
 const SIGN_SYNTAX = /syntax: (.*)/;
@@ -12,47 +17,82 @@ const SIGN_CONTEXT = /context: (.*)/;
 const SIGN_PHASE = /phase: (.*)/;
 const SIGN_SINCE_VERSION = /^This directive was first introduced in the v(\d+\.\d+\.\d+) release./;
 
-//==========================
-//     START      =======>
-const directivesResult: DirectiveItem[] = [];
-const variablesResult: VariableItem[] = [];
-const directivesDocResult: DirectiveDocs[] = [];
-const variablesDocResult = [];
 const snippetsResult: { [x: string]: SnippetItem } = {};
 
 main().catch(error => print.error(error.stack));
 async function main() {
 	initHttpCache();
 
-	const html = await getText('readme', nginxLuaDocsBaseURL);
-	const $ = loadHtml(html);
-	print.start('Analyzing Directives');
+	const coreModule = 'lua_nginx_module'
+	const moduleNames: Array<string | number> = [ManifestItemType.ModuleNames, coreModule, ...nginxLuaModuleURLs.map(it => it.name)];
+	const getModuleIndex = (mod: string) => moduleNames.indexOf(mod, 1);
+	manifestStreams.lua.writeItem(moduleNames);
 
-	const $directiveList = $("#user-content-directives").parent("h1").next("ul").find("li a");
-	$directiveList.each((i, ele) => {
-		processDirectiveElement($, ele, nginxLuaDocsBaseURL, 'lua-nginx-module');
-	});
+	{
+		const modName = coreModule;
+		const modIndex = getModuleIndex(modName);
+		const detailsStream = new JsonFileWriter(detailsFile(modName));
 
-	const $snippetList = $("#user-content-nginx-api-for-lua").parent("h1").next("ul").find("li a");
-	$snippetList.each((i, ele) => {
-		processSnippetElement($, ele);
-	});
+		const html = await getText(modName, nginxLuaDocsBaseURL);
+		const $ = loadHtml(html);
+		const $directiveList = $("#user-content-directives").parent("h1").next("ul").find("li a");
+		let count = 0;
+		$directiveList.each((i, ele) => {
+			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
+				count++;
+		});
+		console.log(`found ${count} directives`);
+
+		const $snippetList = $("#user-content-nginx-api-for-lua").parent("h1").next("ul").find("li a");
+		$snippetList.each((i, ele) => {
+			processSnippetElement($, ele);
+		});
+
+		detailsStream.close();
+	}
+
+	for (let i = 0; i < nginxLuaModuleURLs.length; i++) {
+		const { name: modName, url } = nginxLuaModuleURLs[i];
+		const modIndex = getModuleIndex(modName);
+		const detailsStream = new JsonFileWriter(detailsFile(modName));
+		const html = await getText(modName, url);
+		const $ = loadHtml(html);
+		print.start('Analyzing Directives');
+		const $directiveList = $("#user-content-directives").parent("h1").next("ul").find("li a");
+		let count = 0;
+		$directiveList.each((i, ele) => {
+			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
+			count++;
+		});
+		console.log(`found ${count} directives`);
+		detailsStream.close();
+	}
 
 	for (let i = 0; i < luaRestyDocsURLs.length; i++) {
 		const { prefix, url } = luaRestyDocsURLs[i];
 		await processRestyREADME(url, prefix);
 	}
-
 	applyConstantSnippets();
-	finish();
+	manifestStreams.lua.close();
+
+	print.start('Writing snippets to file');
+	writeJSON(luaSnippetFile, snippetsResult);
+	print.ok();
+	return print.done();
 }
 
-function processDirectiveElement($: CheerioAPI, ele: Node, baseUrl: string, modName: string) {
-	const name = $(ele).text();
-	const directive = $("#user-content-" + name);
-	if (directive.length == 0) return;
+function processDirectiveElement(
+	$: CheerioAPI,
+	ele: Node,
+	baseUrl: string,
+	modIndex: number,
+	detailsStream: JsonFileWriter,
+) {
+	const directiveName = $(ele).text();
+	const directive = $("#user-content-" + directiveName);
+	if (directive.length == 0) return false;
 
-	const item: DirectiveItem = {
+	const item = {
 		name: '',
 		syntax: [],
 		def: '',
@@ -62,13 +102,7 @@ function processDirectiveElement($: CheerioAPI, ele: Node, baseUrl: string, modN
 		since: '',
 		module: ''
 	};
-	const docObj: DirectiveDocs = {
-		table: '',
-		doc: '',
-		module: '',
-		link: '',
-		name: ''
-	};
+	let docsHTML = '';
 	let temp = directive.parent();
 	while ((temp = temp.next())) {
 		const character = temp.text();
@@ -103,36 +137,50 @@ function processDirectiveElement($: CheerioAPI, ele: Node, baseUrl: string, modN
 		item.desc = item.desc || character;
 		item.notes.push(character);
 
-		docObj.doc += temp.toString();
+		docsHTML += temp.toString();
 	}
 
 	if (item.def.startsWith("no")) {
-		item.def = name + " ;";
+		item.def = directiveName + " ;";
 	}
 	if (item.def == "") {
-		if (name.endsWith("by_lua")) {
-			item.def = name + " '';"
-		} else if (name.endsWith("by_lua_block")) {
-			item.def = name + " {}"
-		} else if (name.endsWith("by_lua_file")) {
-			item.def = name + " .lua;"
+		if (directiveName.endsWith("by_lua")) {
+			item.def = directiveName + " '';"
+		} else if (directiveName.endsWith("by_lua_block")) {
+			item.def = directiveName + " {}"
+		} else if (directiveName.endsWith("by_lua_file")) {
+			item.def = directiveName + " .lua;"
 		} else {
-			item.def = name + " ;";
+			item.def = directiveName + " ;";
 		}
 	}
-	item.name = name;
-	item.module = modName;
+	item.name = directiveName;
 	item.since = item.since || null;
 
 	const ctx = item.contexts.map(n => `<code>${n}</code>`).join(',');
-	docObj.name = name;
-	docObj.table = `<table ><tr><th>Syntax:</th><td><code><strong>${item.syntax}</strong></code><br></td></tr><tr><th>Default:</th><td><pre>${item.def}</pre></td></tr><tr><th>Context:</th><td>${ctx}</td></tr></table>`;
-	docObj.module = modName;
-	docObj.link = baseUrl + `#${name}`;
-
-	directivesResult.push(item);
-	directivesDocResult.push(docObj);
+	const tableHTML = `<table ><tr><th>Syntax:</th><td><code><strong>${item.syntax}</strong></code><br></td></tr><tr><th>Default:</th><td><pre>${item.def}</pre></td></tr><tr><th>Context:</th><td>${ctx}</td></tr></table>`;
+	manifestStreams.lua.writeItem([
+		ManifestItemType.Directive,
+		directiveName,
+		item.syntax,
+		item.def,
+		item.contexts,
+		modIndex,
+		item.since,
+		baseUrl + `#${directiveName}`,
+		{},
+	]);
+	detailsStream.writeItem([
+		ManifestItemType.DirectiveDetails,
+		directiveName,
+		item.desc,
+		docsHTML,
+		item.notes,
+		tableHTML,
+	]);
+	return true;
 }
+
 function processSnippetElement($: CheerioAPI, ele: Node) {
 	const name = $(ele).text();
 	const directive = $("#user-content-" + name.toLocaleLowerCase().replace(/[\.:]/g, ""));
@@ -338,19 +386,4 @@ function applyConstantSnippets() {
 			body: key,
 		}
 	})
-}
-
-function finish() {
-	print.start('Writing to file');
-	writeMultipleJSON([
-		[hintDataFiles.lua.directives, directivesResult],
-		[hintDataFiles.lua.directivesDocs, directivesDocResult],
-		[hintDataFiles.lua.variables, variablesResult],
-		[hintDataFiles.lua.variablesDocs, variablesDocResult],
-		[hintDataFiles.lua.snippets, snippetsResult],
-	]);
-	print.ok();
-	console.log(`Total directives count: ${bold(directivesResult.length)}`);
-	console.log(`Total variables count: ${bold(variablesResult.length)}`);
-	return print.done();
 }

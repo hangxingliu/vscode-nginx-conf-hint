@@ -1,14 +1,17 @@
 import axios, { AxiosResponse } from "axios";
 export { load as loadHtml } from "cheerio";
+
+import Turndown = require("turndown");
 import { Agent as HttpsAgent } from "https";
-import { existsSync, writeFile, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, writeFile, mkdirSync, readFileSync, writeFileSync, createWriteStream, WriteStream } from "fs";
 import { resolve as resolvePath } from "path";
 import { yellow, bold as _bold, green, red, blue } from "chalk";
 import { cacheDir } from "./config";
-import type { DirectiveItem } from "../extension/types";
 
 export const hasEnv = typeof process !== 'undefined' && process.env ? true : false;
-export const bold = (input: any) => _bold(String(input));
+export const bold = (input: unknown) => _bold(String(input));
+
+const turndownService = new Turndown({ headingStyle: 'atx', hr: '***' })
 
 const OK = ' - ' + green('OK');
 const WARN = ' - ' + yellow('WARN');
@@ -37,7 +40,7 @@ export const print = {
 export const enum AssertLevel {
 	WARNING = 'warning',
 	ERROR = 'error',
-};
+}
 export function lengthShouldBeMoreThanOrEqual<T extends { length: number }>(
 	name: string,
 	arrayOrString: T,
@@ -114,7 +117,7 @@ function getHttpsAgent(): HttpsAgent {
 		}
 	}
 	return new HttpsAgent({ keepAlive: true });
-};
+}
 
 function encodeUrlSafeBase64(buffer: Buffer) {
 	return buffer.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -152,11 +155,11 @@ export function compressHTML(html: string): string {
 	});
 }
 
-export function writeMultipleJSON(multiple: Array<[filePath: string, object: any]>) {
+export function writeMultipleJSON(multiple: Array<[filePath: string, object: unknown]>) {
 	return Promise.all(multiple.map(m => writeJSON(m[0], m[1])));
 }
 
-export function writeJSON(filePath: string, object: any) {
+export function writeJSON(filePath: string, object: unknown) {
 	return new Promise<void>((resolve, reject) => {
 		writeFile(filePath, JSON.stringify(object, null, 2) + '\n', err =>
 			err ? reject(err) : resolve());
@@ -173,4 +176,25 @@ export function resolveURL(from: string, to: string) {
 	return resolvedUrl.toString();
 }
 
+export function toMarkdown(html: string): string {
+	return turndownService.turndown(html)
+}
 
+
+export class JsonFileWriter {
+	stream: WriteStream;
+	isFirst = true;
+
+	constructor(filePath: string) {
+		this.stream = createWriteStream(filePath);
+		this.stream.write('[');
+	}
+	writeItem(item: unknown) {
+		this.stream.write((this.isFirst ? '\n' : ',\n') + JSON.stringify(item));
+		this.isFirst = false;
+	}
+	close() {
+		this.stream.write('\n]');
+		this.stream.close();
+	}
+}

@@ -1,3 +1,7 @@
+# this extension doesn't need any node modules
+# if I don't ignore node_modules, `vsce` will pack optional dependencies into the extension
+node_modules
+
 # vscode test web
 .vscode-test-web
 
@@ -40,14 +44,9 @@ test/**
 # example files
 example_files/**
 
-
-# type dependencies
-node_modules/@types/**
-
-
 # cache files
-utils/cache
-utils/cache-**
+cache
+cache-*
 
 
 # eslint

@@ -26,8 +26,8 @@ extension/new_syntax_tip_has_been_shown
 node_modules.tar
 
 # ignore nginx document page html cache
-utils/cache
-utils/cache-*
+cache
+cache-*
 
 # ignore vscode.d.ts and vscode.proposed.d.ts
 vscode.d.ts

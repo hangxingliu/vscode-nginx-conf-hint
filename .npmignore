@@ -32,8 +32,8 @@ images/screenshots.gif
 example_files
 
 # cache files
-utils/cache
-utils/cache-*
+cache
+cache-*
 
 # vscode typing files
 vscode.d.ts
