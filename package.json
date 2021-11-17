@@ -2,7 +2,7 @@
 	"name": "vscode-nginx-conf-hint",
 	"displayName": "nginx.conf hint",
 	"description": "nginx.conf syntax, hint and autocompletion",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"license": "GPL-3.0",
 	"icon": "images/icon.png",
 	"galleryBanner": {
@@ -23,12 +23,15 @@
 	"publisher": "hangxingliu",
 	"author": "hangxingliu",
 	"main": "./src/extension/main.desktop.js",
+	"browser": "./artifacts/web-ext/extension.js",
 	"scripts": {
-		"test": "mocha ./test/*.js",
-		"lint:eslint": "eslint .",
+		"lint:eslint": "eslint . --ext .js,.ts",
 		"build:desktop-ext": "tsc -p tsconfig.extension.json",
+		"dev:web-ext": "webpack",
+		"build:web-ext": "webpack --mode production --devtool hidden-source-map",
 		"build:utils": "tsc -p tsconfig.utils.json",
-		"build:syntax": "ts-node --project tsconfig.syntax.json ./src/syntax/generate-tmLanguage.ts"
+		"build:syntax": "ts-node --project tsconfig.syntax.json ./src/syntax/generate-tmLanguage.ts",
+		"clean": "rimraf 'src/extension/**/*.js' 'utils/**/*.js'"
 	},
 	"extensionKind": [
 		"ui",
@@ -37,18 +40,25 @@
 	"extensionDependencies": [],
 	"dependencies": {},
 	"devDependencies": {
-		"@babel/core": "^7",
-		"@babel/eslint-parser": "^7",
 		"@types/node": "^16.11.7",
 		"@types/vscode": "*",
 		"axios": "^0.24.0",
 		"chalk": "^3.0.0",
 		"cheerio": "1.0.0-rc.10",
-		"eslint": "^8",
 		"html-minifier": "^4.0.0",
 		"https-proxy-agent": "^5.0.0",
+		"process": "^0.11.10",
+		"rimraf": "^3.0.2",
+		"ts-loader": "^9.2.6",
 		"ts-node": "^10.4.0",
-		"typescript": "^4.4.4"
+		"typescript": "^4.4.4",
+		"webpack": "^5.64.1",
+		"webpack-cli": "^4.9.1"
+	},
+	"optionalDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.4.0",
+		"@typescript-eslint/parser": "^5.4.0",
+		"eslint": "^8.2.0"
 	},
 	"engines": {
 		"vscode": "^1.1.0"

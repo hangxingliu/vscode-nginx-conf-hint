@@ -38,6 +38,9 @@ const webExtensionConfig = {
 				use: [
 					{
 						loader: "ts-loader",
+						options: {
+							configFile: 'tsconfig.web.json'
+						}
 					},
 				],
 			},

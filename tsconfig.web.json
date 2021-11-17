@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": false,
+    "removeComments": false,
+    "target": "ES2015",
+    "sourceMap": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/extension"]
+}
