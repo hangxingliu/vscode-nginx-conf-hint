@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {
 	CancellationToken,
 	CompletionContext,
@@ -9,19 +11,21 @@ import {
 	Position,
 	TextDocument,
 	Uri,
-	workspace,
-	FileType,
 	CompletionItemKind,
 	CompletionList,
 } from "vscode";
-import { getDirectivesManifest, getVariablesManifest } from "../hint-data/manifest";
-import { NginxDirective } from "../hint-data/types";
-import { logger } from "../logger";
-import { getNginxConfCursorContext } from "../parser";
-import { getDirectiveCompletionItemBase, getVariableCompletionItemBase } from "./completion-item";
-import { extensionConfig } from "./config";
-import { DOCUMENT_SELECTOR } from "./utils";
-import { mediaTypePrefixes, mediaTypePrefixSet, mediaTypes, MediaTypeTuple } from "../hint-data/media-types";
+import { getDirectivesManifest, getVariablesManifest } from "../../hint-data/manifest";
+import { NginxDirective } from "../../hint-data/types";
+import { logger } from "../../logger";
+import { getNginxConfCursorContext, getNginxConfDefinitionInfo } from "../../parser";
+import { getDirectiveCompletionItemBase, getVariableCompletionItemBase, resolveDirectiveCompletionItem } from "./item";
+import { extensionConfig } from "../config";
+import { DOCUMENT_SELECTOR } from "../utils";
+import { mediaTypePrefixes, mediaTypePrefixSet, mediaTypes, MediaTypeTuple } from "../../hint-data/media-types";
+import { _completePath, _doesDirectiveNeedCompletePath } from "./path";
+import { getDirectiveLocationCItem } from "./directive-location";
+import { _completeNameArgs } from "./named-arguments";
+import { _completeNameLocation, _doesDirectiveCanUseNamedLocation } from "./named-location";
 
 const zeroPos = new Position(0, 0);
 
@@ -29,7 +33,7 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 	mediaTypePrefixItems: CompletionItem[] = [];
 
 	constructor(disposables: Disposable[]) {
-		disposables.push(languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, this, "$", "/", " "));
+		disposables.push(languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, this, "$", "/", " ",'@'));
 		this.mediaTypePrefixItems = mediaTypePrefixes.map((it) => {
 			const item = new CompletionItem(`${it}/`, CompletionItemKind.Value);
 			item.detail = "Media Type";
@@ -92,19 +96,33 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 						if (it.name.startsWith(inputPrefix)) matchedDirectives.push(it);
 					});
 				}
-			};
+			}; // end of addDirectives
+
 			const manifest = getDirectivesManifest();
 			addDirectives(manifest.core);
 			if (extensionConfig.hasJsModule) addDirectives(manifest.js);
 			if (extensionConfig.hasLuaModule) addDirectives(manifest.lua);
-			return matchedDirectives.map(getDirectiveCompletionItemBase);
+
+			const result: CompletionItem[] = [];
+			for (let i = 0; i < matchedDirectives.length; i++) {
+				const directive = matchedDirectives[i];
+				switch (directive.name) {
+					case "location":
+						result.push(...getDirectiveLocationCItem(directive));
+						break;
+					default:
+						result.push(getDirectiveCompletionItemBase(directive));
+						break;
+				}
+			}
+			return result;
 		}
 
 		const currentInput = n || list.length === 0 ? "" : list[list.length - 1];
 
-		// include conf
-		if (list[0] == "include" && (n || list.length > 1)) {
-			return this.completePath(Uri.joinPath(document.uri, ".."), currentInput);
+		// complete file
+		if (_doesDirectiveNeedCompletePath(list[0]) && (n || list.length > 1)) {
+			return _completePath(Uri.joinPath(document.uri, ".."), currentInput);
 		}
 
 		// variable
@@ -115,10 +133,17 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 			if (extensionConfig.hasLuaModule) list = list.concat(variables.lua.map(getVariableCompletionItemBase));
 			return list;
 		}
+
+		// other args
+		if (n && !list[0].startsWith("$")) return _completeNameArgs(list[0]);
+
+		// use named location
+		if (currentInput[0] === '@' && _doesDirectiveCanUseNamedLocation(list[0]))
+			return _completeNameLocation(document, currentInput);
 	}
 
-	async resolveCompletionItem?(item: CompletionItem) {
-		return item;
+	async resolveCompletionItem(item: CompletionItem) {
+		return resolveDirectiveCompletionItem(item);
 	}
 
 	private async completeMediaType(input: string) {
@@ -137,27 +162,5 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 			return new CompletionList(suffix.map(this.createMediaTypeCompletionItem), incomplete);
 		}
 		return this.mediaTypePrefixItems;
-	}
-
-	private async completePath(baseUri: Uri, input = "") {
-		if (/[\/\\]$/.test(input)) input = input.slice(0, input.length - 1) + "/";
-		else input += "/..";
-
-		const inputUri = input ? Uri.joinPath(baseUri, input) : baseUri;
-
-		const result: CompletionItem[] = [];
-		try {
-			const files = await workspace.fs.readDirectory(inputUri);
-			files
-				.filter((it) => it[1] === FileType.Directory)
-				.forEach((it) => result.push(new CompletionItem(it[0], CompletionItemKind.Folder)));
-			files
-				.filter((it) => it[1] === FileType.File)
-				.forEach((it) => result.push(new CompletionItem(it[0], CompletionItemKind.File)));
-		} catch (error) {
-			// noop
-		}
-
-		return result;
 	}
 }

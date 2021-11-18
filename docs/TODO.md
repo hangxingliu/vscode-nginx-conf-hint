@@ -1,6 +1,8 @@
 # TODO
 
 - [ ] improve snippets
+- [ ] improve formatter
+- [ ] add completion for `location`, `if`
 - [x] cache the block name cursor located in
 - [x] make hint senmantic
   - reference: <https://github.com/tmont/nginx-conf>
