@@ -220,7 +220,7 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 				const placeholder = syntax.replace(/\s+/g, " ");
 				const mtx = placeholder.match(/^(\w+)\s(\w+)$/);
 				if (mtx) ci.insert = `${directiveName} $\{1:${mtx[1]}\} $\{2:${mtx[2]}\};$0`;
-				else if (placeholder) ci.insert = `${directiveName} $\{1:${placeholder}\};$0`;
+				else if (placeholder) ci.insert = `${directiveName} $\{1:${placeholder.replace(/\}/g, '\\}')}\};$0`;
 				else ci.insert = `${directiveName};$0`;
 			}
 		}

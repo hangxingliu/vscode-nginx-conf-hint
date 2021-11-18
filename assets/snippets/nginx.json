@@ -19,10 +19,6 @@
     "prefix": "server",
     "body": "server {\n\t$0\n}"
   },
-  "Block location": {
-    "prefix": "location",
-    "body": "location ${1:/} {\n\t${0}\n}"
-  },
   "Block if": {
     "prefix": "if",
     "body": "if {\n\t$0\n}"
