@@ -7,7 +7,7 @@ const commonDirectiveNames = new Set<string>();
 const _directives: Array<unknown[]> = [
 	...require('../../assets/manifest/core.json'),
 	...require('../../assets/manifest/js.json'),
-	...require('../../assets/manifest/lua.json'),
+	// ...require('../../assets/manifest/lua.json'),
 ]
 _directives.forEach(it => it[0] === ManifestItemType.Directive && commonDirectiveNames.add(String(it[1])));
 

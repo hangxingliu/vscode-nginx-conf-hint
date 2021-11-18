@@ -2,7 +2,7 @@
 .vscode-test-web
 artifacts
 # old extension source codes
-extension
+/extension
 hint_data
 node_modules
 webpack.config.js

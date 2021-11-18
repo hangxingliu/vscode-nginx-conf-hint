@@ -3,6 +3,7 @@
 	"files.associations": {
 		"*.conf.disabled": "NGINX"
 	},
+	"nginx-conf-hint.externalModules": ["lua","js"],
 	// "workbench.colorTheme": "Visual Studio Light",
 	"editor.tokenColorCustomizations": {
 		"[Solarized Light]": {
