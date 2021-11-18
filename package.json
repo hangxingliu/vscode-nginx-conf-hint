@@ -88,11 +88,11 @@
 		"snippets": [
 			{
 				"language": "NGINX",
-				"path": "./hint_data/snippets.json"
+				"path": "./assets/snippets/nginx.json"
 			},
 			{
 				"language": "lua",
-				"path": "./hint_data/lua/snippets.json"
+				"path": "./assets/snippets/lua.json"
 			}
 		],
 		"grammars": [
@@ -132,10 +132,12 @@
 					},
 					"nginx-conf-hint.externalModules": {
 						"type": "array",
-						"enum": [
-							"lua",
-							"js"
-						],
+						"items": {
+							"enum": [
+								"lua",
+								"js"
+							]
+						},
 						"default": [],
 						"description": "Enabled external modules"
 					}

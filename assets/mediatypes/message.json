@@ -1,0 +1,20 @@
+[
+["CPIM"],
+["delivery-status"],
+["disposition-notification"],
+["example"],
+["feedback-report"],
+["global"],
+["global-delivery-status"],
+["global-disposition-notification"],
+["global-headers"],
+["http"],
+["imdn+xml"],
+["news","news - OBSOLETED by RFC5537"],
+["s-http"],
+["sip"],
+["sipfrag"],
+["tracking-status"],
+["vnd.si.simp","vnd.si.simp - OBSOLETED by request"],
+["vnd.wfa.wsc"]
+]

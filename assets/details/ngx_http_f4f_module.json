@@ -1,0 +1,4 @@
+[
+[4,"f4f","Turns on module processing in the surrounding location.","<p>Turns on module processing in the surrounding location.</p>",[],"<table ><tbody><tr><th>Syntax:</th><td><code><strong>f4f</strong>;</code><br></td></tr><tr><th>Default:</th><td>—</td></tr><tr><th>Context:</th><td><code>location</code><br></td></tr></tbody></table>"],
+[4,"f4f_buffer_size","Sets the `_size_` of the buffer used for reading the `.f4x` index file.","<p>Sets the <code><i>size</i></code> of the buffer used for reading the <code>.f4x</code> index file.</p>",[],"<table ><tbody><tr><th>Syntax:</th><td><code><strong>f4f_buffer_size</strong> <code><i>size</i></code>;</code><br></td></tr><tr><th>Default:</th><td><pre>f4f_buffer_size 512k;</pre></td></tr><tr><th>Context:</th><td><code>http</code>, <code>server</code>, <code>location</code><br></td></tr></tbody></table>"]
+]
