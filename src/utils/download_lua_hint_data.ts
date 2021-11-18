@@ -201,9 +201,9 @@ function processSnippetElement($: CheerioAPI, ele: Node) {
 			let body = match[1].trim();
 			match = body.match(/\((\w.*?)\)/)
 			if (match) {
-				const params = match[1].split(",").map(val => {
+				const params = match[1].split(",").map((val, index) => {
 					val = val.trim();
-					return /^[a-zA-Z]+/.test(val) ? "$" + val : val;
+					return /^[a-zA-Z]+/.test(val) ? (`\${${index + 1}:${val}}`) : val;
 				});
 				body = body.replace(/\(\w.*?\)/, "(" + params.join(", ") + ")");
 			}

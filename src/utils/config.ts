@@ -16,7 +16,7 @@ export const hintDataDir = resolve(projectDir, 'hint_data');
 export const manifestDir = resolve(projectDir, 'assets/manifest');
 export const detailsDir = resolve(projectDir, 'assets/details');
 export const snippetDir = resolve(projectDir, 'assets/snippets');
-export const mimeTypeDir = resolve(projectDir, 'assets/mimetypes');
+export const mediaTypeDir = resolve(projectDir, 'assets/mediatypes');
 
 export const docsTemplatesDir = resolve(__dirname, '../extension/documents/templates');
 export const docsTemplateTarget = resolve(docsTemplatesDir, 'index.ts');
@@ -29,7 +29,7 @@ export const syntaxURLs = {
 	original: 'https://raw.githubusercontent.com/shanoor/vscode-nginx/master/syntaxes/nginx.tmLanguage',
 	sublime: 'https://raw.githubusercontent.com/brandonwamboldt/sublime-nginx/master/Syntaxes/nginx.tmLanguage',
 }
-export const mimeTypesURL = 'https://www.iana.org/assignments/media-types/media-types.xhtml'
+export const mediaTypesURL = 'https://www.iana.org/assignments/media-types/media-types.xhtml'
 
 export const nginxDocsBaseURL = 'https://nginx.org/en/docs/';
 export const nginxLuaDocsBaseURL = 'https://github.com/openresty/lua-nginx-module/blob/master/README.markdown';
@@ -59,7 +59,7 @@ export const manifestFiles = {
 }
 export const detailsFile = (moduleName: string) =>
 	resolve(detailsDir, `${moduleName}.json`);
-export const mimeTypeFile = (prefix: string) =>
-	resolve(mimeTypeDir, `${prefix}.json`);
+export const mediaTypeFile = (prefix: string) =>
+	resolve(mediaTypeDir, `${prefix}.json`);
 
 export const luaSnippetFile = resolve(snippetDir, 'lua.json');

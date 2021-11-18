@@ -12,6 +12,7 @@ function main() {
 
 	const targetFile = createWriteStream(docsTemplateTarget);
 	targetFile.write([
+		'/* eslint-disable */',
 		'///',
 		"/// DON'T edit this file manually, it is generated from util scripts",
 		'///',

@@ -1,3 +1,4 @@
+/* eslint-disable */
 ///
 /// DON'T edit this file manually, it is generated from util scripts
 ///
@@ -20,14 +21,14 @@ export type TemplateDirectiveItemInput = {
 	module: any;
 	link: any;
 	table: any;
-	doc: any;
+	html: any;
 };
 export function templateDirectiveItem(input: TemplateDirectiveItemInput) {
 	return "<h2><small>(" + input.index +
 		")</small> " + input.module +
 		"</h2>\n<a href=\"" + input.link +
 		"\">Open in browser</a>\n<div class=\"directive\">\n\t" + input.table +
-		"\n</div>\n" + input.doc +
+		"\n</div>\n" + input.html +
 		"\n<hr/>\n<br/>\n"
 }
 
