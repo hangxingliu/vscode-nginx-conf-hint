@@ -1,11 +1,15 @@
 import { names } from "./match-names";
 import { includeRepo } from "./repository";
+import { ManifestItemType } from "../extension/hint-data/enum";
 import type { SyntaxPattern } from "./types";
-import type { DirectiveItem } from "../extension/types";
 
 const commonDirectiveNames = new Set<string>();
-const _directives: DirectiveItem[] = require('../../hint_data/directives.json');
-_directives.forEach(it => commonDirectiveNames.add(it.name));
+const _directives: Array<unknown[]> = [
+	...require('../../assets/manifest/core.json'),
+	...require('../../assets/manifest/js.json'),
+	...require('../../assets/manifest/lua.json'),
+]
+_directives.forEach(it => it[0] === ManifestItemType.Directive && commonDirectiveNames.add(String(it[1])));
 
 const blockDirectives = [
 	'events',
@@ -22,12 +26,13 @@ const blockDirectives = [
 ];
 blockDirectives.forEach(it => commonDirectiveNames.delete(it));
 
-
 const noBodyDirectives = _directives.filter(it => {
-	if (it.syntax.length !== 1) return false;
-	const syntax = it.syntax[0].replace(/\s+/g, '')
-	return syntax === (it.name + ';')
-}).map(it => it.name);
+	if (it[0] !== ManifestItemType.Directive) return false;
+	const syntax = it[2] as string[];
+	if (syntax.length !== 1) return false;
+	const s = syntax[0].replace(/\s+/g, '')
+	return s === "";
+}).map(it => String(it[1]));
 noBodyDirectives.forEach(it => commonDirectiveNames.delete(it));
 
 
@@ -36,7 +41,6 @@ const skipDirectives = [
 	'rewrite',
 ];
 skipDirectives.forEach(it => commonDirectiveNames.delete(it));
-
 
 const directivesGroupBy = Array.from(groupByPrefix(Array.from(commonDirectiveNames)).entries());
 
@@ -248,11 +252,11 @@ export const syntaxPatterns: Array<SyntaxPattern | SyntaxPattern[]> = [
 		patterns: [{ include: includeRepo.values }],
 	},
 	{
-		comment: 'MIME types to file extension',
-		begin: /\b([a-z]+\/[a-z0-9\-\.\+]+)\b/,
+		comment: 'media types to file extension',
+		begin: /\b([a-z]+\/[A-Za-z0-9\-\.\+]+)\b/,
 		end: /(;)/,
 		beginCaptures: {
-			'1': names.string.mimeType,
+			'1': names.string.mediaType,
 		},
 		endCaptures: {
 			'1': names.terminator,

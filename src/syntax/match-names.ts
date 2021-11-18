@@ -26,7 +26,7 @@ export const names = {
 		doubleQuoted: 'string.quoted.double.nginx',
 		singleQuoted: 'string.quoted.single.nginx',
 		escaped: 'constant.character.escape.nginx',
-		mimeType: 'constant.other.mimetype.nginx'
+		mediaType: 'constant.other.mediatype.nginx'
 	},
 
 	meta: {
