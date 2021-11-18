@@ -13,7 +13,7 @@ import { initHintDataDetails } from "./hint-data/details";
 
 export function activate(context: ExtensionContext) {
 	const startedAt = Date.now();
-	console.log('nginx-conf-hint activating...');
+	console.log('[web] nginx-conf-hint activating...');
 	logger.init(context);
 
 	initHintDataManifest();

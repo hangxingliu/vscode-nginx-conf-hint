@@ -36,8 +36,14 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Hint Data Getter",
-			"program": "${workspaceFolder}/utils/hint_data_getter.js"
+			"name": "Launch 'test/unit-testing/syntax1.ts'",
+			"sourceMaps": true,
+			"runtimeExecutable": "node",
+			"runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
+			"args": ["${workspaceFolder}/test/unit-testing/syntax1.ts"],
+			"cwd": "${workspaceRoot}",
+			"console": "integratedTerminal",
+			"preLaunchTask": "npm: build:desktop-ext"
 		}
 	]
 }
