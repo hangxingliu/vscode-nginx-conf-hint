@@ -16,6 +16,8 @@ jobs:
         run: |
           yarn install &&
           yarn run build:utils &&
+          yarn run build:syntax &&
+          yarn run build:web-ext &&
           yarn run build:desktop-ext
       - name: Build packages
         run: |

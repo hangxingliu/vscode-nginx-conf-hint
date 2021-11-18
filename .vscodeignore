@@ -3,6 +3,7 @@
 node_modules
 
 # vscode test web
+.vscode
 .vscode-test-web
 
 # github files
@@ -11,10 +12,23 @@ node_modules
 # artifacts
 artifacts/npm
 artifacts/vscode
+artifacts/web-ext/*.map
+
+# documents
+docs
 
 # scripts and utils
 scripts
-utils
+src/extension/**/*.ts
+src/extension/**/*.js.map
+src/syntax/references
+src/syntax/*.ts
+src/syntax/*.js
+src/utils
+test
+
+# typescript files
+tsconfig.*.json
 
 # macos files
 .DS_Store
@@ -29,35 +43,14 @@ utils
 *.vsix
 *.log
 
-# ignore mark file about new syntax tip
-extension/new_syntax_tip_has_been_shown
-
-
-# unit test files
-test/**
-
-
-# vscode workspace configurations
-.vscode/**
-
-
-# example files
-example_files/**
-
 # cache files
 cache
 cache-*
 
-
 # eslint
-.eslintrc.json
+.eslint*
 
 *.d.ts
 
 # screenshot image (because link of screenshot in README is under github)
 images/screenshots.gif
-
-
-# vscode typing files
-vscode.d.ts
-vscode.proposed.d.ts

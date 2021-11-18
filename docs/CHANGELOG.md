@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 0.3.0 (@todo)
+
+@todo
+
 ### 0.2.0 (2021-11-14)
 
 1. update syntax and hint data.

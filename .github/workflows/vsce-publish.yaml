@@ -10,8 +10,9 @@ jobs:
       - name: Install and build
         run: |
           yarn install &&
+          yarn run build:web-ext &&
           yarn run build:desktop-ext &&
-          yarn add vsce
+          yarn add vsce --dev
       - name: Publish VS Code extension
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
