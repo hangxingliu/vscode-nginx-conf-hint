@@ -15,6 +15,11 @@ export type NginxConfCursorContext = {
 	lua?: boolean;
 };
 
+export type NginxConfDefinitionInfo = {
+	location: { name: string; begin: number; end: number; isDef?: boolean }[];
+	var: { name: string; begin: number; end: number }[];
+};
+
 export function isLuaContext(contextName: string) {
 	if (contextName.endsWith("_by_lua") || contextName.endsWith("_by_lua_block")) return true;
 }
@@ -186,7 +191,7 @@ export function getNginxConfCursorContext(confBeforeCursor: string) {
 					}
 					// still in lua block
 					result.lua = true;
-					if(lua.c) result.c = true;
+					if (lua.c) result.c = true;
 					if (lua.s) result.s = true;
 				}
 				result.list = [];
@@ -218,4 +223,122 @@ export function getNginxConfCursorContext(confBeforeCursor: string) {
 		}
 	}
 	return result;
+}
+
+export function getNginxConfDefinitionInfo(text: string) {
+	const info: NginxConfDefinitionInfo = {
+		location: [],
+		var: [],
+	};
+
+	let list: string[] = [];
+	let index: number[] = [];
+	let pending = "";
+	let pendingFrom = -1;
+	let inBraceVar = false;
+	const savePending = () => {
+		list.push(pending);
+		index.push(pendingFrom);
+		if (list.length > 1 && pending[0] === "@") {
+			const isDef = list.length === 2 && list[0] === "location";
+			info.location.push({
+				name: pending,
+				begin: pendingFrom,
+				end: pendingFrom + pending.length,
+				isDef,
+			});
+		}
+		pending = "";
+		pendingFrom = -1;
+	};
+
+	for (let i = 0; i < text.length; i++) {
+		const ch = text[i];
+		switch (ch) {
+			case " ":
+			case "\n":
+			case "\r":
+			case "\t":
+			case "\v":
+				if (pending) savePending();
+				break;
+			case "\\":
+				pending += ch;
+				if (pendingFrom < 0) pendingFrom = i;
+				if (i < text.length - 1) pending += text[++i];
+				break;
+			case "#":
+				i = text.indexOf("\n", i + 1);
+				if (i < 0) i = text.length + 1;
+				break;
+			case "$": {
+				pending += ch;
+				if (pendingFrom < 0) pendingFrom = i;
+				if (text[i + 1] === "{") {
+					pending += text[++i];
+					inBraceVar = true;
+				}
+				break;
+			}
+			case "'":
+			case '"': {
+				const startedAt = i + 1;
+				while (i >= 0 && i < text.length) {
+					i = text.indexOf(ch, i + 1);
+					if (i < 0) {
+						i = text.length + 1;
+						break;
+					}
+					if (text[i - 1] === "\\") {
+						if (text[i - 2] !== "\\") continue;
+					}
+					break;
+				}
+				pending += text.slice(startedAt, i);
+				if (pendingFrom < 0) pendingFrom = startedAt - 1;
+				savePending();
+				break;
+			}
+			case "}":
+				if (inBraceVar) {
+					pending += ch;
+					inBraceVar = false;
+				} else {
+					list = [];
+					index = [];
+					pending = "";
+					pendingFrom = -1;
+				}
+				break;
+			case ";":
+				savePending();
+				list = [];
+				index = [];
+				break;
+			case "{": {
+				const contextName = list[0] || pending;
+				if (isLuaContext(contextName)) {
+					const lua = handleLuaBlockInNginx(text, i + 1);
+					i = lua.i;
+					if (lua.out) {
+						// same as '}'
+						list = [];
+						index = [];
+						pending = "";
+						pendingFrom = -1;
+						break;
+					}
+				}
+				list = [];
+				index = [];
+				pending = "";
+				pendingFrom = -1;
+				break;
+			}
+			default:
+				pending += ch;
+				if (pendingFrom < 0) pendingFrom = i;
+		}
+	} // end of for statement
+	return info;
 }
