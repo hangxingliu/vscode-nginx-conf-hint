@@ -1,8 +1,27 @@
 # CHANGELOG
 
-### 0.3.0 (@todo)
+### 0.3.0 (2021-11-20)
 
-@todo
+:mega: There are a lot of updates in this version:
+
+1. The syntax of the Nginx configuration file is updated completely
+	- Because the syntax from sublime extension and shanoor's repo are long time no updates. So I write a syntax generator for better highlight
+	- New syntax is generated from codes. You can find them in [generate-tmLanguage.ts](../src/syntax/generate-tmLanguage.ts)
+	- New syntax supports embedded Lua block
+	- New syntax supports the directive statement in multiple lines
+	- And extension configuration `nginx-conf-hint.syntax` is removed
+2. Optimize hint data loader and document loader. They use less memory now and load data on demand
+3. This extension can run as a web extension. So you can use this extension on <https://vscode.dev/> now
+4. The coverage of auto-completion is more, and auto-completion is smarter
+	1. Auto completion is based on the context and grammar of the configuration now
+	2. Fix some wrong auto-completion items
+	3. Autocomplete named location
+	4. Autocomplete directive's named argument
+	5. Autocomplete media types 
+5. Add editor definition support for `location` directive
+6. Add new extension configuration `nginx-conf-hint.externalModules` for controlling enabled of external modules hint data
+7. The source code is rewritten by using Typescript
+
 
 ### 0.2.0 (2021-11-14)
 

@@ -5,7 +5,6 @@ export class ExtensionConfiguration {
 
 	//#region vscode configurations
 	enableStrictCompletion = true;
-	enableCodeLens = false;
 	enableFormatAlign = false;
 	externalModules: ExternalModuleName[] = [];
 	tabSize = 4;
@@ -18,7 +17,6 @@ export class ExtensionConfiguration {
 		const config = workspace.getConfiguration('nginx-conf-hint');
 
 		this.enableStrictCompletion = config.get('enableStrictCompletion', true);
-		this.enableCodeLens = config.get('enableCodeLens', false);
 		this.enableFormatAlign = !!config.get('format', { align: false }).align;
 		this.externalModules = config.get('externalModules', []);
 		this.tabSize = workspace.getConfiguration("editor").get("tabSize", 4);

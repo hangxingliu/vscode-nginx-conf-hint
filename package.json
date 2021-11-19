@@ -1,7 +1,7 @@
 {
 	"name": "vscode-nginx-conf-hint",
 	"displayName": "nginx.conf hint",
-	"description": "nginx.conf syntax, hint and autocompletion",
+	"description": "Nginx configuration helper for Visual Studio Code with many features including syntax highlight, auto-complete, in-editor documents, embedded Lua block, and more",
 	"version": "0.3.0",
 	"license": "GPL-3.0",
 	"icon": "images/icon.png",
@@ -11,14 +11,14 @@
 	},
 	"categories": [
 		"Snippets",
+		"Formatters",
 		"Programming Languages"
 	],
 	"keywords": [
-		"NGINX",
-		"nginx",
-		"hint",
-		"auto-completion",
-		"configuration"
+		"Nginx",
+		"OpenResty",
+		"Configuration",
+		"Auto-completion"
 	],
 	"publisher": "hangxingliu",
 	"author": "hangxingliu",
@@ -113,24 +113,22 @@
 		],
 		"configuration": [
 			{
-				"title": "Nginx config file hint",
+				"title": "Nginx configuration",
 				"properties": {
 					"nginx-conf-hint.enableStrictCompletion": {
+						"title": "Strict Completion",
 						"type": "boolean",
 						"default": true,
 						"description": "only complete directives related to the block where cursor is located"
 					},
 					"nginx-conf-hint.format.align": {
+						"title": "Alignment",
 						"type": "boolean",
 						"default": false,
 						"description": "Set whether to perform alignment formatting"
 					},
-					"nginx-conf-hint.enableCodeLens": {
-						"type": "boolean",
-						"default": false,
-						"description": "Enable code lens for describe configuration"
-					},
 					"nginx-conf-hint.externalModules": {
+						"title": "Nginx external modules",
 						"type": "array",
 						"items": {
 							"enum": [
@@ -139,7 +137,7 @@
 							]
 						},
 						"default": [],
-						"description": "Enabled external modules"
+						"description": "Enabled hint data for external modules (lua,js)"
 					}
 				}
 			}
