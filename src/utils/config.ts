@@ -6,6 +6,8 @@ export const enum ManifestItemType {
 	Variable = 3,
 	DirectiveDetails = 4,
 	VariableDetails = 5,
+	HttpReqHeader = 6,
+	HttpResHeader = 7,
 }
 
 export const cacheDir = resolve(__dirname, 'cache')
@@ -52,10 +54,20 @@ export const nginxLuaModuleURLs = [
 	// { name: 'ngx_fastcgi', url: 'http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html' },
 ]
 
+export const httpHeadersWikiURLs = {
+	en: 'https://en.wikipedia.org/wiki/List_of_HTTP_header_fields',
+	es: 'https://es.wikipedia.org/wiki/Anexo:Cabeceras_HTTP',
+	'zh-Hans': 'https://zh.wikipedia.org/zh-cn/HTTP%E5%A4%B4%E5%AD%97%E6%AE%B5',
+	'zh-Hant-HK': 'https://zh.wikipedia.org/zh-hk/HTTP%E5%A4%B4%E5%AD%97%E6%AE%B5',
+	'zh-Hant-TW': 'https://zh.wikipedia.org/zh-tw/HTTP%E5%A4%B4%E5%AD%97%E6%AE%B5',
+}
+
 export const manifestFiles = {
 	core: resolve(manifestDir, 'core.json'),
 	js: resolve(manifestDir, 'js.json'),
 	lua: resolve(manifestDir, 'lua.json'),
+	httpHeaders: (language: string) =>
+		resolve(manifestDir, `http_headers.${language}.json`),
 }
 export const detailsFile = (moduleName: string) =>
 	resolve(detailsDir, `${moduleName}.json`);
