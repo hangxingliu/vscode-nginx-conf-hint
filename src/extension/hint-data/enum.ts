@@ -4,4 +4,6 @@ export const enum ManifestItemType {
 	Variable = 3,
 	DirectiveDetails = 4,
 	VariableDetails = 5,
+	HttpReqHeader = 6,
+	HttpResHeader = 7,
 }

@@ -1,7 +1,24 @@
 export type ExternalModuleName = 'js' | 'lua';
 
+export const enum HttpHeaderType {
+	none = 0,
+	request = 1, // 01
+	response = 2, // 10
+	both = 3, // 11
+}
+
+export type HttpHeaderInfo = {
+	name: string;
+	lowercase: string;
+	type: HttpHeaderType;
+	example: string[];
+	markdown: string;
+	standard?: string;
+}
+
 export type NginxDirective = {
 	name: string;
+	filters: string[];
 	syntax: string[],
 	def: string;
 	contexts: string[],
