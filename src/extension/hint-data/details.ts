@@ -1,5 +1,6 @@
-import { env, ExtensionContext, UIKind, Uri, workspace, } from "vscode";
+import { env, ExtensionContext, UIKind, Uri } from "vscode";
 import { logger } from "../logger";
+import { loadHintDataAsync } from "./async-loader";
 import { ManifestItemType } from "./enum";
 import { NginxDirectiveDetails } from "./types";
 
@@ -25,15 +26,8 @@ export async function loadModuleDetails(moduleName: string) {
 		return null;
 	}
 	const moduleUri = Uri.joinPath(detailsUri, `${moduleName}.json`);
-	let items: unknown[][];
-	try {
-		const data = await workspace.fs.readFile(moduleUri);
-		const json = new TextDecoder().decode(data);
-		items = JSON.parse(json);
-		if (!Array.isArray(items))
-			throw new Error(`Invalid module details: ${json.slice(0, 128)}...`);
-	} catch (error) {
-		logger.error(`load module "${moduleName}" failed: ${error.message}`, error);
+	const items = await loadHintDataAsync(moduleUri);
+	if (!items) {
 		loadings.delete(moduleName);
 		return null;
 	}
