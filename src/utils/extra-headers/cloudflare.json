@@ -1,0 +1,43 @@
+{
+	"url": "https://developers.cloudflare.com/fundamentals/get-started/http-request-headers",
+	"headers": [
+		{
+			"name": "CF-Connecting-IP",
+			"markdown": [
+				"`CF-Connecting-IP` provides the client IP address, connecting to Cloudflare, to the origin web server. This header will only be sent on the traffic from Cloudflare's edge to your origin webserver."
+			]
+		},
+		{
+			"name": "True-Client-IP",
+			"markdown": [
+				"(Enterprise plan only)",
+				"`True-Client-IP` provides the original client IP address to the origin web server. `True-Client-IP` is only available on our Enterprise plan. In the example below, `203.0.113.1` is the original visitor IP address. For example: `True-Client-IP`: `203.0.113.1`",
+				"There is no difference between the `True-Client-IP` and `CF-Connecting-IP` headers besides the name of the header. Some Enterprise customers with legacy devices need `True-Client-IP` to avoid updating firewalls or load-balancers to read a custom header name.",
+				"> If you are using Cloudflare in a stacked CDN and authenticating HTTP requests based on the IP address value in the `True-Client-IP` header, you must [enable True-Client-IP](https://support.cloudflare.com/hc/articles/206776727#h_4bf7CC7xR9dZJjR4y6wwcG). If you do not enable this feature, the `True-Client-IP` header can be spoofed to any value. Alternatively, if you do not want to receive the `True-Client-IP` header, use a [Transform Rule](https://developers.cloudflare.com/rules/transform) to remove this HTTP request header."
+			]
+		},
+		{
+			"name": "CF-RAY",
+			"markdown": [
+				"The `CF-ray` header is a hashed value that encodes information about the data center and the visitor’s request. For example: `CF-RAY: 230b030023ae2822-SJC`.",
+				"Add the [CF-Ray](https://support.cloudflare.com/hc/articles/203118044#h_f7a7396f-ec41-4c52-abf5-a110cadaca7c) header to your origin web server logs to match requests proxied to Cloudflare to requests in your server logs. Enterprise customers can also see all requests via [Cloudflare Logs](https://support.cloudflare.com/hc/en-us/articles/216672448-Enterprise-Log-Share-REST-API)."
+			]
+		},
+		{
+			"name": "CF-IPCountry",
+			"markdown": [
+				"`CF-IPCountry` contains a two character country code of the originating visitor’s country. XX is used for unknown country information. This header is added to requests by enabling [Cloudflare IP Geolocation](https://support.cloudflare.com/hc/en-us/articles/200168236-What-does-Cloudflare-IP-Geolocation-do-) in the dashboard. For example: `CF-IPCountry: US`."
+			]
+		},
+		{
+			"name": "CF-Visitor",
+			"markdown": [
+				"Currently, this header is a JSON object, containing only one key called “scheme”. The header will be either HTTP or HTTPS, and it is only relevant if you need to enable Flexible SSL in your Cloudflare settings. For example: `CF-Visitor: { \"scheme\":\"https\"}`."
+			]
+		},
+		{
+			"name": "CDN-Loop",
+			"markdown": "`CDN-Loop` allows Cloudflare to specify how many times a request can enter Cloudflare's network before it is blocked as a looping request. For example: `CDN-Loop: cloudflare`"
+		}
+	]
+}

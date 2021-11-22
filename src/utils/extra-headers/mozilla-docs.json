@@ -1,0 +1,20 @@
+{
+	"url": "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers",
+	"headers": [
+		{
+			"name": "WWW-Authenticate",
+			"en": [
+				"The HTTP `WWW-Authenticate` response header defines the [HTTP authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) methods (\"challenges\") that might be used to gain access to a specific resource."
+			],
+			"zh-Hans": [
+				"HTTP `WWW-Authenticate` 响应头定义了使用何种验证方式去获取对资源的连接。",
+				"`WWW-Authenticate` header通常会和一个 [`401`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/401) `Unauthorized` 的响应一同被发送。"
+			],
+			"es": [
+				"La cabezera de la respuesta HTTP `WWW-Authenticate` define el método de autentificación que debe ser utilizado para acceder al recurso solicitado.",
+				"La cabezera `WWW-Authenticate` es enviada junto al estado  [`401`](https://developer.mozilla.org/es/docs/Web/HTTP/Status/401) `Unauthorized` en la respuesta."
+			],
+			"url": "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/WWW-Authenticate"
+		}
+	]
+}
