@@ -1,0 +1,11 @@
+{
+	"ext.command.goto-nginx-document": "查看 Nginx 配置文档",
+	"ext.command.goto-nginx-online-document": "查看 Nginx 在线配置文档",
+	"ext.config.title": "Nginx 配置文件",
+	"ext.config.enable-strict-completion.title": "严格补全模式",
+	"ext.config.enable-strict-completion.description": "如果为 `true`, 则仅基于当前的上下文进行配置指令的补全",
+	"ext.config.align.title": "格式化:对齐",
+	"ext.config.align.description": "设置在格式化时是否进行对齐操作",
+	"ext.config.extenal-modules.title": "Nginx 外部模块",
+	"ext.config.extenal-modules.description": "是否启用相关外部模块的代码补全 (lua,js)"
+}

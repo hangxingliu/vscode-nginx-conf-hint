@@ -1,0 +1,11 @@
+{
+	"ext.command.goto-nginx-document": "Goto Nginx Document",
+	"ext.command.goto-nginx-online-document": "Goto Online Nginx Document",
+	"ext.config.title": "Nginx Configuration",
+	"ext.config.enable-strict-completion.title": "Strict Completion",
+	"ext.config.enable-strict-completion.description": "If `true`, only auto-complete directives that can be used in current context",
+	"ext.config.align.title": "Alignment",
+	"ext.config.align.description": "Set whether to perform alignment formatting",
+	"ext.config.extenal-modules.title": "Nginx External Modules",
+	"ext.config.extenal-modules.description": "Enabled hint data for external modules (lua,js)"
+}

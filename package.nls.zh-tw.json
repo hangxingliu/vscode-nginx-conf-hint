@@ -1,0 +1,11 @@
+{
+	"ext.command.goto-nginx-document": "查看 Nginx 設定參考",
+	"ext.command.goto-nginx-online-document": "查看 Nginx 設定的線上參考",
+	"ext.config.title": "Nginx 設定檔",
+	"ext.config.enable-strict-completion.title": "嚴格補全模式",
+	"ext.config.enable-strict-completion.description": "如果為 `true`, 則僅基於當前的上下文進行指令的補全",
+	"ext.config.align.title": "格式器:對齊",
+	"ext.config.align.description": "設定格式器是否啟用對齊功能",
+	"ext.config.extenal-modules.title": "Nginx 外部模組",
+	"ext.config.extenal-modules.description": "是否啟用相關外部模組的程式碼的建議 (lua,js)"
+}

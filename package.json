@@ -108,27 +108,29 @@
 		"commands": [
 			{
 				"command": "nginx-conf-hint.showDocument",
-				"title": "Goto Nginx Document"
+				"title": "%ext.command.goto-nginx-document%",
+				"shortTitle": "NginxDocs",
+				"category": "Nginx"
 			}
 		],
 		"configuration": [
 			{
-				"title": "Nginx configuration",
+				"title": "%ext.config.title%",
 				"properties": {
 					"nginx-conf-hint.enableStrictCompletion": {
-						"title": "Strict Completion",
+						"title": "%ext.config.enable-strict-completion.title%",
 						"type": "boolean",
 						"default": true,
-						"description": "only complete directives related to the block where cursor is located"
+						"description": "%ext.config.enable-strict-completion.description%"
 					},
 					"nginx-conf-hint.format.align": {
-						"title": "Alignment",
+						"title": "%ext.config.align.title%",
 						"type": "boolean",
 						"default": false,
-						"description": "Set whether to perform alignment formatting"
+						"description": "%ext.config.align.description%"
 					},
 					"nginx-conf-hint.externalModules": {
-						"title": "Nginx external modules",
+						"title": "%ext.config.extenal-modules.title%",
 						"type": "array",
 						"items": {
 							"enum": [
@@ -137,7 +139,7 @@
 							]
 						},
 						"default": [],
-						"description": "Enabled hint data for external modules (lua,js)"
+						"description": "%ext.config.extenal-modules.description%"
 					}
 				}
 			}
