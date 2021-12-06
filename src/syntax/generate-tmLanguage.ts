@@ -6,7 +6,7 @@ import { syntax } from "./syntax";
 import type { SyntaxPattern } from "./types";
 
 const tab = '  ';
-const escapeMap: any = {
+const escapeMap = {
 	'&': '&amp;',
 	'<': '&lt;',
 	'>': '&gt;'
