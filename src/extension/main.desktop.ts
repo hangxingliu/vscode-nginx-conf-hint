@@ -5,7 +5,7 @@ import { NginxDocumentLinkProvider } from "./providers/link";
 import { NginxDefinitionProvider } from "./providers/definition";
 import { NginxDocumentFormatProvider } from "./providers/formatter";
 import { NginxHoverProvider } from "./providers/hover";
-import { NginxSignatureProvider } from "./providers/singature";
+import { NginxSignatureProvider } from "./providers/signature";
 import { NginxCommandProvider } from "./providers/command";
 import { logger } from "./logger";
 import { initHintDataManifest, initI18nManifest } from "./hint-data/manifest";
