@@ -14,18 +14,18 @@ import {
 	CompletionItemKind,
 	CompletionList,
 } from "vscode";
-import { getDirectivesManifest, getVariablesManifest } from "../../hint-data/manifest";
-import { NginxDirective } from "../../hint-data/types";
+import { getVariablesManifest } from "../../hint-data/manifest";
 import { logger } from "../../logger";
-import { getNginxConfCursorContext, getNginxConfDefinitionInfo } from "../../parser";
-import { getDirectiveCompletionItemBase, getVariableCompletionItemBase, resolveDirectiveCompletionItem } from "./item";
+import { getNginxConfCursorContext } from "../../parser";
+import { getVariableCompletionItemBase, resolveDirectiveCompletionItem } from "./item";
 import { extensionConfig } from "../config";
 import { DOCUMENT_SELECTOR } from "../utils";
 import { mediaTypePrefixes, mediaTypePrefixSet, mediaTypes, MediaTypeTuple } from "../../hint-data/media-types";
 import { _completePath, _doesDirectiveNeedCompletePath } from "./path";
-import { getDirectiveLocationCItem } from "./directive-location";
 import { _completeNameArgs } from "./named-arguments";
 import { _completeNameLocation, _doesDirectiveCanUseNamedLocation } from "./named-location";
+import { _completeHttpHeader, _doesDirectiveNeedHttpHeader } from "./http-header";
+import { _completeDirectives } from "./directives";
 
 const zeroPos = new Position(0, 0);
 
@@ -33,7 +33,7 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 	mediaTypePrefixItems: CompletionItem[] = [];
 
 	constructor(disposables: Disposable[]) {
-		disposables.push(languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, this, "$", "/", " ",'@'));
+		disposables.push(languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, this, "$", "/", " ", "@", "-"));
 		this.mediaTypePrefixItems = mediaTypePrefixes.map((it) => {
 			const item = new CompletionItem(`${it}/`, CompletionItemKind.Value);
 			item.detail = "Media Type";
@@ -72,50 +72,12 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 
 		// in comment
 		if (cursorContext.c) return null;
-		const { n, v, list, context: nginxContext } = cursorContext;
+		const { n, v, list } = cursorContext;
 
 		// typing directive
 		if (list.length === (n ? 0 : 1)) {
-			if (nginxContext === "types") return this.completeMediaType(list[0] || "");
-
-			// Empty preifx
-			if (!list[0]) {
-				return new CompletionList(getDirectivesManifest().onEmpty.map(getDirectiveCompletionItemBase), true);
-			}
-
-			const inputPrefix = list[0];
-			const matchedDirectives: NginxDirective[] = [];
-			const addDirectives = (directives: NginxDirective[]) => {
-				if (extensionConfig.enableStrictCompletion && nginxContext) {
-					directives.forEach((it) => {
-						if (it.contexts.indexOf(nginxContext) == -1 && it.contexts[0] != "any") return;
-						if (it.name.startsWith(inputPrefix)) matchedDirectives.push(it);
-					});
-				} else {
-					directives.forEach((it) => {
-						if (it.name.startsWith(inputPrefix)) matchedDirectives.push(it);
-					});
-				}
-			}; // end of addDirectives
-
-			const manifest = getDirectivesManifest();
-			addDirectives(manifest.core);
-			if (extensionConfig.hasJsModule) addDirectives(manifest.js);
-			if (extensionConfig.hasLuaModule) addDirectives(manifest.lua);
-
-			const result: CompletionItem[] = [];
-			for (let i = 0; i < matchedDirectives.length; i++) {
-				const directive = matchedDirectives[i];
-				switch (directive.name) {
-					case "location":
-						result.push(...getDirectiveLocationCItem(directive));
-						break;
-					default:
-						result.push(getDirectiveCompletionItemBase(directive));
-						break;
-				}
-			}
-			return result;
+			const result = _completeDirectives(cursorContext);
+			if (result) return result;
 		}
 
 		const currentInput = n || list.length === 0 ? "" : list[list.length - 1];
@@ -134,11 +96,16 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 			return list;
 		}
 
+		const completePos = list.length - (n ? 0 : 1);
+		const completeHeaderPos = _doesDirectiveNeedHttpHeader(list[0]);
+		if (completeHeaderPos === true || completePos === completeHeaderPos)
+			return _completeHttpHeader(document, position, currentInput);
+
 		// other args
 		if (n && !list[0].startsWith("$")) return _completeNameArgs(list[0]);
 
 		// use named location
-		if (currentInput[0] === '@' && _doesDirectiveCanUseNamedLocation(list[0]))
+		if (currentInput[0] === "@" && _doesDirectiveCanUseNamedLocation(list[0]))
 			return _completeNameLocation(document, currentInput);
 	}
 

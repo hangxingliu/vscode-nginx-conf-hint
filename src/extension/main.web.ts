@@ -8,7 +8,7 @@ import { NginxHoverProvider } from "./providers/hover";
 import { NginxSignatureProvider } from "./providers/singature";
 import { NginxCommandProvider } from "./providers/command";
 import { logger } from "./logger";
-import { initHintDataManifest } from "./hint-data/manifest";
+import { initHintDataManifest, initI18nManifest } from "./hint-data/manifest";
 import { initHintDataDetails } from "./hint-data/details";
 
 export function activate(context: ExtensionContext) {
@@ -17,6 +17,7 @@ export function activate(context: ExtensionContext) {
 	logger.init(context);
 
 	initHintDataManifest();
+	initI18nManifest(context);
 	initHintDataDetails(context);
 
 	const subscriptions = context.subscriptions;
