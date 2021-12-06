@@ -156,8 +156,9 @@ export async function initI18nManifest(context: ExtensionContext) {
 	if (language === 'en') return;
 
 	const manifestUri = Uri.joinPath(context.extensionUri, 'assets', 'manifest');
-	const httpHeadersFile = Uri.joinPath(manifestUri, `http_headers.${language}.json`);
 
+	//#region http headers
+	const httpHeadersFile = Uri.joinPath(manifestUri, `http_headers.${language}.json`);
 	const items = await loadHintDataAsync(httpHeadersFile);
 	const namesToMarkdown = new Map<string, string>();
 	if (items) {
@@ -174,5 +175,6 @@ export async function initI18nManifest(context: ExtensionContext) {
 				header.markdown = markdown + '\n\n' + header.markdown;
 		}
 	}
+	//#endregion http headers
 
 }

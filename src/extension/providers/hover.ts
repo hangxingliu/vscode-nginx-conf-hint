@@ -9,7 +9,7 @@ import {
 	MarkdownString,
 	workspace,
 } from "vscode";
-import { findManifestByName } from "../hint-data/manifest";
+import { findManifestByName, getHttpHeaders } from "../hint-data/manifest";
 import { getModuleDetailsQuick } from "../hint-data/details";
 import { NginxDirective, NginxVariable } from "../hint-data/types";
 import { getNginxConfCursorContext } from "../parser";
@@ -53,7 +53,7 @@ export class NginxHoverProvider implements HoverProvider {
 		if (cache) return cache;
 
 		const beforeText = document.getText(new Range(zeroPos, position));
-		const mtx = document.getText(new Range(position, new Position(position.line + 1, 0))).match(/^\w+/);
+		const mtx = document.getText(new Range(position, new Position(position.line + 1, 0))).match(/^[\w\-]+/);
 		const afterWord = mtx ? mtx[0] : "";
 		const { c, list, index, v, context } = getNginxConfCursorContext(beforeText + afterWord);
 		if (c) return null;
@@ -99,6 +99,19 @@ export class NginxHoverProvider implements HoverProvider {
 
 			const hover = [link, `**${variable.name}** ${variable.module}`, variable.desc];
 			return new Hover(hover);
+		}
+
+		if (list.length >= 1) {
+			const word = list[list.length - 1] || '';
+			const lcWord = word.toLowerCase();
+
+			// http header
+			const header = getHttpHeaders().find(it => it.lowercase === lcWord);
+			if (header) {
+				let part1 = `HTTP header **${header.name}**`;
+				if (header.standard) part1 += ` (${header.standard})`;
+				return new Hover([part1, header.markdown]);
+			}
 		}
 		return null;
 	}
