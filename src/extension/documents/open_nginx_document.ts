@@ -40,7 +40,7 @@ function generateDirectivesHTML(
 		return templateDirectiveItem(context);
 	});
 
-	let context = {
+	const context = {
 		name: directives[0].name,
 		items: items.join('\n'),
 		length: items.length == 1 ? '' : `[${items.length}]`

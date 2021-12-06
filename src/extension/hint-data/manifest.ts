@@ -79,7 +79,7 @@ export function initHintDataManifest() {
 						module: modName,
 						since: col[6] as string,
 						link: col[7] as string,
-						ci: col[8] as any,
+						ci: col[8] as unknown,
 						filters,
 						exmod,
 					};
@@ -96,7 +96,7 @@ export function initHintDataManifest() {
 						module: modName,
 						since: col[4] as string,
 						link: col[5] as string,
-						ci: col[6] as any,
+						ci: col[6] as unknown,
 					};
 					pushToMap(allVariables, item.name, item);
 					variables[storageType].push(item);

@@ -11,11 +11,11 @@ export class NginxCommandProvider {
 
 		disposables.push(commands.registerCommand('nginx-conf-hint.showDocument', () => {
 
-			let editor = window.activeTextEditor;
+			const editor = window.activeTextEditor;
 			if (!editor || editor.document.languageId != NGINX_LANGUAGE_ID)
 				return logger.fatal('Have not opened a nginx configuration document!');
 
-			let { document, selection } = editor;
+			const { document, selection } = editor;
 			let text = (selection.isEmpty
 				? document.getText(document.getWordRangeAtPosition(selection.start))
 				: document.getText(selection)).trim();

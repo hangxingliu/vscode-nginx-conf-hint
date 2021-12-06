@@ -25,7 +25,7 @@
 	"main": "./src/extension/main.desktop.js",
 	"browser": "./artifacts/web-ext/extension.js",
 	"scripts": {
-		"lint:eslint": "eslint . --ext .js,.ts",
+		"lint:eslint": "eslint --ext .js,.ts src test",
 		"build:desktop-ext": "tsc -p tsconfig.extension.json",
 		"dev:web-ext": "webpack",
 		"build:web-ext": "webpack --mode production --devtool hidden-source-map",

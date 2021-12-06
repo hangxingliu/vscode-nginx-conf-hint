@@ -5,7 +5,7 @@ import { ManifestItemType } from "./enum";
 import { NginxDirectiveDetails } from "./types";
 
 let detailsUri: Uri;
-let inBrowser = false;
+// let inBrowser = false;
 const preloadModules = [
 	'ngx_core_module',
 	'ngx_http_core_module',
@@ -63,7 +63,7 @@ export async function initHintDataDetails(context: ExtensionContext) {
 	detailsUri = Uri.joinPath(context.extensionUri, 'assets', 'details');
 	const logs: string[] = [`detailsUri=${detailsUri.toString()}`];
 	if (env.uiKind === UIKind.Web) {
-		inBrowser = true;
+		// inBrowser = true;
 		logs.push(`uiKind=Web`);
 		logs.push(`indexedDB=${typeof indexedDB}`);
 	}

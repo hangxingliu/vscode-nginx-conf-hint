@@ -31,7 +31,7 @@ export class NginxSignatureProvider implements SignatureHelpProvider {
 		context: SignatureHelpContext
 	) {
 		const beforeText = document.getText(new Range(zeroPos, position));
-		const { c, list, v, context: nginxContext } = getNginxConfCursorContext(beforeText);
+		const { c, list, context: nginxContext } = getNginxConfCursorContext(beforeText);
 		if (c) return null;
 
 		if (list.length > 0) {
