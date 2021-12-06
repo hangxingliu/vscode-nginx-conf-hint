@@ -1,4 +1,4 @@
-import { CompletionItem, CompletionItemKind, Position, TextDocument, Range } from "vscode";
+import { CompletionItem, CompletionItemKind, Position, TextDocument, Range, MarkdownString } from "vscode";
 import { getHttpHeaders } from "../../hint-data/manifest";
 
 const _directives = new Set<string>([
@@ -39,6 +39,9 @@ export function _completeHttpHeader(document: TextDocument, position: Position, 
 	const range = prefix ? new Range(position.translate(0, -prefix.length), position) : null;
 	return headers.map((it) => {
 		const ci = new CompletionItem(it.name, CompletionItemKind.Constant);
+		ci.detail = 'HTTP Header';
+		if(it.markdown)
+			ci.documentation = new MarkdownString(it.markdown);
 		if (range) {
 			// ci.insertText = it.name.slice(prefix.length);
 			ci.range = range;
