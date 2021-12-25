@@ -10,7 +10,7 @@ Many features in it include syntax highlight, auto-complete, in-editor documents
 ## Installation
 
 1. Click `Extension` button in left side of VSCode. (Shortcut: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> or <kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>)
-2. Search `nginx.conf hint`. Found this extension and click `Install` button.
+2. Search for `hangxingliu.vscode-nginx-conf-hint` and click the `Install` button.
 
 ## Screenshots
 
