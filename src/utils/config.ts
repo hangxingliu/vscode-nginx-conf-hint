@@ -55,6 +55,7 @@ export const nginxLuaModuleURLs = [
 ]
 
 export const httpHeadersWikiURLs = {
+	de: 'https://de.wikipedia.org/wiki/Liste_der_HTTP-Headerfelder',
 	en: 'https://en.wikipedia.org/wiki/List_of_HTTP_header_fields',
 	es: 'https://es.wikipedia.org/wiki/Anexo:Cabeceras_HTTP',
 	'zh-Hans': 'https://zh.wikipedia.org/zh-cn/HTTP%E5%A4%B4%E5%AD%97%E6%AE%B5',
