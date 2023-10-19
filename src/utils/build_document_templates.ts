@@ -19,8 +19,8 @@ function main() {
 		'',
 		'',
 	].join('\n'));
-	for (let i = 0; i < files.length; i++) {
-		const fileName = files[i].name;
+	for (const element of files) {
+		const fileName = element.name;
 		const absPath = resolvePath(docsTemplatesDir, fileName);
 
 		const html = readFileSync(absPath, 'utf8');
