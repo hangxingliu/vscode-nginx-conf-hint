@@ -5,7 +5,7 @@
 [6,"Accept-Language","Idiomas que se aceptan."],
 [6,"Accept-Datetime","Versión de la hora y fecha que se aceptan."],
 [6,"Authorization","Credenciales de autorización."],
-[6,"Cache-Control","Se controla las políticas de caché."],
+[6,"Caché-Control","Se controla las políticas de caché."],
 [6,"Connection","Se controla el tipo de conexión."],
 [6,"Cookie","Una cookie enviada previamente por el servidor usando Set-Cookie"],
 [6,"Content-Length","El tamaño del contenido de la petición en bytes"],
