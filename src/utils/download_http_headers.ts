@@ -26,6 +26,9 @@ async function main() {
 		const handleEnglishRow = ($row: Cheerio<Element>, type: ManifestItemType) => {
 			const $cols = $row.find("td");
 			if ($cols.length === 0) return;
+
+			$cols.eq(0).find("sup").remove()
+
 			const headerNames = normalizeHeaderName($cols.eq(0).text());
 			const description = getDescriptionMarkdown($cols.eq(1), baseUrl);
 			if (!description) print.warning(`header ${headerNames[0]} has no description`);
@@ -53,8 +56,8 @@ async function main() {
 		lengthShouldBeEqual("request fields h2", $reqH2, 1);
 		let $tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("request fields table", $tables, 2);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpReqHeader);
@@ -65,8 +68,8 @@ async function main() {
 		lengthShouldBeEqual("response fields h2", $resH2, 1);
 		$tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("response fields table", $tables, 2);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpResHeader);
@@ -97,8 +100,8 @@ async function main() {
 		lengthShouldBeEqual("request fields h2", $reqH2, 1);
 		let $tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("request fields table", $tables, 2);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpReqHeader);
@@ -109,8 +112,8 @@ async function main() {
 		lengthShouldBeEqual("response fields h2", $resH2, 1);
 		$tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("response fields table", $tables, 2);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpResHeader);
@@ -141,8 +144,8 @@ async function main() {
 		lengthShouldBeEqual("request fields h2", $reqH2, 1);
 		let $tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("request fields table", $tables, 2);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpReqHeader);
@@ -153,8 +156,8 @@ async function main() {
 		lengthShouldBeEqual("response fields h2", $resH2, 1);
 		$tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("response fields table", $tables, 2);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpResHeader);
@@ -185,8 +188,8 @@ async function main() {
 		lengthShouldBeEqual("request fields h2", $reqH2, 1);
 		let $tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("request fields table", $tables, 2);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpReqHeader);
@@ -197,8 +200,8 @@ async function main() {
 		lengthShouldBeEqual("response fields h2", $resH2, 1);
 		$tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("response fields table", $tables, 2);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpResHeader);
@@ -229,8 +232,40 @@ async function main() {
 		lengthShouldBeEqual("request fields h2", $reqH2, 1);
 		const $tables = getNextTables($reqH2.parent(), "h2");
 		lengthShouldBeEqual("request fields table", $tables, 1);
-		for (let i = 0; i < $tables.length; i++) {
-			const $rows = $tables[i].find("tr");
+		for (const element of $tables) {
+			const $rows = element.find("tr");
+			for (let row = 0; row < $rows.length; row++) {
+				const $row = $rows.eq(row);
+				handleEnglishRow($row, ManifestItemType.HttpReqHeader);
+			}
+		}
+		output.close();
+	}
+
+	// de
+	{
+		const baseUrl = httpHeadersWikiURLs.de;
+		const output = new JsonFileWriter(manifestFiles.httpHeaders("de"));
+		const html = await getText("de", baseUrl);
+		const $ = loadHtml(html);
+		const handleEnglishRow = ($row: Cheerio<Element>, type: ManifestItemType) => {
+			const $cols = $row.find("td");
+			if ($cols.length === 0) return;
+			const headerNames = normalizeHeaderName($cols.eq(0).text());
+			const description = getDescriptionMarkdown($cols.eq(2), baseUrl);
+			if (!description) print.warning(`header ${headerNames[0]} has no description`);
+			for (let j = 0; j < headerNames.length; j++) {
+				const headerName = headerNames[j];
+				output.writeItem(j === 0 ? [type, headerName, description] : [type, headerName, -1]);
+			}
+		};
+
+		const $reqH2 = $("h2 #Anfrage-Headerfelder");
+		lengthShouldBeEqual("request fields h2", $reqH2, 1);
+		const $tables = getNextTables($reqH2.parent(), "h2");
+		lengthShouldBeEqual("request fields table", $tables, 1);
+		for (const element of $tables) {
+			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
 				handleEnglishRow($row, ManifestItemType.HttpReqHeader);
@@ -290,7 +325,7 @@ function normalizeHeaderName(_name: string) {
 		.split(/[,;]/)
 		.map((it) => it.trim())
 		.filter((it) => it);
-	for (let i = 0; i < names.length; i++)
-		if (!/^[\w\-]+$/.test(names[i])) return print.error(`Invalid http header name ${JSON.stringify(_name)}`);
+	for (const element of names)
+		if (!/^[\w\-éèáàöäü]+$/ig.test(element)) return print.error(`Invalid http header name ${JSON.stringify(_name)} ${element}`);
 	return names;
 }
