@@ -43,7 +43,7 @@ export const syntaxRepository: {
 	server_parameters: {
 		patterns: [
 			{
-				match: /(?:^|\s)(weight|max_conn|max_fails|fail_timeout|slow_start)(=)([0-9][0-9\.]*[bBkKmMgGtTsShHdD]?)(?:\s|;|$)/,
+				match: /(?:^|\s)(weight|max_conn|max_fails|fail_timeout|slow_start)(=)(\d[\d\.]*[bBkKmMgGtTsShHdD]?)(?:\s|;|$)/,
 				captures: {
 					'1': names.variable.parameter,
 					'2': names.operator,
@@ -118,7 +118,7 @@ export const syntaxRepository: {
 			// 	}
 			// },
 			{
-				match: /[\t ](=?[0-9][0-9\.]*[bBkKmMgGtTsShHdD]?)(?=[\t ;])/,
+				match: /[\t ](=?\d[\d\.]*[bBkKmMgGtTsShHdD]?)(?=[\t ;])/,
 				captures: {
 					'1': names.numeric,
 				}

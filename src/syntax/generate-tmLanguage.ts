@@ -68,8 +68,8 @@ export function generate(file: Writable) {
 	const repoKeys = Object.keys(syntax.repository);
 	write(tag('key', 'repository'));
 	write('<dict>', 1)
-	for (let i = 0; i < repoKeys.length; i++) {
-		const key = repoKeys[i];
+	for (const element of repoKeys) {
+		const key = element;
 		const rule = syntax.repository[key];
 		write(tag('key', key));
 		write('<dict>', 1)
@@ -89,8 +89,8 @@ export function generate(file: Writable) {
 	function writePatterns(patterns: SyntaxPattern[]) {
 		write(tag('key', 'patterns'))
 		write('<array>', 1)
-		for (let i = 0; i < patterns.length; i++) {
-			const pattern = patterns[i];
+		for (const element of patterns) {
+			const pattern = element;
 			write('<dict>', 1)
 			if (pattern.comment)
 				write(`<!-- ${pattern.comment.replace(escapeRegexp, escapeCharFn)} -->`);
@@ -112,8 +112,8 @@ export function generate(file: Writable) {
 				write('<dict>', 1)
 				const captures = pattern[key];
 				const capKeys = Object.keys(captures);
-				for (let j = 0; j < capKeys.length; j++) {
-					const capKey = capKeys[j];
+				for (const element of capKeys) {
+					const capKey = element;
 					let cap = captures[capKey];
 					if (typeof cap === 'string')
 						cap = { name: cap };

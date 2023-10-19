@@ -84,8 +84,8 @@ async function main() {
 	print.ok(`Got ${bold(modules.length)} module document pages`);
 
 	const count = { directives: 0, variables: 0 };
-	for (let i = 0; i < modules.length; i++) {
-		const c = await processModuleDocs(modules[i]);
+	for (const element of modules) {
+		const c = await processModuleDocs(element);
 		count.variables += c.variables;
 		count.directives += c.directives;
 	}
@@ -115,6 +115,20 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 	const $ = loadHtml(html);
 	const $directives = $(".directive");
 	const $varContainer = $("a[name=variables]");
+
+	// fix rendering issue in VS code tooltip
+	const $code_i = $("code > i");
+	for (const element of $code_i) {
+		if (element.parent?.childNodes.length == 1) {
+			$(element).unwrap();
+			$(element).replaceWith(`<code>${$(element).text()}</code>`);
+		}
+	}
+
+	// remove unsafe nodes
+	$("iframe").remove();
+	$("script").remove();
+
 	const info = [`$directives.length=${$directives.length}`, `$varContainer.length=${$varContainer.length}`].join(" ");
 	print.start(`Processing module ${bold(moduleName)} docs (${info})`);
 
@@ -182,6 +196,20 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 		const markdownNotes: string[] = [];
 		while ((elementPointer = elementPointer.next("p, blockquote.note, blockquote.example, dl.compact")).length) {
 			const tagName = elementPointer.prop("tagName");
+			
+			// fix href attributes in contents of VS Code tooltips shown on hover
+			const $anchorNodes = elementPointer.find("a");
+			for (const element of $anchorNodes) {
+				const aHref = element.attribs["href"];
+
+				if (aHref == undefined)
+					continue
+
+				if ((!aHref.match(RegExp(/http(s)*:\/\//i)) && aHref.match(RegExp(/\.htm(l)*/i))) || aHref.match(RegExp(/^#\w+/i))) {
+					element.attribs["href"] = new URL(aHref, fullURL).toString();
+				}
+			}
+			
 			switch (tagName) {
 				case "P": {
 					if (!elementPointer.text().trim()) continue;
@@ -199,7 +227,7 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 					else if (className != "example")
 						print.warning(
 							`there is a blockquote tag with unknown class name (${className}) ` +
-								`after directive (${directiveName})`
+							`after directive (${directiveName})`
 						);
 					fullDocs += $.html(elementPointer);
 				}

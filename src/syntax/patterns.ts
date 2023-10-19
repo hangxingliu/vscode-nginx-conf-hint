@@ -271,8 +271,8 @@ function groupByPrefix(strings: string[]) {
 	const mapList = new Map<string, string[]>();
 	const emptyPrefix: string[] = [];
 
-	for (let i = 0; i < strings.length; i++) {
-		const str = strings[i];
+	for (const element of strings) {
+		const str = element;
 		let index = str.indexOf('_')
 		if (index <= 0) {
 			emptyPrefix.push(str);
@@ -295,8 +295,8 @@ function groupByPrefix(strings: string[]) {
 	}
 
 	const keys = Array.from(mapList.keys());
-	for (let i = 0; i < keys.length; i++) {
-		const key = keys[i];
+	for (const element of keys) {
+		const key = element;
 		const values = mapList.get(key);
 		if (values.length > 1) continue;
 		emptyPrefix.push(key + values[0]);
