@@ -35,7 +35,9 @@ async function main() {
 
 		const html = await getText(modName, nginxLuaDocsBaseURL);
 		const $ = loadHtml(html);
-		const $directiveList = $("#user-content-directives").parent("h1").next("ul").find("li a");
+
+		const $directiveList = $("#user-content-directives").next("ul").find("li a");
+
 		let count = 0;
 		$directiveList.each((i, ele) => {
 			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
@@ -43,7 +45,7 @@ async function main() {
 		});
 		console.log(`found ${count} directives`);
 
-		const $snippetList = $("#user-content-nginx-api-for-lua").parent("h1").next("ul").find("li a");
+		const $snippetList = $("#user-content-nginx-api-for-lua").next("ul").find("li a");
 		$snippetList.each((i, ele) => {
 			processSnippetElement($, ele);
 		});
@@ -103,7 +105,7 @@ function processDirectiveElement(
 		module: ''
 	};
 	let docsHTML = '';
-	let temp = directive.parent();
+	let temp = directive;
 	while ((temp = temp.next())) {
 		const character = temp.text();
 		if (character == SIGN_END)
@@ -190,7 +192,7 @@ function processSnippetElement($: CheerioAPI, ele: Node) {
 		prefix: '',
 		body: ''
 	};
-	let temp = directive.parent();
+	let temp = directive;
 	while ((temp = temp.next())) {
 		const character = temp.text();
 		if (character == SIGN_END)
@@ -254,7 +256,8 @@ function processRestySnippetElement($: CheerioAPI, ele: Node, baseUrl: string, p
 			prefix: '',
 			body: '',
 		}
-		let temp = directive.parent();
+		let temp = directive;
+
 		while ((temp = temp.next())) {
 			const character = temp.text();
 			if (character == SIGN_END)

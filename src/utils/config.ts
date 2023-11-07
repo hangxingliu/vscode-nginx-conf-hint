@@ -34,7 +34,7 @@ export const syntaxURLs = {
 export const mediaTypesURL = 'https://www.iana.org/assignments/media-types/media-types.xhtml'
 
 export const nginxDocsBaseURL = 'https://nginx.org/en/docs/';
-export const nginxLuaDocsBaseURL = 'https://github.com/openresty/lua-nginx-module/blob/master/README.markdown';
+export const nginxLuaDocsBaseURL = 'https://github.com/openresty/lua-nginx-module/';
 export const luaRestyDocsURLs = [
 	{ prefix: 'memcached', url: 'https://github.com/openresty/lua-resty-memcached' },
 	{ prefix: 'mysql', url: 'https://github.com/openresty/lua-resty-mysql' },
@@ -44,6 +44,8 @@ export const luaRestyDocsURLs = [
 	{ prefix: 'websocket', url: 'https://github.com/openresty/lua-resty-websocket' },
 	{ prefix: 'lock', url: 'https://github.com/openresty/lua-resty-lock' },
 	{ prefix: 'lrucache', url: 'https://github.com/openresty/lua-resty-lrucache' },
+	{ prefix: 'healthcheck', url: 'https://github.com/openresty/lua-resty-upstream-healthcheck' },
+	{ prefix: 'balancer', url: 'https://github.com/openresty/lua-resty-balancer' },
 ]
 export const nginxLuaModuleURLs = [
 	// { name: 'ngx_memc', url: 'http://github.com/openresty/memc-nginx-module' },
