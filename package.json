@@ -77,6 +77,8 @@
 				],
 				"extensions": [
 					".conf",
+					".conf.default",
+					".conf.template",
 					"mime.types",
 					"fastcgi_params",
 					"scgi_params",
