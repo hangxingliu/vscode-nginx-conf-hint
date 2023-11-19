@@ -1,8 +1,24 @@
 //@ts-check
-'use strict';
+"use strict";
 
 const path = require("path");
 const webpack = require("webpack");
+
+/** @type {import('webpack').RuleSetUse} */
+let tsLoader = {
+	loader: "ts-loader",
+	options: {
+		configFile: "tsconfig.web.json",
+	},
+};
+try {
+	require("swc-loader");
+	tsLoader = {
+		loader: "swc-loader",
+	};
+} catch (error) {
+	// noop
+}
 
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
 /** @type WebpackConfig */
@@ -35,14 +51,7 @@ const webExtensionConfig = {
 			{
 				test: /\.ts$/,
 				exclude: /node_modules/,
-				use: [
-					{
-						loader: "ts-loader",
-						options: {
-							configFile: 'tsconfig.web.json'
-						}
-					},
-				],
+				use: [tsLoader],
 			},
 		],
 	},

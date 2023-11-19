@@ -6,19 +6,18 @@
 	"configurations": [
 		{
 			"name": "Launch Extension",
-			"type": "pwa-extensionHost",
+			"type": "extensionHost",
 			"request": "launch",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"${workspaceFolder}/test/workspace"
 			],
-			"stopOnEntry": true,
 			"sourceMaps": true,
 			"preLaunchTask": "npm: build:desktop-ext"
 		},
 		{
 			"name": "Launch Web Extension",
-			"type": "pwa-extensionHost",
+			"type": "extensionHost",
 			"request": "launch",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
@@ -26,7 +25,6 @@
 				"${workspaceFolder}/test/workspace"
 			],
 			"debugWebWorkerHost": true,
-			"stopOnEntry": true,
 			"sourceMaps": true,
 			"outFiles": [
 				"${workspaceFolder}/artifacts/web-ext/*.js"
