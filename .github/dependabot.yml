@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - directory: /
+    package-ecosystem: npm
+    commit-message:
+      prefix: deps # the git commit message will look like: "deps: ..."
+    schedule:
+      interval: daily
+    ignore:
+      - dependency-name: '@types/vscode'
+      - dependency-name: '@types/node'
+  - directory: /
+    package-ecosystem: github-actions
+    commit-message:
+      prefix: deps
+    schedule:
+      interval: weekly

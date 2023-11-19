@@ -42,7 +42,7 @@
 	"dependencies": {},
 	"devDependencies": {
 		"@types/node": "latest",
-		"@types/vscode": "^1.84.1",
+		"@types/vscode": "^1.64.0",
 		"axios": "^1",
 		"cheerio": "1.0.0-rc.12",
 		"html-minifier": "^4.0.0",
@@ -62,10 +62,11 @@
 		"@typescript-eslint/parser": "^6",
 		"@vscode/test-web": "^0.0.48",
 		"eslint": "^8",
-		"swc-loader": "^0.2.3"
+		"swc-loader": "^0.2.3",
+		"vsce": "^2.15.0"
 	},
 	"engines": {
-		"vscode": "^1.1.0"
+		"vscode": "^1.64.0"
 	},
 	"activationEvents": [
 		"onLanguage:NGINX",
