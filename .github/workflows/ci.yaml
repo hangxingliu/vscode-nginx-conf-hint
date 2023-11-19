@@ -12,14 +12,23 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      - name: Install and build
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: yarn
+      - name: Install
         run: |
-          yarn install &&
+          yarn install
+      - name: Lint
+        run: |
+          ./scripts/fix-eslint-strip-ansi.sh &&
+          yarn run lint:eslint
+      - name: Build
+        run: |
           yarn run build:utils &&
           yarn run build:syntax &&
           yarn run build:web-ext &&
-          yarn run build:desktop-ext &&
-          yarn run lint:eslint
+          yarn run build:desktop-ext
       - name: Build packages
         run: |
           bash ./scripts/build-npm-package.sh &&
