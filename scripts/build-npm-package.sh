@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2015
 
-pushd "$( dirname "${BASH_SOURCE[0]}" )/.." || exit 1;
+throw() { echo -e "fatal: $1" >&2; exit 1; }
+execute() { echo "$ $*"; "$@" || throw "Failed to execute '$1'"; }
 
-mkdir -p "./artifacts/npm";
+# change the current directory to the project directory
+pushd "$( dirname -- "${BASH_SOURCE[0]}" )/.." >/dev/null || exit 1;
+
+execute mkdir -p "./artifacts/npm";
 
 PKG_NAME="$(awk '/"name"/{ print substr($2,2, length($2)-3); }' ./package.json)"
 PKG_VERSION="$(awk '/"version"/{ print substr($2,2, length($2)-3); }' ./package.json)"
@@ -14,5 +19,5 @@ npm pack --dryrun 2>&1 |
 
 echo "created './artifacts/vscode/${PKG}.list'";
 
-npm pack && mv -f "${PKG}.tgz" "./artifacts/npm" ||
-	throw 'npm pack failed!';
+execute npm pack;
+execute mv -f "${PKG}.tgz" "./artifacts/npm";

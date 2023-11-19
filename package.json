@@ -42,7 +42,7 @@
 	"dependencies": {},
 	"devDependencies": {
 		"@types/node": "latest",
-		"@types/vscode": "latest",
+		"@types/vscode": "^1.84.1",
 		"axios": "^1",
 		"cheerio": "1.0.0-rc.12",
 		"html-minifier": "^4.0.0",

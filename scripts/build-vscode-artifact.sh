@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-pushd "$( dirname "${BASH_SOURCE[0]}" )/.." || exit 1;
+# change the current directory to the project directory
+pushd "$( dirname -- "${BASH_SOURCE[0]}" )/.." >/dev/null || exit 1;
 
 mkdir -p "./artifacts/vscode";
 
