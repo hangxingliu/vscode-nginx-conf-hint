@@ -43,7 +43,6 @@
 		"@types/node": "latest",
 		"@types/vscode": "latest",
 		"axios": "^1",
-		"chalk": "^5",
 		"cheerio": "1.0.0-rc.12",
 		"html-minifier": "^4.0.0",
 		"https-proxy-agent": "^7",

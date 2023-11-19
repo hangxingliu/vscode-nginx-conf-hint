@@ -5,7 +5,7 @@ import Turndown = require("turndown");
 import { Agent as HttpsAgent } from "https";
 import { existsSync, writeFile, mkdirSync, readFileSync, writeFileSync, createWriteStream, WriteStream } from "fs";
 import { resolve as resolvePath } from "path";
-import { yellow, bold as _bold, green, red, blue } from "chalk";
+import { yellow, bold as _bold, green, red, blue } from "./terminal-colors";
 import { cacheDir } from "./config";
 
 export const hasEnv = !!(typeof process !== 'undefined' && process.env);
@@ -16,7 +16,7 @@ const turndownService = new Turndown({ headingStyle: 'atx', hr: '***' })
 const OK = ' - ' + green('OK');
 const WARN = ' - ' + yellow('WARN');
 const ERROR = ' - ' + red('ERROR');
-const DONE = blue.bold('DONE');
+const DONE = blue(bold('DONE'));
 
 export const print = {
 	warnings: 0,
@@ -95,7 +95,7 @@ if (hasEnv && process.env.NO_CACHE)
 	httpCacheEnabled = false;
 
 export function initHttpCache() {
-	if (!httpCacheEnabled) return console.log(yellow.bold('HTTP Cache is disabled!'));
+	if (!httpCacheEnabled) return console.log(yellow(bold('HTTP Cache is disabled!')));
 	if (!existsSync(cacheDir)) {
 		console.log(`Creating HTTP cache directory: ${cacheDir} ...`);
 		mkdirSync(cacheDir);
