@@ -31,7 +31,7 @@
 		"build:web-ext": "webpack --mode production --devtool hidden-source-map",
 		"build:utils": "tsc -p tsconfig.utils.json",
 		"build:syntax": "ts-node --project tsconfig.syntax.json ./src/syntax/generate-tmLanguage.ts",
-		"clean": "rimraf 'src/extension/**/*.js' 'src/utils/**/*.js'"
+		"clean": "rimraf '.tsc' 'src/extension/**/*.js' 'src/utils/**/*.js'"
 	},
 	"extensionKind": [
 		"ui",

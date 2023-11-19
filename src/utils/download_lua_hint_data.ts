@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import type { CheerioAPI, Node } from "cheerio";
+import type { AnyNode, BasicAcceptedElems, CheerioAPI } from "cheerio";
 
 import { nginxLuaDocsBaseURL, luaRestyDocsURLs, manifestFiles, ManifestItemType, detailsFile, luaSnippetFile, nginxLuaModuleURLs } from "./config";
 import { getText, loadHtml, print, initHttpCache, JsonFileWriter, writeJSON } from "./helper";
@@ -85,7 +85,7 @@ async function main() {
 
 function processDirectiveElement(
 	$: CheerioAPI,
-	ele: Node,
+	ele: BasicAcceptedElems<AnyNode>,
 	baseUrl: string,
 	modIndex: number,
 	detailsStream: JsonFileWriter,
@@ -183,7 +183,7 @@ function processDirectiveElement(
 	return true;
 }
 
-function processSnippetElement($: CheerioAPI, ele: Node) {
+function processSnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNode>) {
 	const name = $(ele).text();
 	const directive = $("#user-content-" + name.toLocaleLowerCase().replace(/[\.:]/g, ""));
 	if (name == 'Introduction' || directive.length == 0) return;
@@ -242,7 +242,7 @@ async function processRestyREADME(baseUrl: string, prefix: string) {
 		processRestySnippetElement($, ele, baseUrl, prefix);
 	});
 }
-function processRestySnippetElement($: CheerioAPI, ele: Node, baseUrl: string, prefix: string) {
+function processRestySnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNode>, baseUrl: string, prefix: string) {
 	if ($(ele).attr('href') !== '#methods') return;
 
 	const directiveLists = $(ele).next("ul").find("li a");

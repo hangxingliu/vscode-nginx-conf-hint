@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+	"outDir": ".tsc",
+    "module": "CommonJS",
+    "declaration": false,
+    "removeComments": false,
+    "target": "ES2022",
+    "sourceMap": true,
+    "skipLibCheck": true,
+	"strictNullChecks": false
+  },
+  "include": ["src"],
+  "exclude": [".tsc", "node_modules"]
+}
