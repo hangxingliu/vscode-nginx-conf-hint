@@ -38,8 +38,8 @@ export class NginxHoverProvider implements HoverProvider {
 	}
 	getCache(position: Position) {
 		const now = Date.now();
-		for (let i = 0; i < this.cache.length; i++) {
-			const { exp, hover } = this.cache[i];
+		for (const element of this.cache) {
+			const { exp, hover } = element;
 			if (now < exp && hover.range.contains(position)) {
 				// logger.verbose(`matched hover cache at range`);
 				return hover;

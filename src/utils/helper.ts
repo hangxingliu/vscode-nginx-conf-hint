@@ -8,7 +8,7 @@ import { resolve as resolvePath } from "path";
 import { yellow, bold as _bold, green, red, blue } from "chalk";
 import { cacheDir } from "./config";
 
-export const hasEnv = typeof process !== 'undefined' && process.env ? true : false;
+export const hasEnv = !!(typeof process !== 'undefined' && process.env);
 export const bold = (input: unknown) => _bold(String(input));
 
 const turndownService = new Turndown({ headingStyle: 'atx', hr: '***' })
@@ -106,8 +106,8 @@ export function initHttpCache() {
 function getHttpsAgent(): HttpsAgent {
 	const envNames = [`HTTPS_PROXY`, `https_proxy`, `HTTP_PROXY`, `http_proxy`, `ALL_PROXY`, `all_proxy`];
 	if (hasEnv) {
-		for (let i = 0; i < envNames.length; i++) {
-			const envName = envNames[i];
+		for (const element of envNames) {
+			const envName = element;
 			const env = process.env[envName];
 			if (typeof env === 'string' && env && /^https?:\/\//i.test(env)) {
 				console.log(`Use proxy "${env}" for https request`);

@@ -2,6 +2,4 @@
 
 ``` bash
 yarn run build:utils
-
-
 ```

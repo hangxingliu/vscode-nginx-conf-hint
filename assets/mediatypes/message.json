@@ -1,4 +1,5 @@
 [
+["bhttp"],
 ["CPIM"],
 ["delivery-status"],
 ["disposition-notification"],
@@ -10,11 +11,14 @@
 ["global-headers"],
 ["http"],
 ["imdn+xml"],
-["news","news - OBSOLETED by RFC5537"],
-["s-http"],
+["mls"],
+["news","news (OBSOLETED by [RFC5537])"],
+["ohttp-req"],
+["ohttp-res"],
+["s-http","s-http (OBSOLETE)"],
 ["sip"],
 ["sipfrag"],
 ["tracking-status"],
-["vnd.si.simp","vnd.si.simp - OBSOLETED by request"],
+["vnd.si.simp","vnd.si.simp (OBSOLETED by request)"],
 ["vnd.wfa.wsc"]
 ]

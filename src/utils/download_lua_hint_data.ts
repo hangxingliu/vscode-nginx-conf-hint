@@ -35,7 +35,9 @@ async function main() {
 
 		const html = await getText(modName, nginxLuaDocsBaseURL);
 		const $ = loadHtml(html);
-		const $directiveList = $("#user-content-directives").parent("h1").next("ul").find("li a");
+
+		const $directiveList = $("#user-content-directives").next("ul").find("li a");
+
 		let count = 0;
 		$directiveList.each((i, ele) => {
 			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
@@ -43,7 +45,7 @@ async function main() {
 		});
 		console.log(`found ${count} directives`);
 
-		const $snippetList = $("#user-content-nginx-api-for-lua").parent("h1").next("ul").find("li a");
+		const $snippetList = $("#user-content-nginx-api-for-lua").next("ul").find("li a");
 		$snippetList.each((i, ele) => {
 			processSnippetElement($, ele);
 		});
@@ -51,8 +53,8 @@ async function main() {
 		detailsStream.close();
 	}
 
-	for (let i = 0; i < nginxLuaModuleURLs.length; i++) {
-		const { name: modName, url } = nginxLuaModuleURLs[i];
+	for (const element of nginxLuaModuleURLs) {
+		const { name: modName, url } = element;
 		const modIndex = getModuleIndex(modName);
 		const detailsStream = new JsonFileWriter(detailsFile(modName));
 		const html = await getText(modName, url);
@@ -60,7 +62,7 @@ async function main() {
 		print.start('Analyzing Directives');
 		const $directiveList = $("#user-content-directives").parent("h1").next("ul").find("li a");
 		let count = 0;
-		$directiveList.each((i, ele) => {
+		$directiveList.each((_i, ele) => {
 			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
 			count++;
 		});
@@ -68,8 +70,8 @@ async function main() {
 		detailsStream.close();
 	}
 
-	for (let i = 0; i < luaRestyDocsURLs.length; i++) {
-		const { prefix, url } = luaRestyDocsURLs[i];
+	for (const element of luaRestyDocsURLs) {
+		const { prefix, url } = element;
 		await processRestyREADME(url, prefix);
 	}
 	applyConstantSnippets();
@@ -103,7 +105,7 @@ function processDirectiveElement(
 		module: ''
 	};
 	let docsHTML = '';
-	let temp = directive.parent();
+	let temp = directive;
 	while ((temp = temp.next())) {
 		const character = temp.text();
 		if (character == SIGN_END)
@@ -190,16 +192,16 @@ function processSnippetElement($: CheerioAPI, ele: Node) {
 		prefix: '',
 		body: ''
 	};
-	let temp = directive.parent();
+	let temp = directive;
 	while ((temp = temp.next())) {
 		const character = temp.text();
 		if (character == SIGN_END)
 			break;
 
-		let match = character.match(SIGN_SYNTAX);
+		let match = RegExp(SIGN_SYNTAX).exec(character);
 		if (match) {
 			let body = match[1].trim();
-			match = body.match(/\((\w.*?)\)/)
+			match = RegExp(/\((\w.*?)\)/).exec(body)
 			if (match) {
 				const params = match[1].split(",").map((val, index) => {
 					val = val.trim();
@@ -221,7 +223,7 @@ function processSnippetElement($: CheerioAPI, ele: Node) {
 			continue;
 		}
 
-		match = character.match(SIGN_CONTEXT);
+		match = RegExp(SIGN_CONTEXT).exec(character);
 		if (match) continue;
 
 		item.description += character;
@@ -254,16 +256,17 @@ function processRestySnippetElement($: CheerioAPI, ele: Node, baseUrl: string, p
 			prefix: '',
 			body: '',
 		}
-		let temp = directive.parent();
+		let temp = directive;
+
 		while ((temp = temp.next())) {
 			const character = temp.text();
 			if (character == SIGN_END)
 				break;
 
-			let match = character.match(SIGN_SYNTAX);
+			let match = RegExp(SIGN_SYNTAX).exec(character);
 			if (match) {
 				let body = match[1].trim();
-				match = body.match(/\((\w.*?)\)/)
+				match = RegExp(/\((\w.*?)\)/).exec(body)
 				if (match) {
 					const params = match[1].split(",").map(val => {
 						val = val.trim();
@@ -289,7 +292,7 @@ function processRestySnippetElement($: CheerioAPI, ele: Node, baseUrl: string, p
 				continue;
 			}
 
-			match = character.match(SIGN_CONTEXT);
+			match = RegExp(SIGN_CONTEXT).exec(character);
 			if (match) continue;
 
 			item.description += character;

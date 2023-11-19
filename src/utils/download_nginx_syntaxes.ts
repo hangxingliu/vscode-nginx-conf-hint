@@ -21,6 +21,6 @@ async function download(syntaxName: keyof typeof syntaxURLs) {
 	const targetFiles = [syntaxFiles[syntaxName]];
 	let text = await getText(`${syntaxName} syntax`, url);
 	text = text.replace('?>', `?>\n<!-- vscode-nginx-conf-hint { syntax-type: ${syntaxName} }  -->`)
-	for (let i = 0; i < targetFiles.length; i++)
-		writeFileSync(targetFiles[i], text);
+	for (const element of targetFiles)
+		writeFileSync(element, text);
 }

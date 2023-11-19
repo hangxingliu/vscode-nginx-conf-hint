@@ -21,7 +21,7 @@ async function main() {
 
 		const $name = $link.parents('tr').children('td:nth-child(1)')
 		const mediaTypeName = $name.text().trim();
-		if(!mediaTypeName) return print.error(`$links[${i}] is invalid media type "${$name.text()}"`);
+		if (!mediaTypeName) return print.error(`$links[${i}] is invalid media type "${$name.text()}"`);
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const [_, prefix, suffix] = mtx;

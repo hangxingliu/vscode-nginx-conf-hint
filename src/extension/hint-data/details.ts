@@ -33,8 +33,8 @@ export async function loadModuleDetails(moduleName: string) {
 	}
 
 	const details = new ModuleDetails();
-	for (let i = 0; i < items.length; i++) {
-		const cols = items[i];
+	for (const element of items) {
+		const cols = element;
 		switch (cols[0]) {
 			case ManifestItemType.DirectiveDetails: {
 				const item: NginxDirectiveDetails = {
