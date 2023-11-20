@@ -56,13 +56,15 @@ Many features in it include syntax highlight, auto-complete, in-editor documents
 ## Declaration
 
 1. Icon image of this extension is from extension [nginx.conf][icon-nginx] 
-2. This extension is published under the [GPL-3.0 license](LICENSE)
+2. This project uses the file [src/libs/nginxbeautifier.js](src/libs/nginxbeautifier.js) from <https://github.com/vasilevich/nginxbeautifier>
+3. This extension is published under the [GPL-3.0 license](LICENSE)
 
-## Contributing
+## Building & Contributing
+
+Please check out the document [CONTRIBUTING.md](docs/CONTRIBUTING.md) for information 
+about building/contributing this project
 
 [Pull Request][pr] & [Issues][issues]
-
-[CONTRIBUTING.md](docs/CONTRIBUTING.md)
 
 ## Author
 
