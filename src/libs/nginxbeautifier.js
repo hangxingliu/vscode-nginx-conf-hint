@@ -4,7 +4,7 @@
  * from file:
  *  nginxbeautifier.js
  *
- * synchronized at 2021-11-14
+ * synchronized at 2023-11-20
  *
  * removed function:
  * 	- `walkSync`
@@ -222,6 +222,10 @@ function clean_lines(configContents) {
                 var startOfComment = line.indexOf("#");
                 var comment = startOfComment >= 0 ? line.slice(startOfComment) : "";
                 var code = startOfComment >= 0 ? line.slice(0, startOfComment) : line;
+
+                var removedDoubleQuatations = extractAllPossibleText(code, '"', '"');
+                code = removedDoubleQuatations.filteredInput;
+
                 var startOfParanthesis = code.indexOf("}");
                 if (startOfParanthesis >= 0) {
                     if (startOfParanthesis > 0) {
@@ -242,7 +246,10 @@ function clean_lines(configContents) {
                         splittedByLines.insert(index + 2, l2);
 
                 }
-                line = code;
+
+                removedDoubleQuatations.filteredInput = splittedByLines[index];
+                line = removedDoubleQuatations.getRestored();
+                splittedByLines[index] = line;
             }
         }
         //remove more than two newlines
@@ -254,7 +261,6 @@ function clean_lines(configContents) {
 
             }
         }
-
     }
     return splittedByLines;
 }
@@ -287,7 +293,7 @@ function perform_indentation(lines) {
     var iterator1 = lines;
     for (var index1 = 0; index1 < iterator1.length; index1++) {
         line = iterator1[index1];
-        if (!line.startsWith("#") && line.endsWith("}") && current_indent > 0) {
+        if (!line.startsWith("#") && /.*?\}(\s*#.*)?$/.test(line) && current_indent > 0) {
             current_indent -= 1;
         }
         if (line !== "") {
@@ -296,7 +302,7 @@ function perform_indentation(lines) {
         else {
             indented_lines.push("");
         }
-        if (!line.startsWith("#") && line.endsWith("{")) {
+        if (!line.startsWith("#") && /.*?\{(\s*#.*)?$/.test(line)) {
             current_indent += 1;
         }
     }
@@ -308,9 +314,9 @@ function perform_alignment(lines) {
     for (let index1 = 0; index1 < iterator1.length; index1++) {
         line = iterator1[index1];
         if (line !== "" &&
-            !line.endsWith("{") &&
+            !/.*?\{(\s*#.*)?$/.test(line) &&
             !line.startsWith("#") &&
-            !line.endsWith("}") &&
+            !/.*?\}(\s*#.*)?$/.test(line) &&
             !line.trim().startsWith("upstream") &&
             !line.trim().contains("location")) {
             const splitLine = line.match(/\S+/g);
