@@ -111,7 +111,7 @@ function getHttpsAgent(): HttpsAgent {
 			const env = process.env[envName];
 			if (typeof env === 'string' && env && /^https?:\/\//i.test(env)) {
 				console.log(`Use proxy "${env}" for https request`);
-				const HttpsProxyAgent = require('https-proxy-agent');
+				const { HttpsProxyAgent } = require('https-proxy-agent');
 				return new HttpsProxyAgent(env);
 			}
 		}
