@@ -2,6 +2,8 @@
 # if I don't ignore node_modules, `vsce` will pack optional dependencies into the extension
 node_modules
 
+*.tsbuildinfo
+
 # vscode test web
 .vscode
 .vscode-test-web

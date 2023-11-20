@@ -2,6 +2,8 @@
 .vscode
 .vscode-test-web
 
+*.tsbuildinfo
+
 # github files
 .github
 

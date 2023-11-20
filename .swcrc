@@ -1,0 +1,18 @@
+{
+	"$schema": "http://json.schemastore.org/swcrc",
+	"sourceMaps": true,
+	"minify": false,
+	"module": {
+		"type": "commonjs",
+		"noInterop": true
+	},
+	"jsc": {
+		"target": "es2022",
+		"parser": {
+			"syntax": "typescript",
+			"decorators": true
+		},
+		"preserveAllComments": true,
+		"keepClassNames": true
+	}
+}
