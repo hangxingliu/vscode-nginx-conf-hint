@@ -751,7 +751,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>(["'\s]|^)(auth_)(delay|basic|basic_user_file|jwt|jwt_claim_set|jwt_header_set|jwt_key_file|jwt_key_request|jwt_leeway|jwt_type|jwt_require|request|request_set|http|http_header|http_pass_client_cert|http_timeout)(["'\s]|$)</string>
+      <string>(["'\s]|^)(auth_)(delay|basic|basic_user_file|jwt|jwt_claim_set|jwt_header_set|jwt_key_cache|jwt_key_file|jwt_key_request|jwt_leeway|jwt_type|jwt_require|request|request_set|http|http_header|http_pass_client_cert|http_timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -1983,7 +1983,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>(["'\s]|^)(memcached_)(bind|buffer_size|connect_timeout|force_ranges|gzip_flag|next_upstream|next_upstream_timeout|next_upstream_tries|pass|read_timeout|send_timeout|socket_keepalive)(["'\s]|$)</string>
+      <string>(["'\s]|^)(memcached_)(bind|buffer_size|connect_timeout|gzip_flag|next_upstream|next_upstream_timeout|next_upstream_tries|pass|read_timeout|send_timeout|socket_keepalive)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2027,7 +2027,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>(["'\s]|^)(mp4_)(buffer_size|max_buffer_size|limit_rate|limit_rate_after)(["'\s]|$)</string>
+      <string>(["'\s]|^)(mp4_)(buffer_size|max_buffer_size|limit_rate|limit_rate_after|start_key_frame)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2379,50 +2379,6 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>(["'\s]|^)(spdy_)(chunk_size|headers_comp)(["'\s]|$)</string>
-      <key>end</key>
-      <string>;</string>
-      <key>beginCaptures</key>
-      <dict>
-        <key>1</key>
-        <dict>
-          <key>name</key>
-          <string>keyword.directive.nginx</string>
-        </dict>
-        <key>2</key>
-        <dict>
-          <key>name</key>
-          <string>keyword.directive.nginx</string>
-        </dict>
-        <key>3</key>
-        <dict>
-          <key>name</key>
-          <string>keyword.directive.nginx</string>
-        </dict>
-        <key>4</key>
-        <dict>
-          <key>name</key>
-          <string>keyword.directive.nginx</string>
-        </dict>
-      </dict>
-      <key>endCaptures</key>
-      <dict>
-        <key>0</key>
-        <dict>
-          <key>name</key>
-          <string>punctuation.terminator.nginx</string>
-        </dict>
-      </dict>
-      <key>patterns</key>
-      <array>
-        <dict>
-          <key>include</key>
-          <string>#values</string>
-        </dict>
-      </array>
-    </dict>
-    <dict>
-      <key>begin</key>
       <string>(["'\s]|^)(ssi_)(last_modified|min_file_chunk|silent_errors|types|value_length)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
@@ -2687,6 +2643,94 @@
     </dict>
     <dict>
       <key>begin</key>
+      <string>(["'\s]|^)(http3_)(hq|max_concurrent_streams|stream_buffer_size)(["'\s]|$)</string>
+      <key>end</key>
+      <string>;</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+      </dict>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.terminator.nginx</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#values</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>(["'\s]|^)(quic_)(active_connection_id_limit|bpf|gso|host_key|retry)(["'\s]|$)</string>
+      <key>end</key>
+      <string>;</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+      </dict>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.terminator.nginx</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#values</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
       <string>(["'\s]|^)(xslt_)(last_modified|param|string_param|stylesheet|types)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
@@ -2907,6 +2951,50 @@
     </dict>
     <dict>
       <key>begin</key>
+      <string>(["'\s]|^)(mqtt_)(preread|buffers|rewrite_buffer_size|set_connect)(["'\s]|$)</string>
+      <key>end</key>
+      <string>;</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+      </dict>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.terminator.nginx</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#values</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
       <string>(["'\s]|^)(zone_)(sync_buffers|sync_connect_retry_interval|sync_connect_timeout|sync_interval|sync_recv_buffer_size|sync_server|sync_ssl|sync_ssl_certificate|sync_ssl_certificate_key|sync_ssl_ciphers|sync_ssl_conf_command|sync_ssl_crl|sync_ssl_name|sync_ssl_password_file|sync_ssl_protocols|sync_ssl_server_name|sync_ssl_trusted_certificate|sync_ssl_verify|sync_ssl_verify_depth|sync_timeout)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
@@ -2951,7 +3039,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>(["'\s]|^)(js_)(body_filter|content|fetch_ciphers|fetch_protocols|fetch_trusted_certificate|fetch_verify_depth|header_filter|import|include|path|set|var|access|filter|preread)(["'\s]|$)</string>
+      <string>(["'\s]|^)(otel_)(exporter|service_name|trace|trace_context|span_name|span_attr)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -2995,7 +3083,51 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>(["'\s]|^)(daemon|env|include|pid|use|user|aio|alias|directio|etag|listen|resolver|root|satisfy|sendfile|allow|deny|api|autoindex|charset|geo|gunzip|gzip|expires|index|keyval|mirror|perl|set|slice|ssi|ssl|zone|state|hash|keepalive|queue|random|sticky|match|userid|protocol|timeout|xclient|starttls|load_module|lock_file|master_process|multi_accept|pcre_jit|thread_pool|timer_resolution|working_directory|absolute_redirect|aio_write|chunked_transfer_encoding|connection_pool_size|default_type|directio_alignment|disable_symlinks|if_modified_since|ignore_invalid_headers|large_client_header_buffers|merge_slashes|output_buffers|port_in_redirect|postpone_output|read_ahead|recursive_error_pages|request_pool_size|reset_timedout_connection|resolver_timeout|sendfile_max_chunk|subrequest_output_buffer_size|try_files|underscores_in_headers|addition_types|override_charset|source_charset|create_full_put_path|min_delete_depth|f4f_buffer_size|gunzip_buffers|keyval_zone|access_log|mirror_request_body|random_index|set_real_ip_from|valid_referers|rewrite_log|uninitialized_variable_warn|split_clients|least_time|sticky_cookie_insert|xml_entities|google_perftools_profiles)(["'\s]|$)</string>
+      <string>(["'\s]|^)(js_)(body_filter|content|fetch_buffer_size|fetch_ciphers|fetch_max_response_buffer_size|fetch_protocols|fetch_timeout|fetch_trusted_certificate|fetch_verify|fetch_verify_depth|header_filter|import|include|path|periodic|preload_object|set|shared_dict_zone|var|access|filter|preread)(["'\s]|$)</string>
+      <key>end</key>
+      <string>;</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+        <key>4</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.directive.nginx</string>
+        </dict>
+      </dict>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.terminator.nginx</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#values</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>(["'\s]|^)(daemon|env|include|pid|use|user|aio|alias|directio|etag|listen|resolver|root|satisfy|sendfile|allow|deny|api|autoindex|charset|geo|gunzip|gzip|expires|index|keyval|mirror|perl|set|slice|ssi|ssl|zone|state|hash|keepalive|queue|random|sticky|match|userid|http2|http3|protocol|timeout|xclient|starttls|mqtt|load_module|lock_file|master_process|multi_accept|pcre_jit|thread_pool|timer_resolution|working_directory|absolute_redirect|aio_write|chunked_transfer_encoding|connection_pool_size|default_type|directio_alignment|disable_symlinks|if_modified_since|ignore_invalid_headers|large_client_header_buffers|merge_slashes|output_buffers|port_in_redirect|postpone_output|read_ahead|recursive_error_pages|request_pool_size|reset_timedout_connection|resolver_timeout|sendfile_max_chunk|subrequest_output_buffer_size|try_files|underscores_in_headers|addition_types|override_charset|source_charset|create_full_put_path|min_delete_depth|f4f_buffer_size|gunzip_buffers|internal_redirect|keyval_zone|access_log|mirror_request_body|random_index|set_real_ip_from|valid_referers|rewrite_log|uninitialized_variable_warn|split_clients|least_time|sticky_cookie_insert|xml_entities|google_perftools_profiles)(["'\s]|$)</string>
       <key>end</key>
       <string>;</string>
       <key>beginCaptures</key>
@@ -3133,7 +3265,7 @@
       <array>
         <dict>
           <key>match</key>
-          <string>(?:^|\s)(weight|max_conn|max_fails|fail_timeout|slow_start)(=)([0-9][0-9\.]*[bBkKmMgGtTsShHdD]?)(?:\s|;|$)</string>
+          <string>(?:^|\s)(weight|max_conn|max_fails|fail_timeout|slow_start)(=)(\d[\d\.]*[bBkKmMgGtTsShHdD]?)(?:\s|;|$)</string>
           <key>captures</key>
           <dict>
             <key>1</key>
@@ -3274,7 +3406,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>[\t ](=?[0-9][0-9\.]*[bBkKmMgGtTsShHdD]?)(?=[\t ;])</string>
+          <string>[\t ](=?\d[\d\.]*[bBkKmMgGtTsShHdD]?)(?=[\t ;])</string>
           <key>captures</key>
           <dict>
             <key>1</key>
