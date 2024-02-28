@@ -3406,7 +3406,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>[\t ](=?\d[\d\.]*[bBkKmMgGtTsShHdD]?)(?=[\t ;])</string>
+          <string>(?&lt;=\G|\s)(=?[0-9][0-9\.]*[bBkKmMgGtTsShHdD]?)(?=[\t ;])</string>
           <key>captures</key>
           <dict>
             <key>1</key>
@@ -3420,13 +3420,13 @@
           <key>name</key>
           <string>constant.language.nginx</string>
           <key>match</key>
-          <string>[\t ](on|off|true|false)(?=[\t ;])</string>
+          <string>(?&lt;=\G|\s)(on|off|true|false)(?=[\t ;])</string>
         </dict>
         <dict>
           <key>name</key>
           <string>constant.language.nginx</string>
           <key>match</key>
-          <string>[\t ](kqueue|rtsig|epoll|\/dev\/poll|select|poll|eventport|max|all|default_server|default|main|crit|error|debug|warn|notice|last)(?=[\t ;])</string>
+          <string>(?&lt;=\G|\s)(kqueue|rtsig|epoll|\/dev\/poll|select|poll|eventport|max|all|default_server|default|main|crit|error|debug|warn|notice|last)(?=[\t ;])</string>
         </dict>
         <dict>
           <key>name</key>

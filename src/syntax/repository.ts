@@ -111,22 +111,22 @@ export const syntaxRepository: {
 				name: names.comment,
 			},
 			// {
-			// 	match: /[\t ]([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|[0-9a-f:]+)(\/[0-9]{2})?(?=[\t ;])/,
+			// 	match: /(?<=\G|\s)([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|[0-9a-f:]+)(\/[0-9]{2})?(?=[\t ;])/,
 			// 	captures: {
 			// 		'1': names.ipaddr,
 			// 		'2': names.cidr,
 			// 	}
 			// },
 			{
-				match: /[\t ](=?\d[\d\.]*[bBkKmMgGtTsShHdD]?)(?=[\t ;])/,
+				match: /(?<=\G|\s)(=?[0-9][0-9\.]*[bBkKmMgGtTsShHdD]?)(?=[\t ;])/,
 				captures: {
 					'1': names.numeric,
 				}
 			}, {
-				match: /[\t ](on|off|true|false)(?=[\t ;])/,
+				match: /(?<=\G|\s)(on|off|true|false)(?=[\t ;])/,
 				name: names.languageConstant,
 			}, {
-				match: /[\t ](kqueue|rtsig|epoll|\/dev\/poll|select|poll|eventport|max|all|default_server|default|main|crit|error|debug|warn|notice|last)(?=[\t ;])/,
+				match: /(?<=\G|\s)(kqueue|rtsig|epoll|\/dev\/poll|select|poll|eventport|max|all|default_server|default|main|crit|error|debug|warn|notice|last)(?=[\t ;])/,
 				name: names.languageConstant,
 			}, {
 				match: /\\.*\ |\~\*|\~|\!\~\*|\!\~/,
