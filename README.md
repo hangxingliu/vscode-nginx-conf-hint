@@ -28,6 +28,19 @@ Many features in it include syntax highlight, auto-complete, in-editor documents
 
 ## Changelog
 
+### 0.3.1 (2024-02-29)
+
+1. Update hint data to Dec 5th, 2023. @AdrianDsg
+	- Nginx directives
+	- Lua Resty directives
+	- HTTP headers
+	- MIME types
+2. Add completion for HTTP headers
+3. Add two file extension names `.conf.default` and `.conf.template`. @halilim
+4. Fix syntax for constant values, language keywords
+	- <https://github.com/hangxingliu/vscode-nginx-conf-hint/commit/49159c02fd09dce264ded7802c9499a0f09646f5>
+5. Update Nginx beautifier
+
 ### 0.3.0 (2021-11-20)
 
 :mega: There are a lot of updates in this version:

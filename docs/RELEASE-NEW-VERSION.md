@@ -1,10 +1,10 @@
 ---
-date: 2024-02-28
+date: 2024-02-29
 ---
 # Release New Version SOP
 
 1. Modify the version field (and `preview` field) in [package.json](../package.json)
-2. Add new section in [CHANGELOG.md](./CHANGELOG.md)
+2. Add new section in [CHANGELOG.md](./CHANGELOG.md) and [CHANGELOG.zh-Hans.md](./CHANGELOG.zh-Hans.md)
 3. Update changelog section in [README.md](../README.md)
 4. Waiting for Github CI build to be done
 5. Download the built extension `vsix` file and test it on the following platform/app: (*Install from VSIX...*)

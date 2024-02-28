@@ -1,5 +1,19 @@
 # CHANGELOG
 
+### 0.3.1 (2024-02-29)
+
+1. 更新了补全数据到 2023年12月5日. @AdrianDsg
+	- Nginx 配置命令
+	- Lua Resty 配置命令
+	- HTTP headers
+	- MIME types
+2. 新增了关于 HTTP headers 的补全
+3. 新增了两个文件扩展名: `.conf.default` 和 `.conf.template`. @halilim
+4. 修正了关于常量值和内置关键字的语法高亮
+	- <https://github.com/hangxingliu/vscode-nginx-conf-hint/commit/49159c02fd09dce264ded7802c9499a0f09646f5>
+5. 更新了 Nginx beautifier
+
+
 ### 0.3.0 (2021-11-20)
 
 :mega: 这个版本更新了很多东西:

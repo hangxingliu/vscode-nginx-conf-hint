@@ -2,7 +2,7 @@
 	"name": "vscode-nginx-conf-hint",
 	"displayName": "nginx.conf hint",
 	"description": "Nginx configuration helper for Visual Studio Code with many features including syntax highlight, auto-complete, in-editor documents, embedded Lua block, and more",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"license": "GPL-3.0",
 	"icon": "images/icon.png",
 	"galleryBanner": {
