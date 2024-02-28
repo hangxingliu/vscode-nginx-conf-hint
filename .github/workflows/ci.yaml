@@ -33,13 +33,13 @@ jobs:
         run: bash ./scripts/build-npm-package.sh
       - name: Build Visual Studio Code package
         run: bash ./scripts/build-vscode-artifact.sh
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: vscode-extension
           path: |
             artifacts/vscode/*.vsix
             artifacts/vscode/*.list
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: npm-package
           path: |

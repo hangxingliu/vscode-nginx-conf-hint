@@ -72,7 +72,7 @@ about building/contributing this project
 
 ## Contributors
 
-- [@AdrianDsg](https://github.com/AdrianDsg)
+- [Adrian Dischinger](https://github.com/AdrianDsg)
 - [Halil Özgür](https://github.com/halilim)
 - [@tiansin](https://github.com/tiansin)
 - [@latipun7](https://github.com/latipun7)
