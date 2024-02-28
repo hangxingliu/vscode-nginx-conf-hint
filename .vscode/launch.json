@@ -13,6 +13,10 @@
 				"${workspaceFolder}/test/workspace"
 			],
 			"sourceMaps": true,
+			"outFiles": [
+				"${workspaceFolder}/**/*.(m|c|)js",
+				"!**/node_modules/**"
+			],
 			"preLaunchTask": "npm: build:desktop-ext"
 		},
 		{
