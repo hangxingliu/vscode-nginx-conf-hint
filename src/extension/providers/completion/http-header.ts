@@ -21,10 +21,9 @@ const _directives = new Set<string>([
 	"uwsgi_ignore_headers",
 	"uwsgi_pass_header",
 ]);
-export function _doesDirectiveNeedHttpHeader(directive: string): boolean | number {
-	if (!_directives.has(directive)) false;
-	if (directive.endsWith("s")) return true;
-	return 1;
+export function _doesDirectiveNeedHttpHeader(directive: string): boolean {
+	if (!_directives.has(directive)) return false;
+	return true;
 }
 
 export function _completeHttpHeader(document: TextDocument, position: Position, currentInput: string) {

@@ -98,8 +98,7 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 
 		const completePos = list.length - (n ? 0 : 1);
 		const completeHeaderPos = _doesDirectiveNeedHttpHeader(list[0]);
-		if (completeHeaderPos === true || completePos === completeHeaderPos)
-			return _completeHttpHeader(document, position, currentInput);
+		if (completeHeaderPos === true) return _completeHttpHeader(document, position, currentInput);
 
 		// other args
 		if (n && !list[0].startsWith("$")) return _completeNameArgs(list[0]);
