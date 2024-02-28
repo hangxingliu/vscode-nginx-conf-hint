@@ -1,0 +1,4 @@
+[
+[4,"mqtt_preread","Enables extracting information from the MQTT CONNECT message at the [preread](https://nginx.org/en/docs/stream/stream_processing.html#preread_phase) phase.","<p>Enables extracting information from the MQTT CONNECT message at the <a href=\"https://nginx.org/en/docs/stream/stream_processing.html#preread_phase\">preread</a> phase.</p>",[],"<table ><tbody><tr><th>Syntax:</th><td><code><strong>mqtt_preread</strong> <code>on</code> | <code>off</code>;</code><br></td></tr><tr><th>Default:</th><td><pre>mqtt_preread off;</pre></td></tr><tr><th>Context:</th><td><code>stream</code>, <code>server</code><br></td></tr></tbody></table>"],
+[5,"<p></p><dl class=\"compact\"><dt id=\"var_mqtt_preread_clientid\"><code>$mqtt_preread_clientid</code></dt><dd>the <code>clientid</code> value from the CONNECT message</dd><dt id=\"var_mqtt_preread_username\"><code>$mqtt_preread_username</code></dt><dd>the <code>username</code> value from the CONNECT message</dd></dl>"]
+]
