@@ -1,23 +1,26 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2015
 
+#
+# Update: 2024-02-29
+#
+
 throw() { echo -e "fatal: $1" >&2; exit 1; }
 execute() { echo "$ $*"; "$@" || throw "Failed to execute '$1'"; }
+command -v jq >/dev/null || throw "jq is not installed! (https://jqlang.github.io/jq/)";
 
 # change the current directory to the project directory
 pushd "$( dirname -- "${BASH_SOURCE[0]}" )/.." >/dev/null || exit 1;
 
-execute mkdir -p "./artifacts/npm";
+PKG="$(jq -r '.name+"-"+.version' ./package.json)";
+TARGET_DIR="./artifacts/npm";
+LIST_FILE="./artifacts/npm/${PKG}.list";
+echo "PKG=${PKG}";
 
-PKG_NAME="$(awk '/"name"/{ print substr($2,2, length($2)-3); }' ./package.json)"
-PKG_VERSION="$(awk '/"version"/{ print substr($2,2, length($2)-3); }' ./package.json)"
-PKG="${PKG_NAME}-${PKG_VERSION}";
+execute mkdir -p "$TARGET_DIR";
 
-npm pack --dryrun 2>&1 |
-	sed 's/npm notice//' |
-	tee "./artifacts/npm/${PKG}.list";
-
-echo "created './artifacts/vscode/${PKG}.list'";
+echo "$ npm pack --dryrun | tee $LIST_FILE";
+npm pack --dryrun 2>&1 | sed 's/npm notice//' | tee "$LIST_FILE";
 
 execute npm pack;
-execute mv -f "${PKG}.tgz" "./artifacts/npm";
+execute mv -f "${PKG}.tgz" "$TARGET_DIR";
