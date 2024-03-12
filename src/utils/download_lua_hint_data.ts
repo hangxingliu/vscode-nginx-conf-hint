@@ -106,14 +106,12 @@ function processDirectiveElement(
 		module: ''
 	};
 	let docsHTML = '';
-	let temp = directive;
 
-	let temp_array = temp.parent().nextUntil("div.markdown-heading")
-
-	for (let index = 0; index < temp_array.length; index++) {		
-		let character = $(temp_array[index]).text();
+	let temp = directive.parent();
+	while ((temp = temp.next())) {
+		const character = temp.text();
 		if (character.trim().length == 0) continue;
-		
+
 		if (character == SIGN_END)
 			break;
 
@@ -143,19 +141,11 @@ function processDirectiveElement(
 			item.since = match[1].trim();
 		}
 
-		console.log(index + " -> Test 3");
-
 		item.desc = item.desc || character;
 		item.notes.push(character);
 
-		if($(temp_array[index]).hasClass("anchor-element")){
-			continue;
-		}else if($(temp_array[index]).get(0).tagName == "a"){
-			console.log($(temp_array[index]));
-		}
-
 		// console.log(temp.toString());
-		console.log(" --- --- --- --- ")
+		// console.log(" --- --- --- --- ")
 
 		docsHTML += temp.toString();
 	}
@@ -178,12 +168,6 @@ function processDirectiveElement(
 	}
 	item.name = directiveName;
 	item.since = item.since || null;
-
-	if (directiveName == "server_rewrite_by_lua_block") {
-		console.log("TEST -> server_rewrite_by_lua_block");
-		// console.log(item);
-		console.log(temp_array.html());
-	}
 
 	const ctx = item.contexts.map(n => `<code>${n}</code>`).join(',');
 	const tableHTML = `<table ><tr><th>Syntax:</th><td><code><strong>${item.syntax}</strong></code><br></td></tr><tr><th>Default:</th><td><pre>${item.def}</pre></td></tr><tr><th>Context:</th><td>${ctx}</td></tr></table>`;
@@ -224,11 +208,10 @@ function processSnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNode>) 
 		prefix: '',
 		body: ''
 	};
-	let temp = directive;
-	let temp_array = temp.parent().nextUntil("div.markdown-heading")
 
-	for (let index = 0; index < temp_array.length; index++) {
-		let character = $(temp_array[index]).text();
+	let temp = directive.parent();
+	while ((temp = temp.next())) {
+		const character = temp.text();
 		if (character == SIGN_END)
 			break;
 
@@ -292,11 +275,10 @@ function processRestySnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNo
 			prefix: '',
 			body: '',
 		}
-		let temp = directive;
-		let temp_array = temp.parent().nextUntil("div.markdown-heading")
 
-		for (let index = 0; index < temp_array.length; index++) {
-			let character = $(temp_array[index]).text();
+		let temp = directive.parent();
+		while ((temp = temp.next())) {
+			const character = temp.text();
 			if (character == SIGN_END)
 				break;
 
