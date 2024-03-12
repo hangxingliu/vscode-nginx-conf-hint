@@ -36,8 +36,7 @@ async function main() {
 		const html = await getText(modName, nginxLuaDocsBaseURL);
 		const $ = loadHtml(html);
 
-		const $directiveList = $("#user-content-directives").next("ul").find("li a");
-
+		const $directiveList = $("#user-content-directives").parent().next("ul").find("li a");
 		let count = 0;
 		$directiveList.each((i, ele) => {
 			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
@@ -45,7 +44,8 @@ async function main() {
 		});
 		console.log(`found ${count} directives`);
 
-		const $snippetList = $("#user-content-nginx-api-for-lua").next("ul").find("li a");
+		const $snippetList = $("#user-content-nginx-api-for-lua").parent().next("ul").find("li a");
+
 		$snippetList.each((i, ele) => {
 			processSnippetElement($, ele);
 		});
@@ -64,7 +64,7 @@ async function main() {
 		let count = 0;
 		$directiveList.each((_i, ele) => {
 			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
-			count++;
+				count++;
 		});
 		console.log(`found ${count} directives`);
 		detailsStream.close();
@@ -91,6 +91,7 @@ function processDirectiveElement(
 	detailsStream: JsonFileWriter,
 ) {
 	const directiveName = $(ele).text();
+
 	const directive = $("#user-content-" + directiveName);
 	if (directive.length == 0) return false;
 
@@ -106,8 +107,13 @@ function processDirectiveElement(
 	};
 	let docsHTML = '';
 	let temp = directive;
-	while ((temp = temp.next())) {
-		const character = temp.text();
+
+	let temp_array = temp.parent().nextUntil("div.markdown-heading")
+
+	for (let index = 0; index < temp_array.length; index++) {		
+		let character = $(temp_array[index]).text();
+		if (character.trim().length == 0) continue;
+		
 		if (character == SIGN_END)
 			break;
 
@@ -136,11 +142,25 @@ function processDirectiveElement(
 		if (match) {
 			item.since = match[1].trim();
 		}
+
+		console.log(index + " -> Test 3");
+
 		item.desc = item.desc || character;
 		item.notes.push(character);
 
+		if($(temp_array[index]).hasClass("anchor-element")){
+			continue;
+		}else if($(temp_array[index]).get(0).tagName == "a"){
+			console.log($(temp_array[index]));
+		}
+
+		// console.log(temp.toString());
+		console.log(" --- --- --- --- ")
+
 		docsHTML += temp.toString();
 	}
+
+	// console.log(docsHTML);
 
 	if (item.def.startsWith("no")) {
 		item.def = directiveName + " ;";
@@ -159,6 +179,12 @@ function processDirectiveElement(
 	item.name = directiveName;
 	item.since = item.since || null;
 
+	if (directiveName == "server_rewrite_by_lua_block") {
+		console.log("TEST -> server_rewrite_by_lua_block");
+		// console.log(item);
+		console.log(temp_array.html());
+	}
+
 	const ctx = item.contexts.map(n => `<code>${n}</code>`).join(',');
 	const tableHTML = `<table ><tr><th>Syntax:</th><td><code><strong>${item.syntax}</strong></code><br></td></tr><tr><th>Default:</th><td><pre>${item.def}</pre></td></tr><tr><th>Context:</th><td>${ctx}</td></tr></table>`;
 	manifestStreams.lua.writeItem([
@@ -172,6 +198,12 @@ function processDirectiveElement(
 		baseUrl + `#${directiveName}`,
 		{},
 	]);
+
+	if (directiveName == "server_rewrite_by_lua_block") {
+		// TODO: needs to be changed remove SVG objects and add required contents (!)
+		console.log(docsHTML);
+	}
+
 	detailsStream.writeItem([
 		ManifestItemType.DirectiveDetails,
 		directiveName,
@@ -193,8 +225,10 @@ function processSnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNode>) 
 		body: ''
 	};
 	let temp = directive;
-	while ((temp = temp.next())) {
-		const character = temp.text();
+	let temp_array = temp.parent().nextUntil("div.markdown-heading")
+
+	for (let index = 0; index < temp_array.length; index++) {
+		let character = $(temp_array[index]).text();
 		if (character == SIGN_END)
 			break;
 
@@ -238,6 +272,7 @@ async function processRestyREADME(baseUrl: string, prefix: string) {
 	const $ = loadHtml(html);
 
 	print.start(`Analyzing Resty "${prefix}"`);
+
 	$(".entry-content ul li a").each((i, ele) => {
 		processRestySnippetElement($, ele, baseUrl, prefix);
 	});
@@ -246,6 +281,7 @@ function processRestySnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNo
 	if ($(ele).attr('href') !== '#methods') return;
 
 	const directiveLists = $(ele).next("ul").find("li a");
+
 	directiveLists.each((i, ele) => {
 		const name = $(ele).text();
 		const directive = $("#user-content-" + name.toLocaleLowerCase().replace(/[\.:]/g, ""));
@@ -257,9 +293,10 @@ function processRestySnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNo
 			body: '',
 		}
 		let temp = directive;
+		let temp_array = temp.parent().nextUntil("div.markdown-heading")
 
-		while ((temp = temp.next())) {
-			const character = temp.text();
+		for (let index = 0; index < temp_array.length; index++) {
+			let character = $(temp_array[index]).text();
 			if (character == SIGN_END)
 				break;
 
