@@ -29,10 +29,8 @@ jobs:
           yarn run build:syntax &&
           yarn run build:web-ext &&
           yarn run build:desktop-ext
-      - name: Build npm package
-        run: bash ./scripts/build-npm-package.sh
-      - name: Build Visual Studio Code package
-        run: bash ./scripts/build-vscode-artifact.sh
+      - name: Build npm package and Visual Studio Code package
+        run: bash ./scripts/vsce.sh build-vsix-and-list
       - uses: actions/upload-artifact@v4
         with:
           name: vscode-extension
