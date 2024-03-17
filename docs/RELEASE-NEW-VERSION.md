@@ -1,5 +1,5 @@
 ---
-date: 2024-02-29
+date: 2024-03-17
 ---
 # Release New Version SOP
 
@@ -14,13 +14,13 @@ date: 2024-02-29
 6. Trigger `publish-vscode-extension` workflow on Github 
 7. Check it on <https://marketplace.visualstudio.com/manage/publishers/hangxingliu> after 10~15 minutes
 8. Create and push Git tag. e.g., `git tag 2.0.0-preview`, `git push --tags`
-9. Create a new release at <https://github.com/hangxingliu/vscode-nginx-conf-hint/releases/new>
+9. Create a new release at [github-release-new]
     - Title: `<major>.<minor>.<patch>[-pre.<no>] (<year>-<month>-<day>)`
     - Content: copying from the [CHANGELOG.md](./CHANGELOG.md)
     - Assets: `*.vsix`
 10. Release vsix file to Open VSX
     - URL: <https://open-vsx.org/user-settings/extensions>
-    - **ONLY** Publish vsix file built through CI from: <https://github.com/hangxingliu/vscode-nginx-conf-hint/actions/workflows/ci.yaml>
+    - **ONLY** Publish vsix file built through CI from: [github-ci]
 
 ## Test extension in Visual Studio Code Web
 
@@ -47,3 +47,7 @@ yarn start
 - Expiration (UTC): `30days`
 - Scopes: (Click "Show all scopes")
     - [x] Marketplace > Manage
+
+
+[github-ci]: https://github.com/hangxingliu/vscode-nginx-conf-hint/actions/workflows/ci.yaml
+[github-release-new]: https://github.com/hangxingliu/vscode-nginx-conf-hint/releases/new
