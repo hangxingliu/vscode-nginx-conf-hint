@@ -17,18 +17,13 @@ jobs:
           node-version: latest
           cache: yarn
       - name: Install
-        run: |
-          yarn install
+        run: yarn install
+      - name: Pacth
+        run: ./scripts/fix-eslint-strip-ansi.sh
       - name: Lint
-        run: |
-          ./scripts/fix-eslint-strip-ansi.sh &&
-          yarn run lint:eslint
+        run: yarn run lint:eslint
       - name: Build
-        run: |
-          yarn run build:utils &&
-          yarn run build:syntax &&
-          yarn run build:web-ext &&
-          yarn run build:desktop-ext
+        run: yarn run build
       - name: Build npm package and Visual Studio Code package
         run: bash ./scripts/vsce.sh build-vsix-and-list
       - uses: actions/upload-artifact@v4
