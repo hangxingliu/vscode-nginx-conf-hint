@@ -1,5 +1,6 @@
 # vscode test web
 .vscode-test-web
+/out
 
 *.tsbuildinfo
 

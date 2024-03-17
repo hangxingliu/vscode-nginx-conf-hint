@@ -1,58 +1,71 @@
-# this extension doesn't need any node modules
-# if I don't ignore node_modules, `vsce` will pack optional dependencies into the extension
-node_modules
+#
+#region main
+# template:  .vscodeignore
+# author:    hangxingliu
+# license:   MIT
+# version:   2024-03-16
+#
 
+# config for building/bundling
+tsconfig*.json
 *.tsbuildinfo
+.swcrc
 
-# vscode test web
-.vscode
-.vscode-test-web
+# spellchecker
+cspell.yml
 
-# github files
-.github
+# output files
+artifacts
+.tsc
 
-# artifacts
-artifacts/npm
-artifacts/vscode
-artifacts/web-ext/*.map
+# cache directory
+cache
+cache*
+
+# scripts
+scripts
+
 
 # documents
 docs
 
-# scripts and utils
-scripts
-src/extension/**/*.ts
-src/extension/**/*.js.map
-src/syntax/references
-src/syntax/*.ts
-src/syntax/*.js
-src/utils
+# source files
+src
+*.d.ts
+
+# test files
+*.spec.*
 test
 
-# typescript files
-tsconfig.*.json
+# github files
+.github
+
+# built vscode package
+.vsix
+
+# vscode configuartion and test files
+.vscode
+.vscode-test
+.vscode-test-web
+
+# ignore gitignore
+.gitignore
+
+# example files
+examples
+
+# archived files
+*.tgz
+*.vsix
+*.zip
+*.7z
+*.tar
 
 # macos files
 .DS_Store
 ._*
-.nmimrc
 
-# archive files and logs
-*.tar
-*.tgz
-*.7z
-*.zip
-*.vsix
+# logs
+logs
 *.log
-
-# cache files
-cache
-cache-*
-
-# eslint
-.eslint*
-
-*.d.ts
-
-# screenshot image (because link of screenshot in README is under github)
-images/screenshots.gif
+#endregion main

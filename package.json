@@ -40,17 +40,17 @@
 			"url": "https://github.com/latipun7"
 		}
 	],
-	"main": "./src/extension/main.desktop.js",
-	"browser": "./artifacts/web-ext/extension.js",
+	"main": "./out/extension/main.desktop.js",
+	"browser": "./out/extension/main.web.js",
 	"scripts": {
+		"build": "node scripts/run clean build:ts build:syntax build:web",
+		"build:dev": "node scripts/run build:ts build:syntax",
+		"build:ts": "swc -d out src --strip-leading-paths --copy-files",
+		"build:web": "webpack --mode production --devtool hidden-source-map",
+		"build:syntax": "node --enable-source-maps out/syntax/generate-tmLanguage",
+		"lint:types": "tsc",
 		"lint:eslint": "eslint --ext .js,.ts src test",
-		"dev:web-ext": "webpack",
-		"build:desktop-ext": "tsc -p tsconfig.extension.json",
-		"build:web-ext": "webpack --mode production --devtool hidden-source-map",
-		"build:utils": "tsc -p tsconfig.utils.json",
-		"swc:utils": "swc -d ./src -- ./src/utils/*.ts",
-		"build:syntax": "ts-node --project tsconfig.syntax.json ./src/syntax/generate-tmLanguage.ts",
-		"clean": "rimraf --glob '.tsc' 'src/extension/**/*.{js,map}' 'src/utils/**/*.{js,map}'"
+		"clean": "node scripts/clean"
 	},
 	"extensionKind": [
 		"ui",
@@ -59,7 +59,10 @@
 	"extensionDependencies": [],
 	"dependencies": {},
 	"devDependencies": {
-		"@types/node": "latest",
+		"@swc/cli": "^0.3.10",
+		"@swc/core": "^1.4.8",
+		"@types/node": "^20.11.28",
+		"@types/turndown": "^5.0.4",
 		"@types/vscode": "^1.64.0",
 		"axios": "^1",
 		"cheerio": "1.0.0-rc.12",
@@ -67,21 +70,17 @@
 		"https-proxy-agent": "^7",
 		"process": "^0.11.10",
 		"rimraf": "^5",
-		"ts-loader": "^9",
-		"ts-node": "^10",
+		"swc-loader": "^0.2.6",
 		"turndown": "^7.1.2",
-		"typescript": "^4",
+		"typescript": "^5",
 		"webpack": "^5",
 		"webpack-cli": "^5"
 	},
 	"optionalDependencies": {
-		"@swc/cli": "^0.1.63",
-		"@swc/core": "^1.3.96",
-		"@typescript-eslint/eslint-plugin": "^6",
-		"@typescript-eslint/parser": "^6",
+		"@typescript-eslint/eslint-plugin": "^7",
+		"@typescript-eslint/parser": "^7",
 		"eslint": "^8",
-		"swc-loader": "^0.2.3",
-		"vsce": "^2.15.0"
+		"vsce": "^2"
 	},
 	"engines": {
 		"vscode": "^1.64.0"

@@ -5,20 +5,9 @@ const path = require("path");
 const webpack = require("webpack");
 
 /** @type {import('webpack').RuleSetUse} */
-let tsLoader = {
-	loader: "ts-loader",
-	options: {
-		configFile: "tsconfig.web.json",
-	},
+const tsLoader = {
+	loader: "swc-loader",
 };
-try {
-	require("swc-loader");
-	tsLoader = {
-		loader: "swc-loader",
-	};
-} catch (error) {
-	// noop
-}
 
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
 /** @type WebpackConfig */
@@ -26,11 +15,11 @@ const webExtensionConfig = {
 	mode: "none", // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
 	target: "webworker", // extensions run in a webworker context
 	entry: {
-		extension: "./src/extension/main.web.ts", // source of the web extension main file
+		"main.web": "./src/extension/main.web.ts", // source of the web extension main file
 	},
 	output: {
 		filename: "[name].js",
-		path: path.join(__dirname, "./artifacts/web-ext"),
+		path: path.join(__dirname, "./out/extension"),
 		libraryTarget: "commonjs",
 	},
 	resolve: {

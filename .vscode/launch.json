@@ -14,10 +14,10 @@
 			],
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceFolder}/**/*.(m|c|)js",
+				"${workspaceFolder}/out/**/*.(m|c|)js",
 				"!**/node_modules/**"
 			],
-			"preLaunchTask": "npm: build:desktop-ext"
+			"preLaunchTask": "npm: build:dev"
 		},
 		{
 			"name": "Launch Web Extension",
@@ -31,21 +31,19 @@
 			"debugWebWorkerHost": true,
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceFolder}/artifacts/web-ext/*.js"
+				"${workspaceFolder}/out/**/*.(m|c|)js",
+				"!**/node_modules/**"
 			],
-			"preLaunchTask": "npm: dev:web-ext"
+			"preLaunchTask": "npm: build:web"
 		},
 		{
-			"type": "node",
-			"request": "launch",
-			"name": "Launch 'test/unit-testing/syntax1.ts'",
-			"sourceMaps": true,
-			"runtimeExecutable": "node",
-			"runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
-			"args": ["${workspaceFolder}/test/unit-testing/syntax1.ts"],
-			"cwd": "${workspaceRoot}",
-			"console": "integratedTerminal",
-			"preLaunchTask": "npm: build:desktop-ext"
+			"name": "Attach",
+			"port": 9229,
+			"request": "attach",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"type": "node"
 		}
 	]
 }
