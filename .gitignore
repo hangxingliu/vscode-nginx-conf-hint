@@ -1,3 +1,7 @@
+# outdated generated js files
+src/utils/**/*.js
+src/utils/**/*.js.map
+
 # vscode test web
 .vscode-test-web
 /out

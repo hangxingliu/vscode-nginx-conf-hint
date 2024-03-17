@@ -1,15 +1,5 @@
 import { resolve } from "path";
 
-export const enum ManifestItemType {
-	ModuleNames = 1,
-	Directive = 2,
-	Variable = 3,
-	DirectiveDetails = 4,
-	VariableDetails = 5,
-	HttpReqHeader = 6,
-	HttpResHeader = 7,
-}
-
 export const projectDir = resolve(__dirname, '../..');
 export const cacheDir = resolve(projectDir, 'cache')
 export const syntaxesDir = resolve(projectDir, 'src/syntax/references');

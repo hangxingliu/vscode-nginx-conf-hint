@@ -2,9 +2,10 @@
 
 import type { AnyNode, BasicAcceptedElems, CheerioAPI } from "cheerio";
 import { nginxLuaDocsBaseURL, luaRestyDocsURLs, nginxLuaModuleURLs } from "./config_url";
-import { manifestFiles, ManifestItemType, detailsFile, luaSnippetFile, cacheDir } from "../utils/config";
+import { manifestFiles, detailsFile, luaSnippetFile, cacheDir } from "../utils/config";
 import { JsonFileWriter, SimpleHttpCache, writeJSON, getText, loadHtml, print } from "../utils/crawler-utils";
 import type { SnippetItem } from "../extension/types";
+import { ManifestItemType } from "../types-manifest";
 
 const manifestStreams = {
 	lua: new JsonFileWriter(manifestFiles.lua),
