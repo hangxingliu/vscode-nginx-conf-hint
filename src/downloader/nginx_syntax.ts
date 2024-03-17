@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { getText, print } from "../utils/crawler-utils";
-import { syntaxFiles, syntaxURLs } from "../utils/config";
+import { syntaxFiles } from "../utils/config";
+import { syntaxURLs } from "./config_url";
 import { writeFileSync } from "fs";
 
 main();

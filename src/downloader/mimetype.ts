@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import { cacheDir, mediaTypeFile, mediaTypesURL } from "../utils/config";
-import { JsonFileWriter, getText, SimpleHttpCache, loadHtml, print } from "../utils/crawler-utils";
+import { cacheDir, mediaTypeFile } from "../utils/config";
+import { JsonFileWriter, getText, SimpleHttpCache, loadHtml } from "../utils/crawler-utils";
+import { mediaTypesURL } from "./config_url";
 
 main().catch((e) => console.error(e));
 async function main() {

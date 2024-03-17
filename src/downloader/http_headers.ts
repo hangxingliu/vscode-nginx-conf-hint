@@ -1,6 +1,7 @@
 import { URL } from "url";
 import { Cheerio, Element } from "cheerio";
-import { cacheDir, httpHeadersWikiURLs, manifestFiles, ManifestItemType } from "../utils/config";
+import { cacheDir, manifestFiles, ManifestItemType } from "../utils/config";
+import { httpHeadersWikiURLs } from "./config_url";
 import {
 	bold,
 	getText,
@@ -33,7 +34,7 @@ async function main() {
 			if (!description) print.warn(`header ${headerNames[0]} has no description`);
 			const example: string[] = [];
 			const $example = $cols.eq(2).find("code");
-			assertLength(`example code of "${headerNames[0]}"`, $example, '>=1');
+			assertLength(`example code of "${headerNames[0]}"`, $example, ">=1");
 			$example.each((i, el) => {
 				const code = $(el).text().trim();
 				example.push(code);
