@@ -11,8 +11,8 @@ import {
 	luaSnippetFile,
 	nginxLuaModuleURLs,
 	cacheDir,
-} from "./config";
-import { JsonFileWriter, SimpleHttpCache, writeJSON, getText, loadHtml, print } from "./crawler-utils";
+} from "../utils/config";
+import { JsonFileWriter, SimpleHttpCache, writeJSON, getText, loadHtml, print } from "../utils/crawler-utils";
 import type { SnippetItem } from "../extension/types";
 
 const manifestStreams = {

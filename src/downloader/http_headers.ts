@@ -1,6 +1,6 @@
 import { URL } from "url";
 import { Cheerio, Element } from "cheerio";
-import { cacheDir, httpHeadersWikiURLs, manifestFiles, ManifestItemType } from "./config";
+import { cacheDir, httpHeadersWikiURLs, manifestFiles, ManifestItemType } from "../utils/config";
 import {
 	bold,
 	getText,
@@ -10,7 +10,7 @@ import {
 	toMarkdown,
 	JsonFileWriter,
 	SimpleHttpCache,
-} from "./crawler-utils";
+} from "../utils/crawler-utils";
 
 main().catch((error) => console.error(error.stack));
 async function main() {

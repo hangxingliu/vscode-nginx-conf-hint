@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { ManifestItemType, cacheDir, detailsFile, manifestFiles, nginxDocsBaseURL } from "./config";
+import { ManifestItemType, cacheDir, detailsFile, manifestFiles, nginxDocsBaseURL } from "../utils/config";
 import {
 	JsonFileWriter,
 	resolveURL,
@@ -14,7 +14,7 @@ import {
 	SimpleHttpCache,
 	assertLength,
 	assert,
-} from "./crawler-utils";
+} from "../utils/crawler-utils";
 
 const manifestStreams = {
 	core: new JsonFileWriter(manifestFiles.core),

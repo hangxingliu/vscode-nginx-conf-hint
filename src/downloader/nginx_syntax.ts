@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { getText, print } from "./crawler-utils";
-import { syntaxFiles, syntaxURLs } from "./config";
+import { getText, print } from "../utils/crawler-utils";
+import { syntaxFiles, syntaxURLs } from "../utils/config";
 import { writeFileSync } from "fs";
 
 main();
@@ -10,7 +10,7 @@ async function main() {
 		download('original'),
 		download('sublime')
 	]).then(() => {
-		print.info('downloaded syntaxes')
+		print.info('downloaded syntax')
 	}).catch(error => {
 		print._error(error.message);
 	})
