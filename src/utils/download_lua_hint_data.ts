@@ -2,15 +2,24 @@
 
 import type { AnyNode, BasicAcceptedElems, CheerioAPI } from "cheerio";
 
-import { nginxLuaDocsBaseURL, luaRestyDocsURLs, manifestFiles, ManifestItemType, detailsFile, luaSnippetFile, nginxLuaModuleURLs } from "./config";
-import { getText, loadHtml, print, initHttpCache, JsonFileWriter, writeJSON } from "./helper";
+import {
+	nginxLuaDocsBaseURL,
+	luaRestyDocsURLs,
+	manifestFiles,
+	ManifestItemType,
+	detailsFile,
+	luaSnippetFile,
+	nginxLuaModuleURLs,
+	cacheDir,
+} from "./config";
+import { JsonFileWriter, SimpleHttpCache, writeJSON, getText, loadHtml, print } from "./crawler-utils";
 import type { SnippetItem } from "../extension/types";
 
 const manifestStreams = {
 	lua: new JsonFileWriter(manifestFiles.lua),
-}
+};
 
-const SIGN_END = 'Back to TOC';
+const SIGN_END = "Back to TOC";
 const SIGN_SYNTAX = /syntax: (.*)/;
 const SIGN_DEFAULT = /default: (.*)/;
 const SIGN_CONTEXT = /context: (.*)/;
@@ -19,12 +28,16 @@ const SIGN_SINCE_VERSION = /^This directive was first introduced in the v(\d+\.\
 
 const snippetsResult: { [x: string]: SnippetItem } = {};
 
-main().catch(error => print.error(error.stack));
+main().catch((error) => console.error(error));
 async function main() {
-	initHttpCache();
+	SimpleHttpCache.init(cacheDir);
 
-	const coreModule = 'lua_nginx_module'
-	const moduleNames: Array<string | number> = [ManifestItemType.ModuleNames, coreModule, ...nginxLuaModuleURLs.map(it => it.name)];
+	const coreModule = "lua_nginx_module";
+	const moduleNames: Array<string | number> = [
+		ManifestItemType.ModuleNames,
+		coreModule,
+		...nginxLuaModuleURLs.map((it) => it.name),
+	];
 	const getModuleIndex = (mod: string) => moduleNames.indexOf(mod, 1);
 	manifestStreams.lua.writeItem(moduleNames);
 
@@ -39,8 +52,7 @@ async function main() {
 		const $directiveList = $("#user-content-directives").parent().next("ul").find("li a");
 		let count = 0;
 		$directiveList.each((i, ele) => {
-			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
-				count++;
+			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream)) count++;
 		});
 		console.log(`found ${count} directives`);
 
@@ -59,12 +71,11 @@ async function main() {
 		const detailsStream = new JsonFileWriter(detailsFile(modName));
 		const html = await getText(modName, url);
 		const $ = loadHtml(html);
-		print.start('Analyzing Directives');
+		print.start("Analyzing Directives");
 		const $directiveList = $("#user-content-directives").parent("h1").next("ul").find("li a");
 		let count = 0;
 		$directiveList.each((_i, ele) => {
-			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream))
-				count++;
+			if (processDirectiveElement($, ele, nginxLuaDocsBaseURL, modIndex, detailsStream)) count++;
 		});
 		console.log(`found ${count} directives`);
 		detailsStream.close();
@@ -77,10 +88,9 @@ async function main() {
 	applyConstantSnippets();
 	manifestStreams.lua.close();
 
-	print.start('Writing snippets to file');
+	print.start("Writing snippets to file");
 	writeJSON(luaSnippetFile, snippetsResult);
-	print.ok();
-	return print.done();
+	return print.allDone();
 }
 
 function processDirectiveElement(
@@ -88,7 +98,7 @@ function processDirectiveElement(
 	ele: BasicAcceptedElems<AnyNode>,
 	baseUrl: string,
 	modIndex: number,
-	detailsStream: JsonFileWriter,
+	detailsStream: JsonFileWriter
 ) {
 	const directiveName = $(ele).text();
 
@@ -96,24 +106,23 @@ function processDirectiveElement(
 	if (directive.length == 0) return false;
 
 	const item = {
-		name: '',
-		syntax: [],
-		def: '',
-		contexts: [],
-		desc: '',
-		notes: [],
-		since: '',
-		module: ''
+		name: "",
+		syntax: [] as string[],
+		def: "",
+		contexts: [] as string[],
+		desc: "",
+		notes: [] as string[],
+		since: "",
+		module: "",
 	};
-	let docsHTML = '';
+	let docsHTML = "";
 
 	let temp = directive.parent();
 	while ((temp = temp.next())) {
 		const character = temp.text();
 		if (character.trim().length == 0) continue;
 
-		if (character == SIGN_END)
-			break;
+		if (character == SIGN_END) break;
 
 		let match = character.match(SIGN_SYNTAX);
 		if (match) {
@@ -129,7 +138,7 @@ function processDirectiveElement(
 
 		match = character.match(SIGN_CONTEXT);
 		if (match) {
-			item.contexts = match[1].split(',').map(i => i.trim());
+			item.contexts = match[1].split(",").map((i) => i.trim());
 			continue;
 		}
 
@@ -157,11 +166,11 @@ function processDirectiveElement(
 	}
 	if (item.def == "") {
 		if (directiveName.endsWith("by_lua")) {
-			item.def = directiveName + " '';"
+			item.def = directiveName + " '';";
 		} else if (directiveName.endsWith("by_lua_block")) {
-			item.def = directiveName + " {}"
+			item.def = directiveName + " {}";
 		} else if (directiveName.endsWith("by_lua_file")) {
-			item.def = directiveName + " .lua;"
+			item.def = directiveName + " .lua;";
 		} else {
 			item.def = directiveName + " ;";
 		}
@@ -169,7 +178,7 @@ function processDirectiveElement(
 	item.name = directiveName;
 	item.since = item.since || null;
 
-	const ctx = item.contexts.map(n => `<code>${n}</code>`).join(',');
+	const ctx = item.contexts.map((n) => `<code>${n}</code>`).join(",");
 	const tableHTML = `<table ><tr><th>Syntax:</th><td><code><strong>${item.syntax}</strong></code><br></td></tr><tr><th>Default:</th><td><pre>${item.def}</pre></td></tr><tr><th>Context:</th><td>${ctx}</td></tr></table>`;
 	manifestStreams.lua.writeItem([
 		ManifestItemType.Directive,
@@ -202,27 +211,26 @@ function processDirectiveElement(
 function processSnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNode>) {
 	const name = $(ele).text();
 	const directive = $("#user-content-" + name.toLocaleLowerCase().replace(/[\.:]/g, ""));
-	if (name == 'Introduction' || directive.length == 0) return;
+	if (name == "Introduction" || directive.length == 0) return;
 	const item: SnippetItem = {
-		description: '',
-		prefix: '',
-		body: ''
+		description: "",
+		prefix: "",
+		body: "",
 	};
 
 	let temp = directive.parent();
 	while ((temp = temp.next())) {
 		const character = temp.text();
-		if (character == SIGN_END)
-			break;
+		if (character == SIGN_END) break;
 
 		let match = RegExp(SIGN_SYNTAX).exec(character);
 		if (match) {
 			let body = match[1].trim();
-			match = RegExp(/\((\w.*?)\)/).exec(body)
+			match = RegExp(/\((\w.*?)\)/).exec(body);
 			if (match) {
 				const params = match[1].split(",").map((val, index) => {
 					val = val.trim();
-					return /^[a-zA-Z]+/.test(val) ? (`\${${index + 1}:${val}}`) : val;
+					return /^[a-zA-Z]+/.test(val) ? `\${${index + 1}:${val}}` : val;
 				});
 				body = body.replace(/\(\w.*?\)/, "(" + params.join(", ") + ")");
 			}
@@ -261,7 +269,7 @@ async function processRestyREADME(baseUrl: string, prefix: string) {
 	});
 }
 function processRestySnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNode>, baseUrl: string, prefix: string) {
-	if ($(ele).attr('href') !== '#methods') return;
+	if ($(ele).attr("href") !== "#methods") return;
 
 	const directiveLists = $(ele).next("ul").find("li a");
 
@@ -271,23 +279,22 @@ function processRestySnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNo
 		if (directive.length == 0) return;
 
 		const item: SnippetItem = {
-			description: '',
-			prefix: '',
-			body: '',
-		}
+			description: "",
+			prefix: "",
+			body: "",
+		};
 
 		let temp = directive.parent();
 		while ((temp = temp.next())) {
 			const character = temp.text();
-			if (character == SIGN_END)
-				break;
+			if (character == SIGN_END) break;
 
 			let match = RegExp(SIGN_SYNTAX).exec(character);
 			if (match) {
 				let body = match[1].trim();
-				match = RegExp(/\((\w.*?)\)/).exec(body)
+				match = RegExp(/\((\w.*?)\)/).exec(body);
 				if (match) {
-					const params = match[1].split(",").map(val => {
+					const params = match[1].split(",").map((val) => {
 						val = val.trim();
 						return /^[a-zA-Z]+/.test(val) ? "$" + val : val;
 					});
@@ -317,10 +324,10 @@ function processRestySnippetElement($: CheerioAPI, ele: BasicAcceptedElems<AnyNo
 			item.description += character;
 		}
 
-		item.prefix = `${prefix}.${name}`
+		item.prefix = `${prefix}.${name}`;
 		item.body = item.body || name;
 		snippetsResult[item.prefix] = item;
-	})
+	});
 }
 function applyConstantSnippets() {
 	const core = {
@@ -328,7 +335,7 @@ function applyConstantSnippets() {
 		"ngx.ERROR": "-1",
 		"ngx.AGAIN": "-2",
 		"ngx.DONE": "-4",
-		"ngx.DECLINED": "-5"
+		"ngx.DECLINED": "-5",
 	};
 
 	const methods = {
@@ -399,13 +406,13 @@ function applyConstantSnippets() {
 		"ngx.HTTP_INSUFFICIENT_STORAGE": "(507) (first added in the v0.9.20 release)",
 	};
 
-	const coll = {};
+	const coll: Record<string, string> = {};
 	Object.assign(coll, core, methods, logConst, status);
-	Object.keys(coll).forEach(key => {
+	Object.keys(coll).forEach((key) => {
 		snippetsResult[key] = {
 			description: coll[key],
 			prefix: key,
 			body: key,
-		}
-	})
+		};
+	});
 }

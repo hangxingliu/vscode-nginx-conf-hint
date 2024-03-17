@@ -1,21 +1,20 @@
 #!/usr/bin/env node
 
-import { ManifestItemType, detailsFile, manifestFiles, nginxDocsBaseURL } from "./config";
+import { ManifestItemType, cacheDir, detailsFile, manifestFiles, nginxDocsBaseURL } from "./config";
 import {
+	JsonFileWriter,
 	resolveURL,
-	compressHTML,
+	minifierHTML,
 	getText,
 	loadHtml,
 	print,
-	initHttpCache,
-	shouldBeEqual,
 	AssertLevel,
 	bold,
-	lengthShouldBeMoreThanOrEqual,
-	lengthShouldBeEqual,
 	toMarkdown,
-	JsonFileWriter,
-} from "./helper";
+	SimpleHttpCache,
+	assertLength,
+	assert,
+} from "./crawler-utils";
 
 const manifestStreams = {
 	core: new JsonFileWriter(manifestFiles.core),
@@ -25,9 +24,9 @@ const coreModuleNames: unknown[] = [ManifestItemType.ModuleNames];
 const jsModuleNames: unknown[] = [ManifestItemType.ModuleNames];
 const isJsModule = (moduleName: string) => moduleName.endsWith("_js_module");
 
-main().catch((error) => print.error(error.stack));
+main().catch((error) => console.error(error.stack));
 async function main() {
-	initHttpCache();
+	SimpleHttpCache.init(cacheDir);
 
 	const html = await getText("nginx docs", nginxDocsBaseURL);
 	const $ = loadHtml(html);
@@ -36,10 +35,10 @@ async function main() {
 
 	const titleShouleBe = "Modules reference";
 	const $title = $("center h4").filter((i, e) => $(e).text().trim() == titleShouleBe);
-	lengthShouldBeEqual(`document page title "${titleShouleBe}"`, $title, 1);
+	assertLength(`document page title "${titleShouleBe}"`, $title, 1);
 
 	const directiveLists = $title.parent().nextAll("ul.compact");
-	lengthShouldBeEqual("length(ul.compact)", directiveLists, 6);
+	assertLength("length(ul.compact)", directiveLists, 6);
 
 	const modules: Array<{ moduleName: string; moduleIndex: number; uri: string }> = [];
 	directiveLists.each((i, list) => {
@@ -51,18 +50,18 @@ async function main() {
 					.split("\n")
 					.map((it) => it.trim())
 					.filter((it) => it);
-				shouldBeEqual(`ul.compact[0][0]`, lines[0], "Alphabetical index of directives");
-				shouldBeEqual(`ul.compact[0][1]`, lines[1], "Alphabetical index of variables");
+				assert(`ul.compact[0][0]`, lines[0], "Alphabetical index of directives");
+				assert(`ul.compact[0][1]`, lines[1], "Alphabetical index of variables");
 				return;
 			}
 			default: {
 				const $links = $(list).find("a");
-				lengthShouldBeMoreThanOrEqual(`ul.compact[${i}] a`, $links, 1);
+				assertLength(`ul.compact[${i}] a`, $links, ">=1");
 				$links.each((j, link) => {
 					const $link = $(link);
 					const linkText = $link.text().trim();
 					if (linkText !== "Core functionality" && !linkText.startsWith("ngx_")) {
-						print.warning(`ul.compact[${i}][${j}] has unknown title "${linkText}"`);
+						print.warn(`ul.compact[${i}][${j}] has unknown title "${linkText}"`);
 						return;
 					}
 					const docsUri = $link.attr("href");
@@ -81,7 +80,7 @@ async function main() {
 	manifestStreams.core.writeItem(coreModuleNames);
 	manifestStreams.js.writeItem(jsModuleNames);
 
-	print.ok(`Got ${bold(modules.length)} module document pages`);
+	print.info(`Got ${bold(modules.length)} module document pages`);
 
 	const count = { directives: 0, variables: 0 };
 	for (const element of modules) {
@@ -94,12 +93,11 @@ async function main() {
 	manifestStreams.core.close();
 	manifestStreams.js.close();
 
-	print.ok();
 	console.log(`Total modules:    ${bold(modules.length)}`);
 	console.log(`Total directives: ${bold(count.directives)}`);
 	console.log(`Total variables:  ${bold(count.variables)}`);
 	if (print.warnings) console.log(`Total warnings:   ${bold(print.warnings)}`);
-	return print.done();
+	return print.allDone();
 }
 
 async function processModuleDocs(context: { moduleName: string; moduleIndex: number; uri: string }) {
@@ -133,33 +131,33 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 	print.start(`Processing module ${bold(moduleName)} docs (${info})`);
 
 	//#region process directives
-	lengthShouldBeMoreThanOrEqual(`directives info of ${moduleName}: $directives`, $directives, 1);
+	assertLength(`directives info of ${moduleName}: $directives`, $directives, ">=1");
 	$directives.each((i) => {
 		const $directive = $directives.eq(i);
-		const tableHTML = compressHTML($directive.html()).replace('cellspacing="0"', "");
+		const tableHTML = minifierHTML($directive.html()).replace('cellspacing="0"', "");
 
 		//check table item available
 		const title_check = $directive.find("table th").text().replace(/\s/g, "");
-		shouldBeEqual("directive define table head", title_check, "Syntax:Default:Context:");
+		assert("directive define table head", title_check, "Syntax:Default:Context:");
 
 		const directiveDef = $directive.find("table td");
-		shouldBeEqual("directive define item", directiveDef.length, 3);
+		assert("directive define item", directiveDef.length, 3);
 
 		const directiveSyntax = directiveDef.eq(0);
 		const directiveContext = directiveDef.eq(2);
 		const directiveDefault = directiveDef.eq(1);
 
 		const directiveName = directiveSyntax.find("code strong").eq(0).text().trim();
-		lengthShouldBeMoreThanOrEqual(`directive name in module(${moduleName})`, directiveName, 1);
+		assertLength(`directive name in module(${moduleName})`, directiveName, ">=1");
 
 		let syntaxArray: string[] = [];
 		directiveSyntax.children("code").each((i, e) => {
 			syntaxArray.push($(e).text().trim());
 		});
-		lengthShouldBeMoreThanOrEqual(`directive syntax (${directiveName})`, syntaxArray, 1);
+		assertLength(`directive syntax (${directiveName})`, syntaxArray, ">=1");
 		syntaxArray = syntaxArray.map((syntax, i) => {
 			if (syntax.startsWith(syntax) === false)
-				print.error(`syntax[${i}] of directive "${directiveName}" is invalid: "${syntax}"`);
+				throw new Error(`syntax[${i}] of directive "${directiveName}" is invalid: "${syntax}"`);
 			return syntax.slice(directiveName.length).replace(";", "").trim();
 		});
 
@@ -176,17 +174,17 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 				return it;
 			})
 			.filter((it) => it);
-		lengthShouldBeMoreThanOrEqual(`directive contexts (${directiveName})`, contexts, 1);
+		assertLength(`directive contexts (${directiveName})`, contexts, '>=1');
 
 		let since = $directive.find("p").text().trim() || null;
 		if (since) {
 			const sinceVersionRegexp = /^This directive appeared in versions? (\d+\.\d+\.\d+)/;
 			since = (since.match(sinceVersionRegexp) || ["", null])[1];
-			lengthShouldBeMoreThanOrEqual(`directive since version (${directiveName})`, since, 1);
+			assertLength(`directive since version (${directiveName})`, since, '>=1');
 		}
 
 		let link = $directive.prev("a").attr("name");
-		lengthShouldBeMoreThanOrEqual(`document link of directive (${directiveName})`, link, 1);
+		assertLength(`document link of directive (${directiveName})`, link, '>=1');
 		link = `${uri}#${link}`;
 		// loop after directive box div
 
@@ -196,20 +194,22 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 		const markdownNotes: string[] = [];
 		while ((elementPointer = elementPointer.next("p, blockquote.note, blockquote.example, dl.compact")).length) {
 			const tagName = elementPointer.prop("tagName");
-			
+
 			// fix href attributes in contents of VS Code tooltips shown on hover
 			const $anchorNodes = elementPointer.find("a");
 			for (const element of $anchorNodes) {
 				const aHref = element.attribs["href"];
 
-				if (aHref == undefined)
-					continue
+				if (aHref == undefined) continue;
 
-				if ((!aHref.match(RegExp(/http(s)*:\/\//i)) && aHref.match(RegExp(/\.htm(l)*/i))) || aHref.match(RegExp(/^#\w+/i))) {
+				if (
+					(!aHref.match(RegExp(/http(s)*:\/\//i)) && aHref.match(RegExp(/\.htm(l)*/i))) ||
+					aHref.match(RegExp(/^#\w+/i))
+				) {
 					element.attribs["href"] = new URL(aHref, fullURL).toString();
 				}
 			}
-			
+
 			switch (tagName) {
 				case "P": {
 					if (!elementPointer.text().trim()) continue;
@@ -225,16 +225,16 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 					const className = elementPointer.attr("class").trim();
 					if (className == "note") markdownNotes.push(toMarkdown(elementPointer.html()));
 					else if (className != "example")
-						print.warning(
+						print.warn(
 							`there is a blockquote tag with unknown class name (${className}) ` +
-							`after directive (${directiveName})`
+								`after directive (${directiveName})`
 						);
 					fullDocs += $.html(elementPointer);
 				}
 			}
 		}
 
-		lengthShouldBeMoreThanOrEqual(`description of directive (${directiveName})`, fullDocs, 1, AssertLevel.WARNING);
+		assertLength(`description of directive (${directiveName})`, fullDocs, '>=1', AssertLevel.WARNING);
 		// lengthShouldBeMoreThanOrEqual(`document content of directive (${directiveName})`, item.doc, 1);
 
 		const ci: { insert?: string; args?: string[] } = {};
@@ -248,7 +248,7 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 				const placeholder = syntax.replace(/\s+/g, " ");
 				const mtx = placeholder.match(/^(\w+)\s(\w+)$/);
 				if (mtx) ci.insert = `${directiveName} $\{1:${mtx[1]}\} $\{2:${mtx[2]}\};$0`;
-				else if (placeholder) ci.insert = `${directiveName} $\{1:${placeholder.replace(/\}/g, '\\}')}\};$0`;
+				else if (placeholder) ci.insert = `${directiveName} $\{1:${placeholder.replace(/\}/g, "\\}")}\};$0`;
 				else ci.insert = `${directiveName};$0`;
 			}
 		}
@@ -294,7 +294,7 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 		//Because page of ngx_http_auth_jwt_module
 		if (!container.length) container = variablesDescription.next("p").next("dl");
 
-		shouldBeEqual(
+		assert(
 			`variables info of ${moduleName}: a[name=variables]+center+p+dl or ` + `a[name=variables]+center+p+p+dl`,
 			container.length,
 			1
@@ -316,16 +316,16 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 			const $tailCheck = $varName.next().next();
 
 			const varName = ($varName.text() || "").trim();
-			lengthShouldBeMoreThanOrEqual(`variable name ${i} of ${moduleName}`, varName, 2);
+			assertLength(`variable name ${i} of ${moduleName}`, varName, ">=2");
 
 			const varDesc = ($varDesc.text() || "").trim();
-			lengthShouldBeMoreThanOrEqual(`description of variable ${varName}`, varDesc, 1);
+			assertLength(`description of variable ${varName}`, varDesc, ">=1");
 
 			if ($tailCheck.length && $tailCheck.prop("tagName") != "DT")
-				print.warning(`the tag after description of variable ${varName} is not "dt"`);
+				print.warn(`the tag after description of variable ${varName} is not "dt"`);
 
 			const elementId = $varName.attr("id");
-			lengthShouldBeMoreThanOrEqual(`attribute "id" of element "dt" ${varName} `, elementId, "var_".length);
+			assertLength(`attribute "id" of element "dt" ${varName} `, elementId, `>=${"var_".length}`);
 			// varsId[varName] = elementId;
 			// variablesResult.push(item);
 			count.variables++;
@@ -346,11 +346,11 @@ async function processModuleDocs(context: { moduleName: string; moduleIndex: num
 	count.directives && console.log(` - Directives count: ${bold(count.directives)}`);
 	count.variables && console.log(` - Variables count: ${bold(count.variables)}`);
 	detailsStream.close();
-	print.ok();
+	print.allDone();
 	return count;
 
 	function resolveDocumentHTML(docHTML: string) {
-		return compressHTML(docHTML).replace(
+		return minifierHTML(docHTML).replace(
 			/href=[\"\'](.+?)[\"\']/g,
 			(_, href) => `href="${encodeURI(resolveURL(fullURL, decodeURI(href)))}"`
 		);

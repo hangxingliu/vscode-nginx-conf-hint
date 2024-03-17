@@ -1,21 +1,20 @@
 import { URL } from "url";
 import { Cheerio, Element } from "cheerio";
-import { httpHeadersWikiURLs, manifestFiles, ManifestItemType } from "./config";
+import { cacheDir, httpHeadersWikiURLs, manifestFiles, ManifestItemType } from "./config";
 import {
 	bold,
 	getText,
-	initHttpCache,
-	JsonFileWriter,
-	lengthShouldBeEqual,
-	lengthShouldBeMoreThanOrEqual,
+	assertLength,
 	loadHtml,
 	print,
 	toMarkdown,
-} from "./helper";
+	JsonFileWriter,
+	SimpleHttpCache,
+} from "./crawler-utils";
 
-main().catch((error) => print.error(error.stack));
+main().catch((error) => console.error(error.stack));
 async function main() {
-	initHttpCache();
+	SimpleHttpCache.init(cacheDir);
 
 	// English
 	{
@@ -27,14 +26,14 @@ async function main() {
 			const $cols = $row.find("td");
 			if ($cols.length === 0) return;
 
-			$cols.eq(0).find("sup").remove()
+			$cols.eq(0).find("sup").remove();
 
 			const headerNames = normalizeHeaderName($cols.eq(0).text());
 			const description = getDescriptionMarkdown($cols.eq(1), baseUrl);
-			if (!description) print.warning(`header ${headerNames[0]} has no description`);
+			if (!description) print.warn(`header ${headerNames[0]} has no description`);
 			const example: string[] = [];
 			const $example = $cols.eq(2).find("code");
-			lengthShouldBeMoreThanOrEqual(`example code of "${headerNames[0]}"`, $example, 1);
+			assertLength(`example code of "${headerNames[0]}"`, $example, '>=1');
 			$example.each((i, el) => {
 				const code = $(el).text().trim();
 				example.push(code);
@@ -53,9 +52,9 @@ async function main() {
 		};
 
 		const $reqH2 = $("h2 #Request_fields");
-		lengthShouldBeEqual("request fields h2", $reqH2, 1);
+		assertLength("request fields h2", $reqH2, 1);
 		let $tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("request fields table", $tables, 2);
+		assertLength("request fields table", $tables, 2);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -65,9 +64,9 @@ async function main() {
 		}
 
 		const $resH2 = $("h2 #Response_fields");
-		lengthShouldBeEqual("response fields h2", $resH2, 1);
+		assertLength("response fields h2", $resH2, 1);
 		$tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("response fields table", $tables, 2);
+		assertLength("response fields table", $tables, 2);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -89,7 +88,7 @@ async function main() {
 			if ($cols.length === 0) return;
 			const headerNames = normalizeHeaderName($cols.eq(0).text());
 			const description = getDescriptionMarkdown($cols.eq(1), baseUrl);
-			if (!description) print.warning(`header ${headerNames[0]} has no description`);
+			if (!description) print.warn(`header ${headerNames[0]} has no description`);
 			for (let j = 0; j < headerNames.length; j++) {
 				const headerName = headerNames[j];
 				output.writeItem(j === 0 ? [type, headerName, description] : [type, headerName, -1]);
@@ -97,9 +96,9 @@ async function main() {
 		};
 
 		const $reqH2 = $("h2 #请求字段");
-		lengthShouldBeEqual("request fields h2", $reqH2, 1);
+		assertLength("request fields h2", $reqH2, 1);
 		let $tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("request fields table", $tables, 2);
+		assertLength("request fields table", $tables, 2);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -109,9 +108,9 @@ async function main() {
 		}
 
 		const $resH2 = $("h2 #回应字段");
-		lengthShouldBeEqual("response fields h2", $resH2, 1);
+		assertLength("response fields h2", $resH2, 1);
 		$tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("response fields table", $tables, 2);
+		assertLength("response fields table", $tables, 2);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -133,7 +132,7 @@ async function main() {
 			if ($cols.length === 0) return;
 			const headerNames = normalizeHeaderName($cols.eq(0).text());
 			const description = getDescriptionMarkdown($cols.eq(1), baseUrl);
-			if (!description) print.warning(`header ${headerNames[0]} has no description`);
+			if (!description) print.warn(`header ${headerNames[0]} has no description`);
 			for (let j = 0; j < headerNames.length; j++) {
 				const headerName = headerNames[j];
 				output.writeItem(j === 0 ? [type, headerName, description] : [type, headerName, -1]);
@@ -141,9 +140,9 @@ async function main() {
 		};
 
 		const $reqH2 = $("h2 #请求字段");
-		lengthShouldBeEqual("request fields h2", $reqH2, 1);
+		assertLength("request fields h2", $reqH2, 1);
 		let $tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("request fields table", $tables, 2);
+		assertLength("request fields table", $tables, 2);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -153,9 +152,9 @@ async function main() {
 		}
 
 		const $resH2 = $("h2 #回应字段");
-		lengthShouldBeEqual("response fields h2", $resH2, 1);
+		assertLength("response fields h2", $resH2, 1);
 		$tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("response fields table", $tables, 2);
+		assertLength("response fields table", $tables, 2);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -177,7 +176,7 @@ async function main() {
 			if ($cols.length === 0) return;
 			const headerNames = normalizeHeaderName($cols.eq(0).text());
 			const description = getDescriptionMarkdown($cols.eq(1), baseUrl);
-			if (!description) print.warning(`header ${headerNames[0]} has no description`);
+			if (!description) print.warn(`header ${headerNames[0]} has no description`);
 			for (let j = 0; j < headerNames.length; j++) {
 				const headerName = headerNames[j];
 				output.writeItem(j === 0 ? [type, headerName, description] : [type, headerName, -1]);
@@ -185,9 +184,9 @@ async function main() {
 		};
 
 		const $reqH2 = $("h2 #请求字段");
-		lengthShouldBeEqual("request fields h2", $reqH2, 1);
+		assertLength("request fields h2", $reqH2, 1);
 		let $tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("request fields table", $tables, 2);
+		assertLength("request fields table", $tables, 2);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -197,9 +196,9 @@ async function main() {
 		}
 
 		const $resH2 = $("h2 #回应字段");
-		lengthShouldBeEqual("response fields h2", $resH2, 1);
+		assertLength("response fields h2", $resH2, 1);
 		$tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("response fields table", $tables, 2);
+		assertLength("response fields table", $tables, 2);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -221,7 +220,7 @@ async function main() {
 			if ($cols.length === 0) return;
 			const headerNames = normalizeHeaderName($cols.eq(0).text());
 			const description = getDescriptionMarkdown($cols.eq(1), baseUrl);
-			if (!description) print.warning(`header ${headerNames[0]} has no description`);
+			if (!description) print.warn(`header ${headerNames[0]} has no description`);
 			for (let j = 0; j < headerNames.length; j++) {
 				const headerName = headerNames[j];
 				output.writeItem(j === 0 ? [type, headerName, description] : [type, headerName, -1]);
@@ -229,9 +228,9 @@ async function main() {
 		};
 
 		const $reqH2 = $("h2 #Cabeceras_de_petición");
-		lengthShouldBeEqual("request fields h2", $reqH2, 1);
+		assertLength("request fields h2", $reqH2, 1);
 		const $tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("request fields table", $tables, 1);
+		assertLength("request fields table", $tables, 1);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -253,7 +252,7 @@ async function main() {
 			if ($cols.length === 0) return;
 			const headerNames = normalizeHeaderName($cols.eq(0).text());
 			const description = getDescriptionMarkdown($cols.eq(2), baseUrl);
-			if (!description) print.warning(`header ${headerNames[0]} has no description`);
+			if (!description) print.warn(`header ${headerNames[0]} has no description`);
 			for (let j = 0; j < headerNames.length; j++) {
 				const headerName = headerNames[j];
 				output.writeItem(j === 0 ? [type, headerName, description] : [type, headerName, -1]);
@@ -261,9 +260,9 @@ async function main() {
 		};
 
 		const $reqH2 = $("h2 #Anfrage-Headerfelder");
-		lengthShouldBeEqual("request fields h2", $reqH2, 1);
+		assertLength("request fields h2", $reqH2, 1);
 		const $tables = getNextTables($reqH2.parent(), "h2");
-		lengthShouldBeEqual("request fields table", $tables, 1);
+		assertLength("request fields table", $tables, 1);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
@@ -274,7 +273,7 @@ async function main() {
 		output.close();
 	}
 
-	if (print.warnings) console.log(`Total warnings:   ${bold(print.warnings)}`);
+	if (print.warnings.length > 0) console.log(`Total warnings:   ${bold(print.warnings.length)}`);
 }
 
 function getDescriptionMarkdown($el: Cheerio<Element>, baseUrl: string) {
@@ -315,7 +314,7 @@ function normalizeStatus(_status: string) {
 	if (status.startsWith("permanent")) return "Permanent";
 	if (status.startsWith("provisional")) return "Provisional";
 	if (status.startsWith("experimental")) return "Experimental";
-	return print.error(`Invalid standard status ${JSON.stringify(_status)}`);
+	throw new Error(`Invalid standard status ${JSON.stringify(_status)}`);
 }
 
 function normalizeHeaderName(_name: string) {
@@ -326,6 +325,7 @@ function normalizeHeaderName(_name: string) {
 		.map((it) => it.trim())
 		.filter((it) => it);
 	for (const element of names)
-		if (!/^[\w\-éèáàöäü]+$/ig.test(element)) return print.error(`Invalid http header name ${JSON.stringify(_name)} ${element}`);
+		if (!/^[\w\-éèáàöäü]+$/gi.test(element))
+			throw new Error(`Invalid http header name ${JSON.stringify(_name)} ${element}`);
 	return names;
 }

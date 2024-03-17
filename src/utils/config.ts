@@ -10,8 +10,8 @@ export const enum ManifestItemType {
 	HttpResHeader = 7,
 }
 
-export const cacheDir = resolve(__dirname, 'cache')
 export const projectDir = resolve(__dirname, '../..');
+export const cacheDir = resolve(projectDir, 'cache')
 export const syntaxesDir = resolve(projectDir, 'src/syntax/references');
 export const hintDataDir = resolve(projectDir, 'hint_data');
 
@@ -35,6 +35,7 @@ export const mediaTypesURL = 'https://www.iana.org/assignments/media-types/media
 
 export const nginxDocsBaseURL = 'https://nginx.org/en/docs/';
 export const nginxLuaDocsBaseURL = 'https://github.com/openresty/lua-nginx-module/';
+
 export const luaRestyDocsURLs = [
 	{ prefix: 'memcached', url: 'https://github.com/openresty/lua-resty-memcached' },
 	{ prefix: 'mysql', url: 'https://github.com/openresty/lua-resty-mysql' },
@@ -47,7 +48,7 @@ export const luaRestyDocsURLs = [
 	{ prefix: 'healthcheck', url: 'https://github.com/openresty/lua-resty-upstream-healthcheck' },
 	{ prefix: 'balancer', url: 'https://github.com/openresty/lua-resty-balancer' },
 ]
-export const nginxLuaModuleURLs = [
+export const nginxLuaModuleURLs: Array<{ name: string, url: string }> = [
 	// { name: 'ngx_memc', url: 'http://github.com/openresty/memc-nginx-module' },
 	// { name: 'ngx_postgres', url: 'https://github.com/FRiCKLE/ngx_postgres' },
 	// { name: 'ngx_redis2', url: 'http://github.com/openresty/redis2-nginx-module' },
