@@ -1,0 +1,33 @@
+name: update json assets
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: yarn
+      - name: Install
+        run: yarn install
+      - name: Build
+        run: yarn run build
+      - name: run all downloaders
+        run: |
+          ls -lisha out/downloader/
+          node out/downloader/http_headers.js || true
+          node out/downloader/mimetype.js || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-package
+          path: |
+            assets/
+          retention-days: 3
