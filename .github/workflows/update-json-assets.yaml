@@ -28,9 +28,40 @@ jobs:
           done
 
           git status
+
+      - name: creating the pull request body
+        id: pr-body
+        run: |
+          json_path="assets/**/*.json"
+          diff_shortstat=$(git diff --shortstat "$json_path")
+          diff_numstat=$(git diff --numstat "$json_path")
+
+          pr_body="This pull request has been generated **automatically** to **update** the following files:\n\n```bash\n$diff_shortstat\n$diff_numstat```"
+
+          echo -e "\n----------------------\nThe pull request body:\n----------------------\n"
+          echo -e "$pr_body"
+
+          echo 'pr_body<<EOF' >> $GITHUB_OUTPUT
+          echo -e "$pr_body" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
       - uses: actions/upload-artifact@v4
         with:
-          name: npm-package
+          name: json-assets
           path: |
-            assets/
+            assets/**/*.json
           retention-days: 3
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: |
+            assets/**/*.json
+          commit-message: "chore(assets): update json assets"
+          branch: update-json-assets
+          delete-branch: true
+          base: main
+          title: "Update JSON files in assets/"
+          body: ${{ steps.pr-body.outputs.pr_body }}
+          # labels:
+          draft: false
