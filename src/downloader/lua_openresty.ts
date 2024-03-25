@@ -145,13 +145,8 @@ function processDirectiveElement(
 		item.desc = item.desc || character;
 		item.notes.push(character);
 
-		// console.log(temp.toString());
-		// console.log(" --- --- --- --- ")
-
 		docsHTML += temp.toString();
 	}
-
-	// console.log(docsHTML);
 
 	if (item.def.startsWith("no")) {
 		item.def = directiveName + " ;";
@@ -183,11 +178,6 @@ function processDirectiveElement(
 		baseUrl + `#${directiveName}`,
 		{},
 	]);
-
-	if (directiveName == "server_rewrite_by_lua_block") {
-		// TODO: needs to be changed remove SVG objects and add required contents (!)
-		console.log(docsHTML);
-	}
 
 	detailsStream.writeItem([
 		ManifestItemType.DirectiveDetails,
