@@ -7,7 +7,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 jobs:
-  build:
+  update-assets:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -23,8 +23,11 @@ jobs:
       - name: run all downloaders
         run: |
           ls -lisha out/downloader/
-          node out/downloader/http_headers.js || true
-          node out/downloader/mimetype.js || true
+          for i in out/downloader/*.js; do
+              node "$i" || true
+          done
+
+          git status
       - uses: actions/upload-artifact@v4
         with:
           name: npm-package
