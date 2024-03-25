@@ -1,11 +1,13 @@
 name: update json assets
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  # pull_request:
+  #   branches: [main]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+  schedule:
+    # runs on the first day of the month at 04:05AM (UTC)
+    - cron: "5 4 1 * *"
 jobs:
   update-assets:
     runs-on: ubuntu-latest
