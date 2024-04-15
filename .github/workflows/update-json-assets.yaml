@@ -34,7 +34,11 @@ jobs:
         run: |
           ls -lisha out/downloader/
           for i in out/downloader/*.js; do
-              node "$i" || true
+              # skipping the syntax downloader
+              if [[ $i != *"nginx_syntax"* ]]; then
+                  echo "executing 'node $i' ..."
+                  node "$i" || true
+              fi
           done
 
           git status
