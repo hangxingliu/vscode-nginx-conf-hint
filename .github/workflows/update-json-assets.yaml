@@ -47,6 +47,7 @@ jobs:
         id: pr-body
         run: |          
           json_path="assets/**/*.json"
+
           # capturing git diff stats and removing whitespace
           diff_shortstat=$(git diff --shortstat "$json_path" | sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g')
           diff_numstat=$(git diff --numstat "$json_path" | sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g')
@@ -80,5 +81,5 @@ jobs:
           base: main
           title: "Update JSON files in assets/"
           body: ${{ steps.pr-body.outputs.pr_body }}
-          # labels:
+          labels: dependencies
           draft: false
