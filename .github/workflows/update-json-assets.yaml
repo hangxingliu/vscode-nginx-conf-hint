@@ -41,6 +41,7 @@ jobs:
               fi
           done
 
+          git add assets/**/*.json
           git status
 
       - name: creating the pull request body
@@ -49,8 +50,8 @@ jobs:
           json_path="assets/**/*.json"
 
           # capturing git diff stats and removing whitespace
-          diff_shortstat=$(git diff --shortstat "$json_path" | sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g')
-          diff_numstat=$(git diff --numstat "$json_path" | sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g')
+          diff_shortstat=$(git diff --staged --shortstat "$json_path" | sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g')
+          diff_numstat=$(git diff --staged --numstat "$json_path" | sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g')
 
           pr_body="This pull request has been generated **automatically** to **update** the following files:\n\n\`\`\`bash\n$diff_shortstat\n\n$diff_numstat\n\`\`\`\n"
 
