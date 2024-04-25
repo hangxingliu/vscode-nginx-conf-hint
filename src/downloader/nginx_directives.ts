@@ -40,7 +40,7 @@ async function main() {
 	assertLength(`document page title "${titleShouleBe}"`, $title, 1);
 
 	const directiveLists = $title.parent().nextAll("ul.compact");
-	assertLength("length(ul.compact)", directiveLists, 6);
+	assertLength("length(ul.compact)", directiveLists, 7);
 
 	const modules: Array<{ moduleName: string; moduleIndex: number; uri: string }> = [];
 	directiveLists.each((i, list) => {

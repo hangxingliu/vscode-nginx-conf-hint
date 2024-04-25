@@ -249,7 +249,7 @@ async function main() {
 		const output = new JsonFileWriter(manifestFiles.httpHeaders("de"));
 		const html = await getText("de", baseUrl);
 		const $ = loadHtml(html);
-		const handleEnglishRow = ($row: Cheerio<Element>, type: ManifestItemType) => {
+		const handleGermanRow = ($row: Cheerio<Element>, type: ManifestItemType) => {
 			const $cols = $row.find("td");
 			if ($cols.length === 0) return;
 			const headerNames = normalizeHeaderName($cols.eq(0).text());
@@ -269,7 +269,39 @@ async function main() {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {
 				const $row = $rows.eq(row);
-				handleEnglishRow($row, ManifestItemType.HttpReqHeader);
+				handleGermanRow($row, ManifestItemType.HttpReqHeader);
+			}
+		}
+		output.close();
+	}
+
+	// pt
+	{
+		const baseUrl = httpHeadersWikiURLs.pt;
+		const output = new JsonFileWriter(manifestFiles.httpHeaders("pt"));
+		const html = await getText("pt", baseUrl);
+		const $ = loadHtml(html);
+		const handlePortgueseRow = ($row: Cheerio<Element>, type: ManifestItemType) => {
+			const $cols = $row.find("td");
+			if ($cols.length === 0) return;
+			const headerNames = normalizeHeaderName($cols.eq(0).text());
+			const description = getDescriptionMarkdown($cols.eq(1), baseUrl);
+			if (!description) print.warn(`header ${headerNames[0]} has no description`);
+			for (let j = 0; j < headerNames.length; j++) {
+				const headerName = headerNames[j];
+				output.writeItem(j === 0 ? [type, headerName, description] : [type, headerName, -1]);
+			}
+		};
+
+		const $reqH2 = $("h2 #Campos_de_resposta");
+		assertLength("request fields h2", $reqH2, 1);
+		const $tables = getNextTables($reqH2.parent(), "h2");
+		assertLength("request fields table", $tables, 2);
+		for (const element of $tables) {
+			const $rows = element.find("tr");
+			for (let row = 0; row < $rows.length; row++) {
+				const $row = $rows.eq(row);
+				handlePortgueseRow($row, ManifestItemType.HttpReqHeader);
 			}
 		}
 		output.close();

@@ -1,0 +1,86 @@
+name: update json assets
+on:
+  push:
+    paths:
+      - .github/workflows/update-json-assets.yaml
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  schedule:
+    # runs on the first day of the month at 04:05AM (UTC)
+    - cron: "5 4 1 * *"
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+concurrency:
+  group: "updater"
+  cancel-in-progress: false
+
+jobs:
+  update-assets:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: yarn
+      - name: Install
+        run: yarn install
+      - name: Build
+        run: yarn run build
+      - name: run all downloaders
+        run: |
+          ls -lisha out/downloader/
+          for i in out/downloader/*.js; do
+              # skipping the syntax downloader
+              if [[ $i != *"nginx_syntax"* ]]; then
+                  echo "executing 'node $i' ..."
+                  node "$i" || true
+              fi
+          done
+
+          git add assets/**/*.json
+          git status
+
+      - name: creating the pull request body
+        id: pr-body
+        run: |          
+          json_path="assets/**/*.json"
+
+          # capturing git diff stats and removing whitespace
+          diff_shortstat=$(git diff --staged --shortstat "$json_path" | sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g')
+          diff_numstat=$(git diff --staged --numstat "$json_path" | sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g')
+
+          pr_body="This pull request has been generated **automatically** to **update** the following files:\n\n\`\`\`bash\n$diff_shortstat\n\n$diff_numstat\n\`\`\`\n"
+
+          echo -e "\n----------------------\nThe pull request body:\n----------------------\n"
+          echo -e "$pr_body"
+
+          echo -e "$pr_body" >> $GITHUB_STEP_SUMMARY
+
+          echo 'pr_body<<EOF' >> $GITHUB_OUTPUT
+          echo -e "$pr_body" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: json-assets
+          path: |
+            assets/**/*.json
+          retention-days: 3
+      # - name: Create Pull Request
+      #   id: cpr
+      #   uses: peter-evans/create-pull-request@v6
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     add-paths: |
+      #       assets/**/*.json
+      #     commit-message: "chore(assets): update json assets"
+      #     branch: update-json-assets
+      #     delete-branch: true
+      #     base: main
+      #     title: "Update JSON files in assets/"
+      #     body: ${{ steps.pr-body.outputs.pr_body }}
+      #     labels: dependencies
+      #     draft: false
