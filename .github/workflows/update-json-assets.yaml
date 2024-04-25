@@ -69,18 +69,18 @@ jobs:
           path: |
             assets/**/*.json
           retention-days: 3
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: |
-            assets/**/*.json
-          commit-message: "chore(assets): update json assets"
-          branch: update-json-assets
-          delete-branch: true
-          base: main
-          title: "Update JSON files in assets/"
-          body: ${{ steps.pr-body.outputs.pr_body }}
-          labels: dependencies
-          draft: false
+      # - name: Create Pull Request
+      #   id: cpr
+      #   uses: peter-evans/create-pull-request@v6
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     add-paths: |
+      #       assets/**/*.json
+      #     commit-message: "chore(assets): update json assets"
+      #     branch: update-json-assets
+      #     delete-branch: true
+      #     base: main
+      #     title: "Update JSON files in assets/"
+      #     body: ${{ steps.pr-body.outputs.pr_body }}
+      #     labels: dependencies
+      #     draft: false
