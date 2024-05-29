@@ -77,5 +77,5 @@
 [2,"lua_max_pending_timers",["lua_max_pending_timers <count>"],"lua_max_pending_timers 1024",["http"],1,"0.8.0","https://github.com/openresty/lua-nginx-module/#lua_max_pending_timers",{}],
 [2,"lua_max_running_timers",["lua_max_running_timers <count>"],"lua_max_running_timers 256",["http"],1,"0.8.0","https://github.com/openresty/lua-nginx-module/#lua_max_running_timers",{}],
 [2,"lua_sa_restart",["lua_sa_restart on|off"],"lua_sa_restart on",["http"],1,"0.10.14","https://github.com/openresty/lua-nginx-module/#lua_sa_restart",{}],
-[2,"lua_worker_thread_vm_pool_size",["lua_worker_thread_vm_pool_size <size>"],"lua_worker_thread_vm_pool_size 100",["http"],1,null,"https://github.com/openresty/lua-nginx-module/#lua_worker_thread_vm_pool_size",{}]
+[2,"lua_worker_thread_vm_pool_size",["lua_worker_thread_vm_pool_size <size>"],"lua_worker_thread_vm_pool_size 10",["http"],1,null,"https://github.com/openresty/lua-nginx-module/#lua_worker_thread_vm_pool_size",{}]
 ]
