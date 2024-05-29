@@ -43,6 +43,7 @@
 ["EVRCWB1"],
 ["EVS"],
 ["example"],
+["flac"],
 ["flexfec"],
 ["fwdred"],
 ["G711-0"],
@@ -75,6 +76,7 @@
 ["MELP1200"],
 ["MELP2400"],
 ["mhas"],
+["midi-clip"],
 ["mobile-xmf"],
 ["MPA"],
 ["mp4"],
@@ -158,4 +160,3 @@
 ["vnd.vmx.cvsd"],
 ["vorbis"],
 ["vorbis-config"]
-]

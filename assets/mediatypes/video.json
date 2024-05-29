@@ -9,6 +9,7 @@
 ["CelB"],
 ["DV"],
 ["encaprtp"],
+["evc"],
 ["example"],
 ["FFV1"],
 ["flexfec"],
@@ -89,4 +90,3 @@
 ["vnd.vivo"],
 ["VP8"],
 ["VP9"]
-]
