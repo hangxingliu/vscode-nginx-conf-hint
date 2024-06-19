@@ -252,7 +252,12 @@ async function main() {
 		const handleGermanRow = ($row: Cheerio<Element>, type: ManifestItemType) => {
 			const $cols = $row.find("td");
 			if ($cols.length === 0) return;
-			const headerNames = normalizeHeaderName($cols.eq(0).text());
+
+			let headerName = $cols.eq(0).text();
+			if(headerName.indexOf("[") > -1){
+				headerName = headerName.split("[")[0]
+			}
+			const headerNames = normalizeHeaderName(headerName);
 			const description = getDescriptionMarkdown($cols.eq(2), baseUrl);
 			if (!description) print.warn(`header ${headerNames[0]} has no description`);
 			for (let j = 0; j < headerNames.length; j++) {
@@ -261,10 +266,10 @@ async function main() {
 			}
 		};
 
-		const $reqH2 = $("h2 #Anfrage-Headerfelder");
+		const $reqH2 = $("h2#Anfrage-Headerfelder");
 		assertLength("request fields h2", $reqH2, 1);
 		const $tables = getNextTables($reqH2.parent(), "h2");
-		assertLength("request fields table", $tables, 1);
+		assertLength("request fields table", $tables, 4);
 		for (const element of $tables) {
 			const $rows = element.find("tr");
 			for (let row = 0; row < $rows.length; row++) {

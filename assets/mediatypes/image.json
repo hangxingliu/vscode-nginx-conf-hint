@@ -25,6 +25,7 @@
 ["jphc"],
 ["jpm"],
 ["jpx"],
+["jxl"],
 ["jxr"],
 ["jxrA"],
 ["jxrS"],
@@ -77,4 +78,3 @@
 ["wmf"],
 ["emf","x-emf - DEPRECATED in favor of image/emf"],
 ["wmf","x-wmf - DEPRECATED in favor of image/wmf"]
-]

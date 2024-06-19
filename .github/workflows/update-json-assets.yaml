@@ -26,6 +26,8 @@ jobs:
         with:
           node-version: latest
           cache: yarn
+      - name: install jq
+        run: sudo apt update && sudo apt install jq -y
       - name: Install
         run: yarn install
       - name: Build
@@ -41,7 +43,19 @@ jobs:
               fi
           done
 
-          git add assets/**/*.json
+          json_assets = "assets/**/*.json"
+          for i in $json_assets; do
+              # verify that the file contains valid JSON
+              # based on: https://stackoverflow.com/a/46955018
+              if jq -e . >/dev/null 2>&1 <<<"$(cat $i)"; then
+                  echo "successfully parsed JSON contents of '$i'"
+                  git add $i
+              else
+                  echo "failed to parse JSON contents of '$i' -> resetting to previous commit ..."
+                  git restore --source main $i 
+            fi
+          done
+
           git status
 
       - name: creating the pull request body
